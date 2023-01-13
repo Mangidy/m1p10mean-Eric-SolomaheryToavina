@@ -1,4 +1,4 @@
 const app = require("./app")
-const route = require("./route")
+const routeAdmin = require("./routeAdmin")
 
-app.start(4000, route)
+app.start(4000, routeAdmin)
