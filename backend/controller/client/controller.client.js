@@ -18,19 +18,26 @@ const HomeClient = (dataBase, req, res) => {
 const AddCarClient = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionDb = dataBase.collection('Client')
-        const CollectionDbTwo = dataBase.collection('Voiture')
         CollectionDb.findOne({ "_id": new ObjectID(req.session.clientId) })
             .then(resultat => {
+                const CollectionDbTwo = dataBase.collection('Voiture')
                 if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
-                    const dataCar = {
-                        user: resultat,
-                        car: req.body
-                    }
-                    CollectionDbTwo.insertOne(dataCar)
-                        .then(resFinal => {
-                            res.send({ message: "NEW CAR ADDED", user: dataCar.user })
+                    CollectionDbTwo.findOne({ numero: req.body.numero })
+                        .then(resTwo => {
+                            if (resTwo) {
+                                res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY ADDED" })
+                            } else {
+                                req.body.receptionne = false
+                                req.body.user = resultat
+                                CollectionDbTwo.insertOne(req.body)
+                                    .then(resFinal => {
+                                        res.send({ message: "NEW CAR ADDED", user: req.body.user })
+                                    })
+                                    .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                            }
+                        }).catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
                         })
-                        .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                 } else {
                     res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
                 }
@@ -38,10 +45,10 @@ const AddCarClient = (dataBase, req, res) => {
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
             })
-
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
+
 }
 
 const LoginClient = (dataBase, res, req, subStatus) => {
