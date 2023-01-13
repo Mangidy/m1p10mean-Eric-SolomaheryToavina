@@ -13,6 +13,8 @@ import { RepairProgressComponent } from './components/repair-progress/repair-pro
 import { BillingComponent } from './components/billing/billing.component';
 import { CarRecoveryComponent } from './components/car-recovery/car-recovery.component';
 import { RepairHistoryComponent } from './components/repair-history/repair-history.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { AtelierHeaderComponent } from './components/atelier-header/atelier-header.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { RepairHistoryComponent } from './components/repair-history/repair-histo
     RepairProgressComponent,
     BillingComponent,
     CarRecoveryComponent,
-    RepairHistoryComponent
+    RepairHistoryComponent,
+    SignUpComponent,
+    AtelierHeaderComponent
   ],
   imports: [
     BrowserModule,

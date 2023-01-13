@@ -8,10 +8,12 @@ import { LoginComponent } from './components/login/login.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { RepairHistoryComponent } from './components/repair-history/repair-history.component';
 import { RepairProgressComponent } from './components/repair-progress/repair-progress.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 const routes: Routes = [
   { path:'home', component: HomeComponent},
   { path:'login', component: LoginComponent},
+  { path:'signup', component: SignUpComponent}, 
   { path:'deposit', component: DepositComponent}, 
   { path:'progress', component: RepairProgressComponent}, 
   { path:'billing', component: BillingComponent}, 

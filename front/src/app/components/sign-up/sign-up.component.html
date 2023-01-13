@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Login</title>
+	<title>Register page</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
+<body ng-app="">
 	
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
 				<form class="login100-form validate-form">
 					<span class="login100-form-title p-b-26">
-						Welcome
+						Create an account
 					</span>
 					
+                    <div class="wrap-input100 validate-input" >
+						<input class="input100" type="text" name="name">
+						<span class="focus-input100" data-placeholder="Name"></span>
+					</div>
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
 						<input class="input100" type="text" name="email">
@@ -23,26 +27,36 @@
 
 					<div class="wrap-input100 validate-input" data-validate="Enter password">
 					
-						<input class="input100" type="password" name="pass">
+						<input class="input100" type="password" name="pass1">
 						<span class="focus-input100" data-placeholder="Password"></span>
 					</div>
-
+                    <div class="wrap-input100 validate-input" data-validate="Re-enter your password">
+					
+						<input class="input100" type="password" name="pass2">
+						<span class="focus-input100" data-placeholder="Password"></span>
+					</div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" ng-model="checked">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            I agree all statements in Terms of service
+                        </label>
+                      </div>
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
-								Login
+							<button class="login100-form-btn" ng-model="button" ng-disabled="checked">
+								Register
 							</button>
 						</div>
 					</div>
 
 					<div class="text-center p-t-115">
 						<span class="txt1">
-							Don’t have an account?
+							Already have an account?
 						</span>
 
-						<a class="text-warning" routerLink="../signup">
-							Sign Up
+						<a class="text-warning" routerLink="../login">
+							Sign In
 						</a>
 						<br/>
 						<span class="txt1">
