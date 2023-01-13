@@ -30,13 +30,13 @@ const LoginClient = (dataBase, res, req, subStatus) => {
                             res.send({ message: "Loggin successfully" })
                         }
                     } else {
-                        res.send({ message: "Login Failed", detailled: "invalid information" })
+                        res.send({ message: "Login Failed", detailled: "Invalid information" })
                     }
                 } else {
-                    res.send({ message: "Login Failed", detailled: "Phone invalid" })
+                    res.send({ message: "Login Failed", detailled: "Phone Invalid" })
                 }
             } else {
-                res.send({ message: "Login Failed", detailled: "invalid information" })
+                res.send({ message: "Login Failed", detailled: "Invalid information" })
             }
         })
         .catch(err => {
