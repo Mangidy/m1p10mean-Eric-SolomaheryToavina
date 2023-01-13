@@ -6,11 +6,12 @@ const { MongoClient } = require('mongodb');
 const app = express()
 const uriBd = "mongodb://localhost:27017/"
 
-const start = (port, routeAdmin) => {
+const start = (port, routeAdmin, routeClient) => {
     MongoClient.connect(uriBd, { useUnifiedTopology: true })
         .then(client => {
             const db = client.db('Garage')
             routeAdmin.sendDb(db)
+            routeClient.sendDb(db)
 
             app.use(express.urlencoded({ extended: true }))
             app.use(express.json())
@@ -26,6 +27,9 @@ const start = (port, routeAdmin) => {
             app.get("/admin/client", routeAdmin.client)
             app.post("/admin/login", routeAdmin.login)
             app.post("/admin/logout", routeAdmin.logout)
+
+            app.post("/client/login", routeClient.login)
+            app.post("/client/logout", routeClient.logout)
 
             app.listen(port, console.log(`Server running on port ${port}`))
         })

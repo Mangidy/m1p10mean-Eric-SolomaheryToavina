@@ -14,7 +14,7 @@ const LoginAdmin = (dataBase, res, req) => {
     CollectionDb.findOne({ "username": req.body.username })
         .then(resultat => {
             if (resultat) {
-                if (req.body.username === resultat.username && req.body.password === resultat.password) {
+                if (req.body.username === resultat.usernameAdmin && req.body.password === resultat.passwordAdmin) {
                     req.session.usernameAdmin = resultat._id
                     res.send({ message: "Loggin successfully" })
                 } else {
