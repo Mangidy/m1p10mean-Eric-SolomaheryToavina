@@ -1,14 +1,4 @@
-const express = require('express')
-const bodyParser = require('body-parser')
+const app = require("./app")
+const route = require("./route")
 
-const app = express()
-
-app.use(bodyParser.urlencoded({ extended: true }))
-
-app.get('/', function (req, res) {
-    res.send("Initalized")
-})
-
-app.listen(3000, function () {
-    console.log("Serveur running !!");
-})
+app.start(4000, route)
