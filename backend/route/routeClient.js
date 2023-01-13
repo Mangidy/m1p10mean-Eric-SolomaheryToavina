@@ -1,4 +1,4 @@
-const controllerClient = require('./controller/client/controller.client')
+const controllerClient = require('../controller/client/controller.client')
 var dataBase
 
 const sendDb = (db) => {

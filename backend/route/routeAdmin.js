@@ -1,4 +1,4 @@
-const controllerAdminClient = require('./controller/admin/controller.admin.client')
+const controllerAdminClient = require('../controller/admin/controller.admin.client')
 var dataBase
 
 const sendDb = (db) => {
