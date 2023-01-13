@@ -2,15 +2,43 @@ const { ObjectID } = require("bson");
 
 const HomeClient = (dataBase, req, res) => {
     if (req.session.clientId) {
-        console.log(req.session.clientId);
         const CollectionDb = dataBase.collection('Client')
         CollectionDb.findOne({ "_id": new ObjectID(req.session.clientId) })
             .then(resultat => {
                 res.send({ message: "USER CONNECTED", user: resultat })
             })
             .catch(err => {
-                res.send({ message: "Request Error" })
+                res.send({ message: "REQUEST ERROR" })
             })
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
+const AddCarClient = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionDb = dataBase.collection('Client')
+        const CollectionDbTwo = dataBase.collection('Voiture')
+        CollectionDb.findOne({ "_id": new ObjectID(req.session.clientId) })
+            .then(resultat => {
+                if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
+                    const dataCar = {
+                        user: resultat,
+                        car: req.body
+                    }
+                    CollectionDbTwo.insertOne(dataCar)
+                        .then(resFinal => {
+                            res.send({ message: "NEW CAR ADDED", user: dataCar.user })
+                        })
+                        .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                }
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
@@ -25,22 +53,22 @@ const LoginClient = (dataBase, res, req, subStatus) => {
                     if (req.body.phone === resultat.phone && req.body.password === resultat.password) {
                         req.session.clientId = resultat._id
                         if (subStatus) {
-                            res.send({ message: "SubScribe successfully" })
+                            res.send({ message: "SUBSCRIBE SUCCESSFULLY" })
                         } else {
-                            res.send({ message: "Loggin successfully" })
+                            res.send({ message: "LOGIN SUCCESSFULLY" })
                         }
                     } else {
-                        res.send({ message: "Login Failed", detailled: "Invalid information" })
+                        res.send({ message: "LOGIN FAILED", detailled: "INVALID INFORMATION" })
                     }
                 } else {
-                    res.send({ message: "Login Failed", detailled: "Phone Invalid" })
+                    res.send({ message: "LOGIN FAILED", detailled: "PHONE INVALID" })
                 }
             } else {
-                res.send({ message: "Login Failed", detailled: "Invalid information" })
+                res.send({ message: "LOGIN FAILED", detailled: "INVALID INFORMATION" })
             }
         })
         .catch(err => {
-            res.send({ message: "Request Error" })
+            res.send({ message: "REQUEST ERROR" })
         })
 }
 
@@ -51,19 +79,21 @@ const SubScribeClient = (dataBase, res, req) => {
             .then(resultat => {
                 LoginClient(dataBase, res, req, true)
             })
-            .catch(err => res.send({ message: "SubScribe Failed", detailled: "Invalid information" }))
+            .catch(err => res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION" }))
 
     } else {
-        res.send({ message: "SubScribe Failed", detailled: "Invalid information" })
+        res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION" })
     }
 }
 
 const LogoutClient = (res, req) => {
     req.session.destroy()
-    res.send({ message: "Loggout successfully" })
+    res.send({ message: "LOGOUT SUCCESSFULLY" })
 }
 
 exports.HomeClient = HomeClient
+exports.AddCarClient = AddCarClient
+
 exports.SubScribeClient = SubScribeClient
 exports.LoginClient = LoginClient
 exports.LogoutClient = LogoutClient

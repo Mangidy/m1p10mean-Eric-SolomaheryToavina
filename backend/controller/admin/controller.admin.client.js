@@ -5,7 +5,7 @@ const getAllClient = (dataBase, res) => {
             res.send(resultat)
         })
         .catch(err => {
-            res.send("Erreur")
+            res.send({ message: "REQUEST ERROR" })
         })
 }
 
@@ -16,22 +16,22 @@ const LoginAdmin = (dataBase, res, req) => {
             if (resultat) {
                 if (req.body.username === resultat.usernameAdmin && req.body.password === resultat.passwordAdmin) {
                     req.session.usernameAdmin = resultat._id
-                    res.send({ message: "Loggin successfully" })
+                    res.send({ message: "LOGIN SUCCESSFULLY" })
                 } else {
-                    res.send({ message: "Login Failed" })
+                    res.send({ message: "LOGIN FAILED" })
                 }
             } else {
-                res.send({ message: "Login Failed" })
+                res.send({ message: "LOGIN FAILED" })
             }
         })
         .catch(err => {
-            res.send("Erreur")
+            res.send({ message: "REQUEST ERROR" })
         })
 }
 
 const LogoutAdmin = (res, req) => {
     req.session.destroy()
-    res.send({ message: "Loggout successfully" })
+    res.send({ message: "LOGOUT SUCCESSFULLY" })
 }
 
 exports.getAllClient = getAllClient

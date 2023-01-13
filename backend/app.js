@@ -29,6 +29,7 @@ const start = (port, routeAdmin, routeClient) => {
             app.post("/admin/logout", routeAdmin.logout)
 
             app.get("/client/", routeClient.home)
+            app.post("/client/car", routeClient.car)
             app.post("/client/subscribe", routeClient.subscribe)
             app.post("/client/login", routeClient.login)
             app.post("/client/logout", routeClient.logout)
