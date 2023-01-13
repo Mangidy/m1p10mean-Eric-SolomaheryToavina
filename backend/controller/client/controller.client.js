@@ -1,3 +1,11 @@
+const HomeClient = (req, res) => {
+    if (req.session.clientId) {
+        res.send({ message: "USER CONNECTED" })
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
 const LoginClient = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Client')
     CollectionDb.findOne({ "username": req.body.username })
@@ -23,5 +31,6 @@ const LogoutClient = (res, req) => {
     res.send({ message: "Loggout successfully" })
 }
 
+exports.HomeClient = HomeClient
 exports.LoginClient = LoginClient
 exports.LogoutClient = LogoutClient
