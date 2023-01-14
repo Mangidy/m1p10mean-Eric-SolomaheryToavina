@@ -22,14 +22,22 @@ const AddCarClient = (dataBase, req, res) => {
             .then(resultat => {
                 const CollectionDbTwo = dataBase.collection('Voiture')
                 if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
-                    CollectionDbTwo.findOne({ numero: req.body.numero })
+                    CollectionDbTwo.findOne({ numero: req.body.numero, receptionne: false })
                         .then(resTwo => {
                             if (resTwo) {
                                 res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY ADDED" })
                             } else {
-                                req.body.receptionne = false
                                 req.body.user = resultat
-                                CollectionDbTwo.insertOne(req.body)
+                                dataCar = {
+                                    numero: req.body.numero,
+                                    marque: req.body.marque,
+                                    modele: req.body.modele,
+                                    annee: req.body.annee,
+                                    receptionne: false,
+                                    admin: {},
+                                    user: req.body.user
+                                }
+                                CollectionDbTwo.insertOne(dataCar)
                                     .then(resFinal => {
                                         res.send({ message: "NEW CAR ADDED", user: req.body.user })
                                     })
@@ -50,6 +58,8 @@ const AddCarClient = (dataBase, req, res) => {
     }
 
 }
+
+
 
 const LoginClient = (dataBase, res, req, subStatus) => {
     const CollectionDb = dataBase.collection('Client')
