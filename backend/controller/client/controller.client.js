@@ -38,6 +38,7 @@ const AddCarClient = (dataBase, req, res) => {
                                     modele: req.body.modele,
                                     annee: req.body.annee,
                                     receptionne: false,
+                                    dataDepot: new Date(),
                                     admin: {},
                                     client: req.body.user
                                 }
@@ -137,6 +138,7 @@ const LoginClient = (dataBase, res, req, subStatus) => {
 const SubScribeClient = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Client')
     if (req.body.username !== undefined && req.body.password !== undefined && req.body.nom !== undefined && req.body.prenom !== undefined && req.body.adress !== undefined && req.body.phone !== undefined) {
+        req.body.dateSubscribe = new Date()
         CollectionDb.insertOne(req.body)
             .then(resultat => {
                 LoginClient(dataBase, res, req, true)
