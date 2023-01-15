@@ -28,6 +28,10 @@ const AddCarClient = (dataBase, req, res) => {
                                 res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY ADDED" })
                             } else {
                                 req.body.user = resultat
+
+                                delete req.body.user.password
+                                delete req.body.user.username
+
                                 dataCar = {
                                     numero: req.body.numero,
                                     marque: req.body.marque,
@@ -35,11 +39,11 @@ const AddCarClient = (dataBase, req, res) => {
                                     annee: req.body.annee,
                                     receptionne: false,
                                     admin: {},
-                                    user: req.body.user
+                                    client: req.body.user
                                 }
                                 CollectionDbTwo.insertOne(dataCar)
                                     .then(resFinal => {
-                                        res.send({ message: "NEW CAR ADDED", user: req.body.user })
+                                        res.send({ message: "NEW CAR ADDED", client: req.body.user })
                                     })
                                     .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                             }
@@ -56,10 +60,51 @@ const AddCarClient = (dataBase, req, res) => {
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
-
 }
 
 
+const AddCarReparation = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionClient = dataBase.collection('Client')
+        const CollectionVoiture = dataBase.collection('Voiture')
+        CollectionClient.findOne({ "_id": new ObjectID(req.session.clientId) })
+            .then(resUser => {
+                if (req.params.numero !== undefined) {
+                    delete resUser.password
+                    delete resUser.username
+
+                    CollectionVoiture.findOne({ "numero": req.params.numero, client: resUser, reparation: null })
+                        .then(resCar => {
+                            if (resCar) {
+                                resCar.reparation = req.body
+                                newValeurReparation = resCar
+                                const updateDoc = {
+                                    $set: { reparation: req.body }
+                                };
+                                const options = { upsert: true };
+                                try {
+                                    CollectionVoiture.updateOne({ _id: newValeurReparation._id }, updateDoc, options)
+                                        .then(resF => res.send({ message: "CAR REPARATION ADDED" }))
+                                        .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" }))
+                                } catch (error) {
+                                    console.log(error);
+                                }
+                            } else {
+                                res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION" })
+                            }
+                        })
+                        .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION", err: err }))
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "NUMBER CAR INVALID" })
+                }
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
 
 const LoginClient = (dataBase, res, req, subStatus) => {
     const CollectionDb = dataBase.collection('Client')
@@ -110,6 +155,7 @@ const LogoutClient = (res, req) => {
 
 exports.HomeClient = HomeClient
 exports.AddCarClient = AddCarClient
+exports.AddCarReparation = AddCarReparation
 
 exports.SubScribeClient = SubScribeClient
 exports.LoginClient = LoginClient

@@ -15,6 +15,11 @@ const car = (req, res) => {
     controllerClient.AddCarClient(dataBase, req, res)
 }
 
+const carreparation = (req, res) => {
+    res.setHeader("Content-Type", "text/plain")
+    controllerClient.AddCarReparation(dataBase, req, res)
+}
+
 const login = (req, res) => {
     res.setHeader("Content-Type", "text/plain")
     controllerClient.LoginClient(dataBase, res, req, false)
@@ -32,6 +37,7 @@ const logout = (req, res) => {
 
 exports.home = home
 exports.car = car
+exports.carreparation = carreparation
 
 exports.subscribe = subscribe
 exports.login = login
