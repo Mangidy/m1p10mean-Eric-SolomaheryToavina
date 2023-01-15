@@ -17,12 +17,12 @@ const HomeClient = (dataBase, req, res) => {
 
 const AddCarClient = (dataBase, req, res) => {
     if (req.session.clientId) {
-        const CollectionDb = dataBase.collection('Client')
-        CollectionDb.findOne({ "_id": new ObjectID(req.session.clientId) })
+        const CollectionClient = dataBase.collection('Client')
+        CollectionClient.findOne({ "_id": new ObjectID(req.session.clientId) })
             .then(resultat => {
-                const CollectionDbTwo = dataBase.collection('Voiture')
+                const CollectionVoiture = dataBase.collection('Voiture')
                 if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
-                    CollectionDbTwo.findOne({ numero: req.body.numero, receptionne: false })
+                    CollectionVoiture.findOne({ numero: req.body.numero, receptionne: false })
                         .then(resTwo => {
                             if (resTwo) {
                                 res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY ADDED" })
@@ -42,14 +42,31 @@ const AddCarClient = (dataBase, req, res) => {
                                     admin: {},
                                     client: req.body.user
                                 }
-                                CollectionDbTwo.insertOne(dataCar)
+
+                                CollectionVoiture.insertOne(dataCar)
                                     .then(resFinal => {
-                                        res.send({ message: "NEW CAR ADDED", client: req.body.user })
+                                        dataActivite = {
+                                            activite: "DEPOT VOITURE",
+                                            client: req.body.user,
+                                            voiture: {
+                                                numero: req.body.numero,
+                                                marque: req.body.marque,
+                                                modele: req.body.modele,
+                                                annee: req.body.annee,
+                                            },
+                                            dataDepot: dataCar.dataDepot
+                                        }
+                                        const CollectionActivite = dataBase.collection('Activite')
+                                        CollectionActivite.insertOne(dataActivite)
+                                            .then(resActivite => {
+                                                res.send({ message: "NEW CAR ADDED", client: req.body.user })
+                                            })
+                                            .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                                     })
                                     .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                             }
                         }).catch(err => {
-                            res.send({ message: "REQUEST ERROR" })
+                            res.send({ message: "REQUEST ERROR VOITURE" })
                         })
                 } else {
                     res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
