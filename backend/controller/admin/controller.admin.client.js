@@ -76,6 +76,7 @@ const receptionneCar = (dataBase, res, req) => {
                                 const updateDoc = {
                                     $set: {
                                         receptionne: true,
+                                        sortie: false,
                                         admin: resAdmin,
                                         facture: req.body
                                     }
@@ -85,6 +86,7 @@ const receptionneCar = (dataBase, res, req) => {
                                     CollectionDb.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
                                         .then(resF => {
                                             const CollectionActivite = dataBase.collection('Activite')
+                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
                                             dataActivite = {
                                                 activite: "FACTURATION VOITURE",
                                                 admin: resAdmin,
@@ -94,7 +96,11 @@ const receptionneCar = (dataBase, res, req) => {
                                             }
                                             CollectionActivite.insertOne(dataActivite)
                                                 .then(resActivite => {
-                                                    res.send({ message: "FACTURE FOR CAR ADDED" })
+                                                    CollectionNotificationClient.insertOne(dataActivite)
+                                                        .then(resNotif => {
+                                                            res.send({ message: "FACTURE FOR CAR ADDED" })
+                                                        })
+                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                                                 })
                                                 .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                                         })
@@ -107,7 +113,7 @@ const receptionneCar = (dataBase, res, req) => {
                                 res.send({ message: "REQUEST ERROR" })
                             })
                     } else {
-                        res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY RECEPTION" })
+                        res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY RECEPTIONNED" })
                     }
                 })
                 .catch(err => {
