@@ -38,7 +38,7 @@ const AddCarClient = (dataBase, req, res) => {
                                     modele: req.body.modele,
                                     annee: req.body.annee,
                                     receptionne: false,
-                                    dataDepot: new Date(),
+                                    dateDepot: new Date(),
                                     admin: {},
                                     client: req.body.user
                                 }

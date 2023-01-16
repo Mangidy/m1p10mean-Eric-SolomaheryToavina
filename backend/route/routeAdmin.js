@@ -17,7 +17,34 @@ const client = (req, res) => {
     if (req.session.usernameAdmin) {
         controllerAdminClient.getAllClient(dataBase, res)
     } else {
-        res.redirect("/")
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
+const clientOne = (req, res) => {
+    res.setHeader("Content-Type", "text/plain")
+    if (req.session.usernameAdmin) {
+        controllerAdminClient.getOneClient(dataBase, res, req)
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
+const carList = (req, res) => {
+    res.setHeader("Content-Type", "text/plain")
+    if (req.session.usernameAdmin) {
+        controllerAdminClient.getAllCar(dataBase, res)
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
+const carOne = (req, res) => {
+    res.setHeader("Content-Type", "text/plain")
+    if (req.session.usernameAdmin) {
+        controllerAdminClient.getOneCar(dataBase, res, req)
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
@@ -33,6 +60,9 @@ const logout = (req, res) => {
 
 exports.home = home
 exports.client = client
+exports.clientOne = clientOne
+exports.carList = carList
+exports.carOne = carOne
 exports.login = login
 exports.logout = logout
 exports.sendDb = sendDb
