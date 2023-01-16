@@ -60,6 +60,67 @@ const getOneCar = (dataBase, res, req) => {
     }
 }
 
+const receptionneCar = (dataBase, res, req) => {
+    if (req.params.id !== undefined) {
+        const CollectionDb = dataBase.collection('Voiture')
+        const CollectionDbAdmin = dataBase.collection('Admin')
+        try {
+            CollectionDb.findOne({ _id: new ObjectID(req.params.id) })
+                .then(resultat => {
+                    dataUpdate = resultat
+                    if (!dataUpdate.receptionne) {
+                        CollectionDbAdmin.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+                            .then(resAdmin => {
+                                delete resAdmin.passwordAdmin
+                                delete resAdmin._id
+                                const updateDoc = {
+                                    $set: {
+                                        receptionne: true,
+                                        admin: resAdmin,
+                                        facture: req.body
+                                    }
+                                };
+                                const options = { upsert: true };
+                                try {
+                                    CollectionDb.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
+                                        .then(resF => {
+                                            const CollectionActivite = dataBase.collection('Activite')
+                                            dataActivite = {
+                                                activite: "FACTURATION VOITURE",
+                                                admin: resAdmin,
+                                                voiture: dataUpdate,
+                                                facture: req.body,
+                                                dateDepot: new Date()
+                                            }
+                                            CollectionActivite.insertOne(dataActivite)
+                                                .then(resActivite => {
+                                                    res.send({ message: "FACTURE FOR CAR ADDED" })
+                                                })
+                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                        })
+                                        .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" }))
+                                } catch (error) {
+                                    res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" })
+                                }
+                            })
+                            .catch(err => {
+                                res.send({ message: "REQUEST ERROR" })
+                            })
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY RECEPTION" })
+                    }
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+        } catch (error) {
+            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+        }
+
+    } else {
+        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+    }
+}
 const LoginAdmin = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Admin')
     CollectionDb.findOne({ "usernameAdmin": req.body.username })
@@ -89,5 +150,6 @@ exports.getAllClient = getAllClient
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
 exports.getOneCar = getOneCar
+exports.receptionneCar = receptionneCar
 exports.LoginAdmin = LoginAdmin
 exports.LogoutAdmin = LogoutAdmin

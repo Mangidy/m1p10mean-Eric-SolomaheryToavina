@@ -105,7 +105,7 @@ const AddCarReparation = (dataBase, req, res) => {
                                         .then(resF => res.send({ message: "CAR REPARATION ADDED" }))
                                         .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" }))
                                 } catch (error) {
-                                    console.log(error);
+                                    res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" })
                                 }
                             } else {
                                 res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION" })

@@ -48,6 +48,15 @@ const carOne = (req, res) => {
     }
 }
 
+const carReceptionne = (req, res) => {
+    res.setHeader("Content-Type", "text/plain")
+    if (req.session.usernameAdmin) {
+        controllerAdminClient.receptionneCar(dataBase, res, req)
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
 const login = (req, res) => {
     res.setHeader("Content-Type", "text/plain")
     controllerAdminClient.LoginAdmin(dataBase, res, req)
@@ -63,6 +72,7 @@ exports.client = client
 exports.clientOne = clientOne
 exports.carList = carList
 exports.carOne = carOne
+exports.carReceptionne = carReceptionne
 exports.login = login
 exports.logout = logout
 exports.sendDb = sendDb
