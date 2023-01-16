@@ -20,14 +20,17 @@
                    <div class="collapse navbar-collapse" id="navbarsExample04" ng-controller="barController">
                       <ul class="navbar-nav mr-auto">
                          <li class="nav-item ">
-                            <a class="nav-link" routerLink="../home" routerLinkActive="active">Car Reception</a>
+                            <a class="nav-link" routerLink="./reception" routerLinkActive="active">Car Reception</a>
                          </li>
                          <li class="nav-item">
-                            <a class="nav-link" routerLink="../deposit" routerLinkActive="active">Repair List</a>
+                            <a class="nav-link" routerLink="./listing" routerLinkActive="active">Repair List</a>
                          </li>
                          <li class="nav-item">
-                            <a class="nav-link"routerLink="../progress" routerLinkActive="active">Leaving ticket</a>
+                            <a class="nav-link"routerLink="./ticketing" routerLinkActive="active">Leaving ticket</a>
                          </li>
+                         <li class="nav-item d_none">
+                           <a class="nav-link" (click)="logout()"><i class="fa fa-user-circle padd_right" aria-hidden="true" ></i>Log out</a>
+                        </li>
                        
                         
                       </ul>

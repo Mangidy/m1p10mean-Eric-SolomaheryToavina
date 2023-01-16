@@ -14,7 +14,13 @@ import { BillingComponent } from './components/billing/billing.component';
 import { CarRecoveryComponent } from './components/car-recovery/car-recovery.component';
 import { RepairHistoryComponent } from './components/repair-history/repair-history.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { AtelierHeaderComponent } from './components/atelier-header/atelier-header.component';
+import { AtelierHeaderComponent } from './components/atelier/atelier-header/atelier-header.component';
+import { AtelierHomeComponent } from './components/atelier/atelier-home/atelier-home.component';
+import { AtelierFooterComponent } from './components/atelier/atelier-footer/atelier-footer.component';
+import { AtelierReceptionComponent } from './components/atelier/atelier-reception/atelier-reception.component';
+import { AtelierRepairComponent } from './components/atelier/atelier-repair/atelier-repair.component';
+import { AtelierLeaveComponent } from './components/atelier/atelier-leave/atelier-leave.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -30,11 +36,17 @@ import { AtelierHeaderComponent } from './components/atelier-header/atelier-head
     CarRecoveryComponent,
     RepairHistoryComponent,
     SignUpComponent,
-    AtelierHeaderComponent
+    AtelierHeaderComponent,
+    AtelierHomeComponent,
+    AtelierFooterComponent,
+    AtelierReceptionComponent,
+    AtelierRepairComponent,
+    AtelierLeaveComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
