@@ -21,7 +21,13 @@ export class LoginComponent {
       this.auth.login(this.loginForm.value).subscribe(
         (result) => {
           console.log(result);
-          this.router.navigate(['/atelier']);
+          if(result.privilage==2){
+            this.router.navigate(['/atelier']);
+          }
+          if(result.privilage==3){
+            this.router.navigate(['/financier']);
+          }
+          
         },
         (err: Error) => {
           alert(err.message);

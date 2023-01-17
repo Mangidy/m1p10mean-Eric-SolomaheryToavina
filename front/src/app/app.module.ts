@@ -21,6 +21,11 @@ import { AtelierReceptionComponent } from './components/atelier/atelier-receptio
 import { AtelierRepairComponent } from './components/atelier/atelier-repair/atelier-repair.component';
 import { AtelierLeaveComponent } from './components/atelier/atelier-leave/atelier-leave.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FinancierHeaderComponent } from './components/financier/financier-header/financier-header.component';
+import { FinancierFooterComponent } from './components/financier/financier-footer/financier-footer.component';
+import { FinancierHomeComponent } from './components/financier/financier-home/financier-home.component';
+import { FinancierPayementComponent } from './components/financier/financier-payement/financier-payement.component';
+import { FinancierStatistiqueComponent } from './components/financier/financier-statistique/financier-statistique.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +46,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     AtelierFooterComponent,
     AtelierReceptionComponent,
     AtelierRepairComponent,
-    AtelierLeaveComponent
+    AtelierLeaveComponent,
+    FinancierHeaderComponent,
+    FinancierFooterComponent,
+    FinancierHomeComponent,
+    FinancierPayementComponent,
+    FinancierStatistiqueComponent
   ],
   imports: [
     BrowserModule,

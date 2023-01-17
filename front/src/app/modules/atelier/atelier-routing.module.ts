@@ -8,9 +8,11 @@ import { AtelierRepairComponent } from 'src/app/components/atelier/atelier-repai
 const routes: Routes = [
   { path:'', component : AtelierHomeComponent,
   children:[
+    { path:'home', component: AtelierHomeComponent},
     { path:'reception', component: AtelierReceptionComponent},
     { path:'listing', component: AtelierRepairComponent},
-    { path:'ticketing', component: AtelierLeaveComponent}
+    { path:'ticketing', component: AtelierLeaveComponent},
+    {path:'',redirectTo:'/atelier/home',pathMatch:'full'}
 
   ]}
 ];

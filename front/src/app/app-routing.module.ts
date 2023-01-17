@@ -9,8 +9,8 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { RepairHistoryComponent } from './components/repair-history/repair-history.component';
 import { RepairProgressComponent } from './components/repair-progress/repair-progress.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { AuthGuard } from './guard/auth.guard';
-import { AtelierModule } from './modules/atelier/atelier.module';
+import { AtelierGuard } from './guard/atelier.guard';
+import {  FinancierGuard } from './guard/financier.guard';
 
 const routes: Routes = [
   { path:'home', component: HomeComponent},
@@ -23,7 +23,10 @@ const routes: Routes = [
   { path:'history', component: RepairHistoryComponent}, 
    { path:'', redirectTo:'home', pathMatch:'full'},
    {
-    path:'atelier',canActivate: [AuthGuard],loadChildren: ()=>import('./modules/atelier/atelier.module').then((m)=>m.AtelierModule)
+    path:'atelier',canActivate: [AtelierGuard],loadChildren: ()=>import('./modules/atelier/atelier.module').then((m)=>m.AtelierModule)
+   },
+   {
+    path:'financier',canActivate:[FinancierGuard],loadChildren:()=>import('./modules/financier/financier.module').then((m)=>m.FinancierModule)
    },
   { path:'**', component: NotfoundComponent}
 
