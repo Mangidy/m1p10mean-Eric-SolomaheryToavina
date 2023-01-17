@@ -129,23 +129,48 @@ const receptionneCar = (dataBase, res, req) => {
 }
 const LoginAdmin = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Admin')
-    CollectionDb.findOne({ "usernameAdmin": req.body.username })
+    CollectionDb.findOne({ usernameAdmin: req.body.username })
         .then(resultat => {
             if (resultat) {
                 if (resultat.usernameAdmin === req.body.username && resultat.passwordAdmin === req.body.password) {
                     req.session.usernameAdmin = resultat._id
                     res.send({ message: "LOGIN SUCCESSFULLY" })
                 } else {
-                    res.send({ message: "LOGIN FAILED" })
+                    res.send({ message: "LOGIN FAILED", detailled: "INVALID INFORMATION" })
                 }
             } else {
-                res.send({ message: "LOGIN FAILED" })
+                res.send({ message: "LOGIN FAILED", detailled: "INVALID INFORMATION" })
             }
         })
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
         })
 }
+
+const AddAdmin = (dataBase, res, req) => {
+    const CollectionDbAdmin = dataBase.collection('Admin')
+    if (req.body.usernameAdmin !== undefined && req.body.passwordAdmin !== undefined && req.body.roleAdmin !== undefined) {
+
+        CollectionDbAdmin.findOne({ usernameAdmin: req.body.usernameAdmin })
+            .then(resAdmin => {
+                if (resAdmin) {
+                    res.send({ message: "ADMIN ADD FAILED", detailled: "ADMIN ALREADY ADDED" })
+                } else {
+                    req.body.dateSubscribe = new Date()
+                    CollectionDbAdmin.insertOne(req.body)
+                        .then(resultat => {
+                            res.send({ message: "ADMIN ADDED SUCCESSFULLY" })
+                        })
+                        .catch(err => res.send({ message: "ADMIN ADD FAILED", detailled: "INVALID INFORMATION" }))
+                }
+            })
+            .catch(err => res.send({ message: "ADMIN ADD FAILED", detailled: "INVALID INFORMATION" }))
+
+    } else {
+        res.send({ message: "ADMIN ADD FAILED", detailled: "INVALID INFORMATION" })
+    }
+}
+
 
 const LogoutAdmin = (res, req) => {
     req.session.destroy()
@@ -157,5 +182,6 @@ exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
 exports.getOneCar = getOneCar
 exports.receptionneCar = receptionneCar
+exports.AddAdmin = AddAdmin
 exports.LoginAdmin = LoginAdmin
 exports.LogoutAdmin = LogoutAdmin

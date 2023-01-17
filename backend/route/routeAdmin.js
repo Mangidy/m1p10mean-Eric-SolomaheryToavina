@@ -62,6 +62,11 @@ const login = (req, res) => {
     controllerAdminClient.LoginAdmin(dataBase, res, req)
 }
 
+const add = (req, res) => {
+    res.setHeader("Content-Type", "text/plain")
+    controllerAdminClient.AddAdmin(dataBase, res, req)
+}
+
 const logout = (req, res) => {
     res.setHeader("Content-Type", "text/plain")
     controllerAdminClient.LogoutAdmin(res, req)
@@ -73,6 +78,7 @@ exports.clientOne = clientOne
 exports.carList = carList
 exports.carOne = carOne
 exports.carReceptionne = carReceptionne
+exports.add = add
 exports.login = login
 exports.logout = logout
 exports.sendDb = sendDb
