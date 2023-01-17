@@ -1,4 +1,5 @@
 const { ObjectID } = require("bson");
+const crypto = require('crypto')
 
 const HomeClient = (dataBase, req, res) => {
     if (req.session.clientId) {
@@ -18,7 +19,7 @@ const HomeClient = (dataBase, req, res) => {
 const AddCarClient = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionClient = dataBase.collection('Client')
-        CollectionClient.findOne({ "_id": new ObjectID(req.session.clientId) })
+        CollectionClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resultat => {
                 const CollectionVoiture = dataBase.collection('Voiture')
                 if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
@@ -31,6 +32,8 @@ const AddCarClient = (dataBase, req, res) => {
 
                                 delete req.body.user.password
                                 delete req.body.user.username
+                                delete req.body.user._id
+                                delete req.body.user.dateSubscribe
 
                                 dataCar = {
                                     numero: req.body.numero,
@@ -38,9 +41,10 @@ const AddCarClient = (dataBase, req, res) => {
                                     modele: req.body.modele,
                                     annee: req.body.annee,
                                     receptionne: false,
-                                    dateDepot: new Date(),
                                     admin: {},
-                                    client: req.body.user
+                                    client: req.body.user,
+                                    reparation: {},
+                                    dateDepot: new Date()
                                 }
 
                                 CollectionVoiture.insertOne(dataCar)
@@ -54,7 +58,7 @@ const AddCarClient = (dataBase, req, res) => {
                                                 modele: req.body.modele,
                                                 annee: req.body.annee,
                                             },
-                                            dataDepot: dataCar.dataDepot
+                                            dateDepot: dataCar.dateDepot
                                         }
                                         const CollectionActivite = dataBase.collection('Activite')
                                         CollectionActivite.insertOne(dataActivite)
@@ -85,13 +89,13 @@ const AddCarReparation = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionClient = dataBase.collection('Client')
         const CollectionVoiture = dataBase.collection('Voiture')
-        CollectionClient.findOne({ "_id": new ObjectID(req.session.clientId) })
+        CollectionClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resUser => {
                 if (req.params.numero !== undefined) {
                     delete resUser.password
                     delete resUser.username
 
-                    CollectionVoiture.findOne({ "numero": req.params.numero, client: resUser, reparation: null })
+                    CollectionVoiture.findOne({ numero: req.params.numero, reparation: {} })
                         .then(resCar => {
                             if (resCar) {
                                 resCar.reparation = req.body
@@ -108,7 +112,7 @@ const AddCarReparation = (dataBase, req, res) => {
                                     res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" })
                                 }
                             } else {
-                                res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION" })
+                                res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION INFORMATION" })
                             }
                         })
                         .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION", err: err }))
@@ -124,27 +128,24 @@ const AddCarReparation = (dataBase, req, res) => {
     }
 }
 
-const LoginClient = (dataBase, res, req, subStatus) => {
+const LoginClient = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Client')
-    CollectionDb.findOne({ "phone": req.body.phone })
+    CollectionDb.findOne({ phone: req.body.phone })
         .then(resultat => {
             if (resultat) {
                 if (req.body.phone !== undefined) {
-                    if (req.body.phone === resultat.phone && req.body.password === resultat.password) {
+                    let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
+                    if (resultat.phone === req.body.phone && resultat.password === hashPassword) {
                         req.session.clientId = resultat._id
-                        if (subStatus) {
-                            res.send({ message: "SUBSCRIBE SUCCESSFULLY" })
-                        } else {
-                            res.send({ message: "LOGIN SUCCESSFULLY" })
-                        }
+                        res.send({ message: "LOGIN SUCCESSFULLY" })
                     } else {
-                        res.send({ message: "LOGIN FAILED", detailled: "INVALID INFORMATION" })
+                        res.send({ message: "LOGIN FAILED", detailled: "PHONE OR PASSWORD INVALID" })
                     }
                 } else {
                     res.send({ message: "LOGIN FAILED", detailled: "PHONE INVALID" })
                 }
             } else {
-                res.send({ message: "LOGIN FAILED", detailled: "INVALID INFORMATION" })
+                res.send({ message: "LOGIN FAILED", detailled: "INFORMATION NOT FOUND" })
             }
         })
         .catch(err => {
@@ -156,9 +157,11 @@ const SubScribeClient = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Client')
     if (req.body.username !== undefined && req.body.password !== undefined && req.body.nom !== undefined && req.body.prenom !== undefined && req.body.adress !== undefined && req.body.phone !== undefined) {
         req.body.dateSubscribe = new Date()
+        let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
+        req.body.password = hashPassword
         CollectionDb.insertOne(req.body)
             .then(resultat => {
-                LoginClient(dataBase, res, req, true)
+                res.send({ message: "SUBSCRIBE SUCCESSFULLY" })
             })
             .catch(err => res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION" }))
 

@@ -1,4 +1,5 @@
 const { ObjectID } = require("bson")
+const crypto = require('crypto')
 
 const getAllClient = (dataBase, res) => {
     const CollectionDb = dataBase.collection('Client')
@@ -60,6 +61,19 @@ const getOneCar = (dataBase, res, req) => {
     }
 }
 
+const CalculTotal = (jsonData) => {
+    try {
+        toArr = Object.values(jsonData)
+        somme = 0
+        for (let i = 0; i < toArr.length; i++) {
+            somme += parseInt(toArr[i])
+        }
+        return somme
+    } catch (error) {
+        return 0
+    }
+}
+
 const receptionneCar = (dataBase, res, req) => {
     if (req.params.id !== undefined) {
         const CollectionDb = dataBase.collection('Voiture')
@@ -73,40 +87,51 @@ const receptionneCar = (dataBase, res, req) => {
                             .then(resAdmin => {
                                 delete resAdmin.passwordAdmin
                                 delete resAdmin._id
-                                const updateDoc = {
-                                    $set: {
-                                        receptionne: true,
-                                        sortie: false,
-                                        admin: resAdmin,
-                                        facture: req.body
+                                req.body.Total = CalculTotal(req.body)
+                                if (req.body.Total !== 0) {
+                                    const updateDoc = {
+                                        $set: {
+                                            receptionne: true,
+                                            sortie: false,
+                                            validation: false,
+                                            admin: resAdmin,
+                                            facture: req.body
+                                        }
+                                    };
+                                    const options = { upsert: true };
+                                    try {
+                                        CollectionDb.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
+                                            .then(resF => {
+                                                const CollectionActivite = dataBase.collection('Activite')
+                                                const CollectionNotificationClient = dataBase.collection('NotificationClient')
+                                                delete dataUpdate._id
+                                                delete dataUpdate.receptionne
+                                                delete dataUpdate.admin
+                                                delete dataUpdate.facture
+                                                delete resAdmin.dateSubscribe
+                                                dataActivite = {
+                                                    activite: "FACTURATION VOITURE",
+                                                    admin: resAdmin,
+                                                    voiture: dataUpdate,
+                                                    facture: req.body,
+                                                    dateDepot: new Date()
+                                                }
+                                                CollectionActivite.insertOne(dataActivite)
+                                                    .then(resActivite => {
+                                                        CollectionNotificationClient.insertOne(dataActivite)
+                                                            .then(resNotif => {
+                                                                res.send({ message: "FACTURE FOR CAR ADDED" })
+                                                            })
+                                                            .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                                    })
+                                                    .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                            })
+                                            .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" }))
+                                    } catch (error) {
+                                        res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" })
                                     }
-                                };
-                                const options = { upsert: true };
-                                try {
-                                    CollectionDb.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
-                                        .then(resF => {
-                                            const CollectionActivite = dataBase.collection('Activite')
-                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                            dataActivite = {
-                                                activite: "FACTURATION VOITURE",
-                                                admin: resAdmin,
-                                                voiture: dataUpdate,
-                                                facture: req.body,
-                                                dateDepot: new Date()
-                                            }
-                                            CollectionActivite.insertOne(dataActivite)
-                                                .then(resActivite => {
-                                                    CollectionNotificationClient.insertOne(dataActivite)
-                                                        .then(resNotif => {
-                                                            res.send({ message: "FACTURE FOR CAR ADDED" })
-                                                        })
-                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                                })
-                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                        })
-                                        .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" }))
-                                } catch (error) {
-                                    res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" })
+                                } else {
+                                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INTEGER" })
                                 }
                             })
                             .catch(err => {
@@ -127,19 +152,21 @@ const receptionneCar = (dataBase, res, req) => {
         res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
     }
 }
+
 const LoginAdmin = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Admin')
     CollectionDb.findOne({ usernameAdmin: req.body.username })
         .then(resultat => {
             if (resultat) {
-                if (resultat.usernameAdmin === req.body.username && resultat.passwordAdmin === req.body.password) {
+                let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
+                if (resultat.usernameAdmin === req.body.username && resultat.passwordAdmin === hashPassword) {
                     req.session.usernameAdmin = resultat._id
                     res.send({ message: "LOGIN SUCCESSFULLY" })
                 } else {
-                    res.send({ message: "LOGIN FAILED", detailled: "INVALID INFORMATION" })
+                    res.send({ message: "LOGIN FAILED", detailled: "LOGIN OR PASSWORD INVALID" })
                 }
             } else {
-                res.send({ message: "LOGIN FAILED", detailled: "INVALID INFORMATION" })
+                res.send({ message: "LOGIN FAILED", detailled: "LOGIN NOT FOUND" })
             }
         })
         .catch(err => {
@@ -150,13 +177,14 @@ const LoginAdmin = (dataBase, res, req) => {
 const AddAdmin = (dataBase, res, req) => {
     const CollectionDbAdmin = dataBase.collection('Admin')
     if (req.body.usernameAdmin !== undefined && req.body.passwordAdmin !== undefined && req.body.roleAdmin !== undefined) {
-
         CollectionDbAdmin.findOne({ usernameAdmin: req.body.usernameAdmin })
             .then(resAdmin => {
                 if (resAdmin) {
                     res.send({ message: "ADMIN ADD FAILED", detailled: "ADMIN ALREADY ADDED" })
                 } else {
                     req.body.dateSubscribe = new Date()
+                    let hashPassword = crypto.createHash('md5').update(req.body.passwordAdmin).digest("hex")
+                    req.body.passwordAdmin = hashPassword
                     CollectionDbAdmin.insertOne(req.body)
                         .then(resultat => {
                             res.send({ message: "ADMIN ADDED SUCCESSFULLY" })
@@ -170,7 +198,6 @@ const AddAdmin = (dataBase, res, req) => {
         res.send({ message: "ADMIN ADD FAILED", detailled: "INVALID INFORMATION" })
     }
 }
-
 
 const LogoutAdmin = (res, req) => {
     req.session.destroy()
