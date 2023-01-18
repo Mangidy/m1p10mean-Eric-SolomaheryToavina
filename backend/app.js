@@ -23,7 +23,7 @@ const start = (port, routeAdmin, routeClient) => {
             }))
             app.use(cookieParser())
 
-            app.get("/", routeAdmin.home)
+            app.get("/admin/", routeAdmin.home)
             app.get("/admin/client", routeAdmin.client)
             app.get("/admin/client/:id", routeAdmin.clientOne)
             app.get("/admin/car", routeAdmin.carList)
@@ -39,6 +39,11 @@ const start = (port, routeAdmin, routeClient) => {
             app.post("/client/subscribe", routeClient.subscribe)
             app.post("/client/login", routeClient.login)
             app.post("/client/logout", routeClient.logout)
+
+            app.use((req, res) => {
+                res.setHeader("Content-Type", "text/plain")
+                res.send(404, "PAGE NOT FOUND")
+            })
 
             app.listen(port, console.log(`Server running on port ${port}`))
         })

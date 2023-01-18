@@ -1,6 +1,18 @@
 const { ObjectID } = require("bson")
 const crypto = require('crypto')
 
+const HomeAdmin = (dataBase, req, res) => {
+    const CollectionDb = dataBase.collection('Admin')
+    CollectionDb.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+        .then(resultat => {
+            res.send({ message: "ADMIN CONNECTED", admin: resultat })
+        })
+        .catch(err => {
+            Z_ASCII
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
+
 const getAllClient = (dataBase, res) => {
     const CollectionDb = dataBase.collection('Client')
     CollectionDb.find().toArray()
@@ -205,6 +217,7 @@ const LogoutAdmin = (res, req) => {
 }
 
 exports.getAllClient = getAllClient
+exports.HomeAdmin = HomeAdmin
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
 exports.getOneCar = getOneCar

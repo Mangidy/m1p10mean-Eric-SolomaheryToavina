@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const HomeClient = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionDb = dataBase.collection('Client')
-        CollectionDb.findOne({ "_id": new ObjectID(req.session.clientId) })
+        CollectionDb.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resultat => {
                 res.send({ message: "USER CONNECTED", user: resultat })
             })

@@ -6,32 +6,26 @@ const sendDb = (db) => {
 }
 
 const home = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerClient.HomeClient(dataBase, req, res)
 }
 
 const car = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerClient.AddCarClient(dataBase, req, res)
 }
 
 const carreparation = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerClient.AddCarReparation(dataBase, req, res)
 }
 
 const login = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerClient.LoginClient(dataBase, res, req, false)
 }
 
 const subscribe = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerClient.SubScribeClient(dataBase, res, req)
 }
 
 const logout = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerClient.LogoutClient(res, req)
 }
 

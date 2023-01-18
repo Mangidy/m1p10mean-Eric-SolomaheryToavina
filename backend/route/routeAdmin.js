@@ -6,14 +6,14 @@ const sendDb = (db) => {
 }
 
 const home = (req, res) => {
-    console.log(req.session);
-    res.setHeader("Content-Type", "text/plain")
-    res.send('API FOR GARAGE WEB')
-    res.end()
+    if (req.session.usernameAdmin) {
+        controllerAdminClient.HomeAdmin(dataBase, req, res)
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
 }
 
 const client = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     if (req.session.usernameAdmin) {
         controllerAdminClient.getAllClient(dataBase, res)
     } else {
@@ -22,7 +22,6 @@ const client = (req, res) => {
 }
 
 const clientOne = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     if (req.session.usernameAdmin) {
         controllerAdminClient.getOneClient(dataBase, res, req)
     } else {
@@ -31,7 +30,6 @@ const clientOne = (req, res) => {
 }
 
 const carList = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     if (req.session.usernameAdmin) {
         controllerAdminClient.getAllCar(dataBase, res)
     } else {
@@ -40,7 +38,6 @@ const carList = (req, res) => {
 }
 
 const carOne = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     if (req.session.usernameAdmin) {
         controllerAdminClient.getOneCar(dataBase, res, req)
     } else {
@@ -49,7 +46,6 @@ const carOne = (req, res) => {
 }
 
 const carReceptionne = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     if (req.session.usernameAdmin) {
         controllerAdminClient.receptionneCar(dataBase, res, req)
     } else {
@@ -58,17 +54,14 @@ const carReceptionne = (req, res) => {
 }
 
 const login = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerAdminClient.LoginAdmin(dataBase, res, req)
 }
 
 const add = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerAdminClient.AddAdmin(dataBase, res, req)
 }
 
 const logout = (req, res) => {
-    res.setHeader("Content-Type", "text/plain")
     controllerAdminClient.LogoutAdmin(res, req)
 }
 
