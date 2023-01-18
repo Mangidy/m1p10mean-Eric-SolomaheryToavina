@@ -5,14 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { DepositComponent } from './components/deposit/deposit.component';
+import { DepositComponent } from './components/client/deposit/deposit.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { RepairProgressComponent } from './components/repair-progress/repair-progress.component';
-import { BillingComponent } from './components/billing/billing.component';
-import { CarRecoveryComponent } from './components/car-recovery/car-recovery.component';
-import { RepairHistoryComponent } from './components/repair-history/repair-history.component';
+import { HeaderComponent } from './components/client/header/header.component';
+import { FooterComponent } from './components/client/footer/footer.component';
+import { RepairProgressComponent } from './components/client/repair-progress/repair-progress.component';
+import { BillingComponent } from './components/client/billing/billing.component';
+import { CarRecoveryComponent } from './components/client/car-recovery/car-recovery.component';
+import { RepairHistoryComponent } from './components/client/repair-history/repair-history.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { AtelierHeaderComponent } from './components/atelier/atelier-header/atelier-header.component';
 import { AtelierHomeComponent } from './components/atelier/atelier-home/atelier-home.component';
@@ -26,6 +26,8 @@ import { FinancierFooterComponent } from './components/financier/financier-foote
 import { FinancierHomeComponent } from './components/financier/financier-home/financier-home.component';
 import { FinancierPayementComponent } from './components/financier/financier-payement/financier-payement.component';
 import { FinancierStatistiqueComponent } from './components/financier/financier-statistique/financier-statistique.component';
+import { ClientHomeComponent } from './components/client/client-home/client-home.component';
+import { AdminComponent } from './components/admin/admin-home/admin.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { FinancierStatistiqueComponent } from './components/financier/financier-
     FinancierFooterComponent,
     FinancierHomeComponent,
     FinancierPayementComponent,
-    FinancierStatistiqueComponent
+    FinancierStatistiqueComponent,
+    ClientHomeComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

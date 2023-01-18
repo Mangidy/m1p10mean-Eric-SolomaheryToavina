@@ -12,12 +12,18 @@ export class FinancierGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-if( this.auth.getPrivilage()==3 &&this.auth.isLoggedIn()){
+if( Number(localStorage.getItem('privilage'))==3 &&this.auth.isLoggedIn()){
       return this.auth.isLoggedIn();
       }
       else{
-      this.router.navigate(['login']);
-      return false;
+        if(localStorage.getItem('token')!=null)
+        {
+          this.router.navigate(['notfound']);
+        }
+        else{
+          this.router.navigate(['login']);
+        }
+        return false;
       }
   }
 }

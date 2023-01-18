@@ -21,11 +21,17 @@ export class LoginComponent {
       this.auth.login(this.loginForm.value).subscribe(
         (result) => {
           console.log(result);
-          if(result.privilage==2){
+          if(this.auth.getPrivilage()==1){
+            this.router.navigate(['/client']);
+          }
+          if(this.auth.getPrivilage()==2){
             this.router.navigate(['/atelier']);
           }
-          if(result.privilage==3){
+          if(this.auth.getPrivilage()==3){
             this.router.navigate(['/financier']);
+          }
+          if(this.auth.getPrivilage()==4){
+            this.router.navigate(['/admin']);
           }
           
         },
