@@ -17,6 +17,36 @@ const HomeClient = (dataBase, req, res) => {
     }
 }
 
+const NotificationClient = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionDb = dataBase.collection('Client')
+        const CollectionDbNotificationClient = dataBase.collection('NotificationClient')
+        CollectionDb.findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resUser => {
+                delete resUser._id
+                delete resUser.password
+                delete resUser.username
+                delete resUser.dateSubscribe
+                CollectionDbNotificationClient.find({ client: resUser }).toArray()
+                    .then(resNotif => {
+                        if (resNotif) {
+                            res.send(resNotif)
+                        } else {
+                            res.send({ message: "Aucune notification pour le moment" })
+                        }
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
 const GetCarClient = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionDbClient = dataBase.collection('Client')
@@ -307,6 +337,7 @@ const LogoutClient = (res, req) => {
 }
 
 exports.HomeClient = HomeClient
+exports.NotificationClient = NotificationClient
 exports.GetCarClient = GetCarClient
 exports.GetCarOne = GetCarOne
 exports.GetFactureClient = GetFactureClient
