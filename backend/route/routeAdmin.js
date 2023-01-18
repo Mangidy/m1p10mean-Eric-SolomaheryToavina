@@ -13,6 +13,14 @@ const home = (req, res) => {
     }
 }
 
+const facture = (req, res) => {
+    if (req.session.usernameAdmin) {
+        controllerAdminClient.getAllFacture(dataBase, res)
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
 const client = (req, res) => {
     if (req.session.usernameAdmin) {
         controllerAdminClient.getAllClient(dataBase, res)
@@ -67,6 +75,7 @@ const logout = (req, res) => {
 
 exports.home = home
 exports.client = client
+exports.facture = facture
 exports.clientOne = clientOne
 exports.carList = carList
 exports.carOne = carOne

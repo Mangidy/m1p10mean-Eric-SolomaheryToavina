@@ -24,6 +24,31 @@ const CalculTotal = (jsonData) => {
     }
 }
 
+const TriageDataFactureAdmin = (data) => {
+    Newdata = data.map(resultat => {
+        if (resultat.receptionne === true) {
+            return {
+                id: resultat._id,
+                voiture: {
+                    numero: resultat.numero,
+                    marque: resultat.marque,
+                    modele: resultat.modele,
+                    annee: resultat.annee,
+                },
+                client: resultat.client,
+                facture: resultat.facture,
+                reparation: resultat.reparation,
+                dateDepot: resultat.dateDepot,
+            }
+        } else {
+            return {
+                message: "Aucune facture pour le moment"
+            }
+        }
+    })
+    return Newdata
+}
+
 const TriageDataFacture = (data) => {
     Newdata = data.map(resultat => {
         if (resultat.receptionne === true) {
@@ -207,5 +232,6 @@ exports.TriageDataCarAdmin = TriageDataCarAdmin
 exports.TriageDataCarOne = TriageDataCarOne
 exports.TriageDataCarOneAdmin = TriageDataCarOneAdmin
 exports.CalculTotal = CalculTotal
+exports.TriageDataFactureAdmin = TriageDataFactureAdmin
 exports.TriageDataFacture = TriageDataFacture
 exports.TriageDataFactureOne = TriageDataFactureOne

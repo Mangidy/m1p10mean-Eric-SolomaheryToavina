@@ -27,6 +27,7 @@ const start = (port, routeAdmin, routeClient) => {
             app.get("/admin/client", routeAdmin.client)
             app.get("/admin/client/:id", routeAdmin.clientOne)
             app.get("/admin/car", routeAdmin.carList)
+            app.get("/admin/facture", routeAdmin.facture)
             app.get("/admin/car/:id", routeAdmin.carOne)
             app.post("/admin/car/:id/receptionne", routeAdmin.carReceptionne)
             app.post("/admin/add", routeAdmin.add)
@@ -40,7 +41,6 @@ const start = (port, routeAdmin, routeClient) => {
             app.get("/client/car/reception/:valeur", routeClient.carClientReception)
             app.get("/client/facture", routeClient.facture)
             app.get("/client/facture/:id", routeClient.factureId)
-            // app.get("/client/facture/:id/valid", routeClient.factureValid)
             app.post("/client/car", routeClient.car)
             app.post("/client/car/reparation/:numero", routeClient.carreparation)
             app.post("/client/subscribe", routeClient.subscribe)
@@ -48,7 +48,7 @@ const start = (port, routeAdmin, routeClient) => {
             app.post("/client/logout", routeClient.logout)
 
             app.use((req, res) => {
-                res.send(404, { message: "PAGE NOT FOUND" })
+                res.send({ message: "PAGE NOT FOUND" })
             })
 
             app.listen(port, console.log(`Server running on port ${port}`))

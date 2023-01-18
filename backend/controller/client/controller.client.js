@@ -163,12 +163,12 @@ const GetFactureIdClient = (dataBase, req, res) => {
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
             })
-
-
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
 }
+
+
 
 const GetCarClientReception = (dataBase, req, res) => {
     if (req.session.clientId) {

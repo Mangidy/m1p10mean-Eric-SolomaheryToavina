@@ -56,6 +56,18 @@ const getAllCar = (dataBase, res) => {
         })
 }
 
+const getAllFacture = (dataBase, res) => {
+    const CollectionDb = dataBase.collection('Voiture')
+    CollectionDb.find({ receptionne: true }).toArray()
+        .then(resFacture => {
+            resAffiche = outil.TriageDataFactureAdmin(resFacture)
+            res.send(resAffiche)
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
+
 const getOneCar = (dataBase, res, req) => {
     if (req.params.id !== undefined) {
         const CollectionDb = dataBase.collection('Voiture')
@@ -221,6 +233,7 @@ const LogoutAdmin = (res, req) => {
 }
 
 exports.getAllClient = getAllClient
+exports.getAllFacture = getAllFacture
 exports.HomeAdmin = HomeAdmin
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
