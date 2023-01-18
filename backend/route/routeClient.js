@@ -37,9 +37,6 @@ const carClientReception = (req, res) => {
     controllerClient.GetCarClientReception(dataBase, req, res)
 }
 
-const carreparation = (req, res) => {
-    controllerClient.AddCarReparation(dataBase, req, res)
-}
 
 const login = (req, res) => {
     controllerClient.LoginClient(dataBase, res, req, false)
@@ -61,7 +58,6 @@ exports.factureId = factureId
 exports.carClient = carClient
 exports.carOne = carOne
 exports.carClientReception = carClientReception
-exports.carreparation = carreparation
 
 exports.subscribe = subscribe
 exports.login = login

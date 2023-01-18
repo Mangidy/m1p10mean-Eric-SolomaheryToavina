@@ -272,49 +272,6 @@ const AddCarClient = (dataBase, req, res) => {
 }
 
 
-const AddCarReparation = (dataBase, req, res) => {
-    if (req.session.clientId) {
-        const CollectionClient = dataBase.collection('Client')
-        const CollectionVoiture = dataBase.collection('Voiture')
-        CollectionClient.findOne({ _id: new ObjectID(req.session.clientId) })
-            .then(resUser => {
-                if (req.params.numero !== undefined) {
-                    delete resUser.password
-                    delete resUser.username
-
-                    CollectionVoiture.findOne({ numero: req.params.numero, reparation: {} })
-                        .then(resCar => {
-                            if (resCar) {
-                                resCar.reparation = req.body
-                                newValeurReparation = resCar
-                                const updateDoc = {
-                                    $set: { reparation: req.body }
-                                };
-                                const options = { upsert: true };
-                                try {
-                                    CollectionVoiture.updateOne({ _id: newValeurReparation._id }, updateDoc, options)
-                                        .then(resF => res.send({ message: "CAR REPARATION ADDED" }))
-                                        .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" }))
-                                } catch (error) {
-                                    res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" })
-                                }
-                            } else {
-                                res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION INFORMATION" })
-                            }
-                        })
-                        .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION", err: err }))
-                } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "NUMBER CAR INVALID" })
-                }
-            })
-            .catch(err => {
-                res.send({ message: "REQUEST ERROR" })
-            })
-    } else {
-        res.send({ message: "USER NOT CONNECTED" })
-    }
-}
-
 const LoginClient = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Client')
     CollectionDb.findOne({ phone: req.body.phone })
@@ -378,7 +335,6 @@ exports.GetFactureClient = GetFactureClient
 exports.GetFactureIdClient = GetFactureIdClient
 exports.GetCarClientReception = GetCarClientReception
 exports.AddCarClient = AddCarClient
-exports.AddCarReparation = AddCarReparation
 
 exports.SubScribeClient = SubScribeClient
 exports.LoginClient = LoginClient

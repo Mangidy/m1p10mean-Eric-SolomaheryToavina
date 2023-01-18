@@ -61,6 +61,14 @@ const carOne = (req, res) => {
     }
 }
 
+const carreparation = (req, res) => {
+    if (req.session.usernameAdmin) {
+        controllerAdminClient.AddCarReparation(dataBase, req, res)
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
 const carReceptionne = (req, res) => {
     if (req.session.usernameAdmin) {
         controllerAdminClient.receptionneCar(dataBase, res, req)
@@ -82,6 +90,7 @@ const logout = (req, res) => {
 }
 
 exports.home = home
+exports.carreparation = carreparation
 exports.client = client
 exports.facture = facture
 exports.factureValidate = factureValidate
