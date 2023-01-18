@@ -31,8 +31,13 @@ const start = (port, routeAdmin, routeClient) => {
             app.get("/admin/facture", routeAdmin.facture)
             app.get("/admin/facture/:valeur", routeAdmin.factureTF) //TRUE | FALSE
             app.post("/admin/car/reparation/:numero", routeAdmin.carreparation)
+
+            // VERIFICATE
+            app.post("/admin/car/sortie/:idVoiture", routeAdmin.carOut)
+            // VERIFICATE
             app.post("/admin/car/facture/:idVoiture", routeAdmin.carReceptionneFacture)
-            app.post("/admin/facture/:id/validate", routeAdmin.factureValidate)
+
+            app.post("/admin/facture/validate/:id", routeAdmin.factureValidate)
             app.post("/admin/add", routeAdmin.add)
             app.post("/admin/login", routeAdmin.login)
             app.post("/admin/logout", routeAdmin.logout)
