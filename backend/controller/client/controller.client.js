@@ -189,13 +189,19 @@ const SubScribeClient = (dataBase, res, req) => {
         req.body.dateSubscribe = new Date()
         let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
         req.body.password = hashPassword
-
-
-        CollectionDb.insertOne(req.body)
-            .then(resultat => {
-                res.send({ message: "SUBSCRIBE SUCCESSFULLY" })
+        CollectionDb.findOne({ phone: req.body.phone })
+            .then(resUser => {
+                if (resUser) {
+                    res.send({ message: "SUBSCRIBE FAILED", detailled: "PHONE ALREADY USED" })
+                } else {
+                    CollectionDb.insertOne(req.body)
+                        .then(resultat => {
+                            res.send({ message: "SUBSCRIBE SUCCESSFULLY" })
+                        })
+                        .catch(err => res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION" }))
+                }
             })
-            .catch(err => res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION" }))
+            .catch(err => res.send({ message: "SUBSCRIBE FAILED", detailled: "TRAITEMENT FAILED" }))
 
     } else {
         res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION" })
