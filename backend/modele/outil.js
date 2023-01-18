@@ -15,9 +15,10 @@ const CalculTotal = (jsonData) => {
     try {
         toArr = Object.values(jsonData)
         somme = 0
-        return somme = toArr.map(res => {
-            return somme += parseInt(res)
-        })
+        for (let i = 0; i < toArr.length; i++) {
+            somme += parseInt(toArr[i]);
+        }
+        return somme
     } catch (error) {
         return 0
     }
