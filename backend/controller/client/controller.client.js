@@ -203,69 +203,145 @@ const GetCarClientReception = (dataBase, req, res) => {
     }
 }
 
+const ValidateCar = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionClient = dataBase.collection('Client')
+        CollectionClient.findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resClient => {
+                if (resClient) {
+                    if (req.params.idVoiture !== undefined) {
+                        delete resClient._id
+                        delete resClient.password
+                        delete resClient.username
+                        delete resClient.dateSubscribe
+                        const CollectionVoiture = dataBase.collection('Voiture')
+                        CollectionVoiture.findOne({ $and: [{ _id: new ObjectID(req.params.idVoiture) }, { client: resClient }] })
+                            .then(resVoiture => {
+                                if (!resVoiture.validationClient) {
+                                    const updateDoc = {
+                                        $set: {
+                                            validationClient: true,
+                                        }
+                                    };
+                                    const options = { upsert: true };
+                                    CollectionVoiture.updateOne({ _id: new ObjectID(req.params.idVoiture) }, updateDoc, options)
+                                        .then(resUpdate => {
+                                            dataActivite = {
+                                                activite: "VALIDATION FACTURE VOITURE",
+                                                client: resClient,
+                                                voiture: {
+                                                    numero: resVoiture.numero,
+                                                    marque: resVoiture.marque,
+                                                    modele: resVoiture.modele,
+                                                    annee: resVoiture.annee,
+                                                },
+                                                admin: resVoiture.admin,
+                                                facture: resVoiture.facture,
+                                                dateDepot: resVoiture.dateDepot,
+                                            }
+                                            const CollectionActivite = dataBase.collection('Activite')
+                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
+                                            CollectionActivite.insertOne(dataActivite)
+                                                .then(resActivite => {
+                                                    CollectionNotificationClient.insertOne(dataActivite)
+                                                        .then(resNotifClient => {
+                                                            res.send({ message: "VALIDATION FACTURE DONE" })
+                                                        })
+                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                                })
+                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                        })
+                                        .catch(err => {
+                                            res.send({ message: "REQUEST ERROR" })
+                                        })
+                                } else {
+                                    res.send({ message: "REQUEST ERROR", detailled: "ALREADY VALIDATE" })
+                                }
+                            }).catch(err => {
+                                res.send({ message: "REQUEST ERROR" })
+                            })
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                    }
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                }
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
 const AddCarClient = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionClient = dataBase.collection('Client')
         CollectionClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resultat => {
-                const CollectionVoiture = dataBase.collection('Voiture')
-                if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
-                    CollectionVoiture.findOne({ numero: req.body.numero, receptionne: false })
-                        .then(resTwo => {
-                            if (resTwo) {
-                                res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY ADDED" })
-                            } else {
-                                req.body.user = resultat
+                if (resultat) {
+                    const CollectionVoiture = dataBase.collection('Voiture')
+                    if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
+                        CollectionVoiture.findOne({ numero: req.body.numero, receptionne: false })
+                            .then(resTwo => {
+                                if (resTwo) {
+                                    res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY ADDED" })
+                                } else {
+                                    req.body.user = resultat
 
-                                delete req.body.user.password
-                                delete req.body.user.username
-                                delete req.body.user._id
-                                delete req.body.user.dateSubscribe
+                                    delete req.body.user.password
+                                    delete req.body.user.username
+                                    delete req.body.user._id
+                                    delete req.body.user.dateSubscribe
 
-                                dataCar = {
-                                    numero: req.body.numero,
-                                    marque: req.body.marque,
-                                    modele: req.body.modele,
-                                    annee: req.body.annee,
-                                    receptionne: false,
-                                    admin: {},
-                                    client: req.body.user,
-                                    reparation: {},
-                                    dateDepot: new Date()
+                                    dataCar = {
+                                        numero: req.body.numero,
+                                        marque: req.body.marque,
+                                        modele: req.body.modele,
+                                        annee: req.body.annee,
+                                        receptionne: false,
+                                        admin: {},
+                                        client: req.body.user,
+                                        reparation: {},
+                                        dateDepot: new Date()
+                                    }
+
+                                    CollectionVoiture.insertOne(dataCar)
+                                        .then(resFinal => {
+                                            dataActivite = {
+                                                activite: "DEPOT VOITURE",
+                                                client: req.body.user,
+                                                voiture: {
+                                                    numero: req.body.numero,
+                                                    marque: req.body.marque,
+                                                    modele: req.body.modele,
+                                                    annee: req.body.annee,
+                                                },
+                                                dateDepot: dataCar.dateDepot
+                                            }
+                                            const CollectionActivite = dataBase.collection('Activite')
+                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
+                                            CollectionActivite.insertOne(dataActivite)
+                                                .then(resActivite => {
+                                                    CollectionNotificationClient.insertOne(dataActivite)
+                                                        .then(resNotifClient => {
+                                                            res.send({ message: "NEW CAR ADDED", client: req.body.user })
+                                                        })
+                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                                })
+                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                        })
+                                        .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                                 }
-
-                                CollectionVoiture.insertOne(dataCar)
-                                    .then(resFinal => {
-                                        dataActivite = {
-                                            activite: "DEPOT VOITURE",
-                                            client: req.body.user,
-                                            voiture: {
-                                                numero: req.body.numero,
-                                                marque: req.body.marque,
-                                                modele: req.body.modele,
-                                                annee: req.body.annee,
-                                            },
-                                            dateDepot: dataCar.dateDepot
-                                        }
-                                        const CollectionActivite = dataBase.collection('Activite')
-                                        const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                        CollectionActivite.insertOne(dataActivite)
-                                            .then(resActivite => {
-                                                CollectionNotificationClient.insertOne(dataActivite)
-                                                    .then(resNotifClient => {
-                                                        res.send({ message: "NEW CAR ADDED", client: req.body.user })
-                                                    })
-                                                    .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                            })
-                                            .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                    })
-                                    .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                            }
-                        }).catch(err => {
-                            res.send({ message: "REQUEST ERROR VOITURE" })
-                        })
+                            }).catch(err => {
+                                res.send({ message: "REQUEST ERROR VOITURE" })
+                            })
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                    }
                 } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
                 }
             })
             .catch(err => {
@@ -340,6 +416,7 @@ exports.GetFactureClient = GetFactureClient
 exports.GetFactureIdClient = GetFactureIdClient
 exports.GetCarClientReception = GetCarClientReception
 exports.AddCarClient = AddCarClient
+exports.ValidateCar = ValidateCar
 
 exports.SubScribeClient = SubScribeClient
 exports.LoginClient = LoginClient

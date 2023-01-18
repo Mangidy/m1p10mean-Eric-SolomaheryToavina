@@ -40,9 +40,10 @@ const start = (port, routeAdmin, routeClient) => {
             app.get("/client/notification", routeClient.notificationClient)
             app.get("/client/car", routeClient.carClient)
             app.get("/client/car/:id", routeClient.carOne)
-            app.get("/client/car/reception/:valeur", routeClient.carClientReception)
+            app.get("/client/car/reception/:valeur", routeClient.carClientReception) // GET CAR USER RECEPTIONNED TRUE|FALSE
             app.get("/client/facture", routeClient.facture)
             app.get("/client/facture/:id", routeClient.factureId)
+            app.post("/client/validate/:idVoiture", routeClient.validateCarFacture)
             app.post("/client/car", routeClient.car)
             app.post("/client/subscribe", routeClient.subscribe)
             app.post("/client/login", routeClient.login)
