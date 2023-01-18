@@ -1,5 +1,6 @@
 const { ObjectID } = require("bson");
 const crypto = require('crypto')
+const outil = require('../../modele/outil')
 
 const HomeClient = (dataBase, req, res) => {
     if (req.session.clientId) {
@@ -20,17 +21,44 @@ const GetCarClient = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionDbClient = dataBase.collection('Client')
         const CollectionDbVoiture = dataBase.collection('Voiture')
-
         CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
                 delete resClient._id
                 delete resClient.password
                 delete resClient.username
                 delete resClient.dateSubscribe
-                console.log(resClient);
                 CollectionDbVoiture.find({ client: resClient }).toArray()
                     .then(resultatVoiture => {
                         res.send(resultatVoiture)
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+
+
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
+const GetCarClientReception = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionDbClient = dataBase.collection('Client')
+        const CollectionDbVoiture = dataBase.collection('Voiture')
+        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resClient => {
+                delete resClient._id
+                delete resClient.password
+                delete resClient.username
+                delete resClient.dateSubscribe
+                CollectionDbVoiture.find({ client: resClient }).toArray()
+                    .then(resultatVoiture => {
+                        valeurAffiche = outil.TriageDataReceptionne(resultatVoiture, JSON.parse(req.params.valeur))
+                        res.send(valeurAffiche)
                     })
                     .catch(err => {
                         res.send({ message: "REQUEST ERROR" })
@@ -215,6 +243,7 @@ const LogoutClient = (res, req) => {
 
 exports.HomeClient = HomeClient
 exports.GetCarClient = GetCarClient
+exports.GetCarClientReception = GetCarClientReception
 exports.AddCarClient = AddCarClient
 exports.AddCarReparation = AddCarReparation
 

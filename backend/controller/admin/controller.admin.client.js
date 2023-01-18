@@ -1,5 +1,6 @@
 const { ObjectID } = require("bson")
 const crypto = require('crypto')
+const outil = require('../../modele/outil')
 
 const HomeAdmin = (dataBase, req, res) => {
     const CollectionDb = dataBase.collection('Admin')
@@ -73,19 +74,6 @@ const getOneCar = (dataBase, res, req) => {
     }
 }
 
-const CalculTotal = (jsonData) => {
-    try {
-        toArr = Object.values(jsonData)
-        somme = 0
-        for (let i = 0; i < toArr.length; i++) {
-            somme += parseInt(toArr[i])
-        }
-        return somme
-    } catch (error) {
-        return 0
-    }
-}
-
 const receptionneCar = (dataBase, res, req) => {
     if (req.params.id !== undefined) {
         const CollectionDb = dataBase.collection('Voiture')
@@ -99,7 +87,7 @@ const receptionneCar = (dataBase, res, req) => {
                             .then(resAdmin => {
                                 delete resAdmin.passwordAdmin
                                 delete resAdmin._id
-                                req.body.Total = CalculTotal(req.body)
+                                req.body.Total = outil.CalculTotal(req.body)
                                 if (req.body.Total !== 0) {
                                     const updateDoc = {
                                         $set: {
