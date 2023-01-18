@@ -9,7 +9,6 @@ const HomeAdmin = (dataBase, req, res) => {
             res.send({ message: "ADMIN CONNECTED", admin: resultat })
         })
         .catch(err => {
-            Z_ASCII
             res.send({ message: "REQUEST ERROR" })
         })
 }
@@ -62,6 +61,83 @@ const getAllFacture = (dataBase, res) => {
         .then(resFacture => {
             resAffiche = outil.TriageDataFactureAdmin(resFacture)
             res.send(resAffiche)
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
+
+const ValidFacture = (dataBase, res, req) => {
+    const CollectionDb = dataBase.collection('Admin')
+    CollectionDb.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+        .then(resAdmin => {
+            if (resAdmin.roleAdmin === "FINANCIER") {
+                const CollectionDbVoiture = dataBase.collection('Voiture')
+                if (req.params.id !== undefined) {
+                    CollectionDbVoiture.findOne({ $and: [{ receptionne: true }, { paiement: false }, { _id: new ObjectID(req.params.id) }] })
+                        .then(resFacture => {
+                            if (resFacture) {
+                                dataUpdate = resFacture
+                                delete resAdmin.passwordAdmin
+                                delete resAdmin._id
+                                const updateDoc = {
+                                    $set: {
+                                        paiement: true,
+                                        adminPaiement: resAdmin,
+                                    }
+                                };
+                                const options = { upsert: true };
+                                try {
+                                    CollectionDbVoiture.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
+                                        .then(resUpdate => {
+                                            const CollectionActivite = dataBase.collection('Activite')
+                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
+                                            delete dataUpdate._id
+                                            delete dataUpdate.receptionne
+                                            delete dataUpdate.admin
+                                            voitureCl = dataUpdate.client
+                                            delete dataUpdate.client
+                                            reparationCl = dataUpdate.reparation
+                                            delete dataUpdate.reparation
+                                            delete resAdmin.dateSubscribe
+                                            dataActivite = {
+                                                activite: "VALIDATION PAIEMENT",
+                                                admin: resAdmin,
+                                                voiture: dataUpdate,
+                                                client: voitureCl,
+                                                reparation: reparationCl,
+                                                facture: dataUpdate.facture,
+                                                dateDepot: new Date()
+                                            }
+                                            CollectionActivite.insertOne(dataActivite)
+                                                .then(resActivite => {
+                                                    CollectionNotificationClient.insertOne(dataActivite)
+                                                        .then(resNotif => {
+                                                            res.send({ message: "VALIDATE PAYMENT" })
+                                                        })
+                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                                })
+                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                                        })
+                                        .catch(err => {
+                                            res.send({ message: "REQUEST ERROR" })
+                                        })
+                                } catch (error) {
+                                    res.send({ message: "REQUEST ERROR" })
+                                }
+                            } else {
+                                res.send({ message: "REQUEST ERROR", detailled: "FACTURE ALREADY DONE" })
+                            }
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                }
+            } else {
+                res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT ALLOWED FOR THIS POST" })
+            }
         })
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
@@ -234,6 +310,7 @@ const LogoutAdmin = (res, req) => {
 
 exports.getAllClient = getAllClient
 exports.getAllFacture = getAllFacture
+exports.ValidFacture = ValidFacture
 exports.HomeAdmin = HomeAdmin
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
