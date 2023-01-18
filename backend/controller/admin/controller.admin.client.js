@@ -67,6 +67,26 @@ const getAllFacture = (dataBase, res) => {
         })
 }
 
+const getAllFactureTr = (dataBase, res, req) => {
+    const CollectionDb = dataBase.collection('Voiture')
+    if (req.params.valeur && req.params.valeur == "false" || req.params.valeur == "true") {
+        CollectionDb.find({ $and: [{ receptionne: true }, { validationClient: JSON.parse(req.params.valeur) }] }).toArray()
+            .then(resFacture => {
+                if (resFacture) {
+                    resAffiche = outil.TriageDataFactureAdmin(resFacture)
+                    res.send(resAffiche)
+                } else {
+                    res.send({ message: "REQUEST DONE", detailled: "NOTHING DATA" })
+                }
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+    } else {
+        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+    }
+}
+
 const ValidFacture = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Admin')
     CollectionDb.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
@@ -374,6 +394,7 @@ const LogoutAdmin = (res, req) => {
 
 exports.getAllClient = getAllClient
 exports.getAllFacture = getAllFacture
+exports.getAllFactureTr = getAllFactureTr
 exports.AddCarReparation = AddCarReparation
 exports.ValidFacture = ValidFacture
 exports.HomeAdmin = HomeAdmin

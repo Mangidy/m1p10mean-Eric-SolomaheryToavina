@@ -21,6 +21,14 @@ const facture = (req, res) => {
     }
 }
 
+const factureTF = (req, res) => {
+    if (req.session.usernameAdmin) {
+        controllerAdminClient.getAllFactureTr(dataBase, res, req)
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
 const factureValidate = (req, res) => {
     if (req.session.usernameAdmin) {
         controllerAdminClient.ValidFacture(dataBase, res, req)
@@ -93,6 +101,7 @@ exports.home = home
 exports.carreparation = carreparation
 exports.client = client
 exports.facture = facture
+exports.factureTF = factureTF
 exports.factureValidate = factureValidate
 exports.clientOne = clientOne
 exports.carList = carList

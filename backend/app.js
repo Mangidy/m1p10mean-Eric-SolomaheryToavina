@@ -27,8 +27,9 @@ const start = (port, routeAdmin, routeClient) => {
             app.get("/admin/client", routeAdmin.client)
             app.get("/admin/client/:id", routeAdmin.clientOne)
             app.get("/admin/car", routeAdmin.carList)
-            app.get("/admin/facture", routeAdmin.facture)
             app.get("/admin/car/:id", routeAdmin.carOne)
+            app.get("/admin/facture", routeAdmin.facture)
+            app.get("/admin/facture/:valeur", routeAdmin.factureTF) //TRUE | FALSE
             app.post("/admin/car/reparation/:numero", routeAdmin.carreparation)
             app.post("/admin/car/facture/:idVoiture", routeAdmin.carReceptionneFacture)
             app.post("/admin/facture/:id/validate", routeAdmin.factureValidate)
