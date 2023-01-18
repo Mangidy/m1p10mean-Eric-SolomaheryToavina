@@ -93,7 +93,7 @@ const receptionneCar = (dataBase, res, req) => {
                                         $set: {
                                             receptionne: true,
                                             sortie: false,
-                                            validation: false,
+                                            paiement: false,
                                             admin: resAdmin,
                                             facture: req.body
                                         }

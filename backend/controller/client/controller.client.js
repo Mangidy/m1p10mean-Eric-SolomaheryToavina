@@ -45,6 +45,36 @@ const GetCarClient = (dataBase, req, res) => {
     }
 }
 
+
+const GetFactureClient = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionDbClient = dataBase.collection('Client')
+        const CollectionDbVoiture = dataBase.collection('Voiture')
+        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resClient => {
+                delete resClient._id
+                delete resClient.password
+                delete resClient.username
+                delete resClient.dateSubscribe
+                CollectionDbVoiture.find({ client: resClient }).toArray()
+                    .then(resultatVoiture => {
+                        valeurAffiche = outil.TriageDataFacture(resultatVoiture)
+                        res.send(valeurAffiche)
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+
+
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
 const GetCarClientReception = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionDbClient = dataBase.collection('Client')
@@ -57,8 +87,12 @@ const GetCarClientReception = (dataBase, req, res) => {
                 delete resClient.dateSubscribe
                 CollectionDbVoiture.find({ client: resClient }).toArray()
                     .then(resultatVoiture => {
-                        valeurAffiche = outil.TriageDataReceptionne(resultatVoiture, JSON.parse(req.params.valeur))
-                        res.send(valeurAffiche)
+                        if (req.params.valeur === undefined) {
+                            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                        } else {
+                            valeurAffiche = outil.TriageDataReceptionne(resultatVoiture, JSON.parse(req.params.valeur))
+                            res.send(valeurAffiche)
+                        }
                     })
                     .catch(err => {
                         res.send({ message: "REQUEST ERROR" })
@@ -243,6 +277,7 @@ const LogoutClient = (res, req) => {
 
 exports.HomeClient = HomeClient
 exports.GetCarClient = GetCarClient
+exports.GetFactureClient = GetFactureClient
 exports.GetCarClientReception = GetCarClientReception
 exports.AddCarClient = AddCarClient
 exports.AddCarReparation = AddCarReparation
