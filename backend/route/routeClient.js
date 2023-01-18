@@ -13,6 +13,10 @@ const car = (req, res) => {
     controllerClient.AddCarClient(dataBase, req, res)
 }
 
+const carClient = (req, res) => {
+    controllerClient.GetCarClient(dataBase, req, res)
+}
+
 const carreparation = (req, res) => {
     controllerClient.AddCarReparation(dataBase, req, res)
 }
@@ -31,6 +35,7 @@ const logout = (req, res) => {
 
 exports.home = home
 exports.car = car
+exports.carClient = carClient
 exports.carreparation = carreparation
 
 exports.subscribe = subscribe

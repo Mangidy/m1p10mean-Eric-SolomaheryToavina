@@ -16,6 +16,36 @@ const HomeClient = (dataBase, req, res) => {
     }
 }
 
+const GetCarClient = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionDbClient = dataBase.collection('Client')
+        const CollectionDbVoiture = dataBase.collection('Voiture')
+
+        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resClient => {
+                delete resClient._id
+                delete resClient.password
+                delete resClient.username
+                delete resClient.dateSubscribe
+                console.log(resClient);
+                CollectionDbVoiture.find({ client: resClient }).toArray()
+                    .then(resultatVoiture => {
+                        res.send(resultatVoiture)
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+
+
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
 const AddCarClient = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionClient = dataBase.collection('Client')
@@ -159,6 +189,8 @@ const SubScribeClient = (dataBase, res, req) => {
         req.body.dateSubscribe = new Date()
         let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
         req.body.password = hashPassword
+
+
         CollectionDb.insertOne(req.body)
             .then(resultat => {
                 res.send({ message: "SUBSCRIBE SUCCESSFULLY" })
@@ -176,6 +208,7 @@ const LogoutClient = (res, req) => {
 }
 
 exports.HomeClient = HomeClient
+exports.GetCarClient = GetCarClient
 exports.AddCarClient = AddCarClient
 exports.AddCarReparation = AddCarReparation
 
