@@ -29,7 +29,8 @@ const GetCarClient = (dataBase, req, res) => {
                 delete resClient.dateSubscribe
                 CollectionDbVoiture.find({ client: resClient }).toArray()
                     .then(resultatVoiture => {
-                        res.send(resultatVoiture)
+                        valeurAffiche = outil.TriageDataCar(resultatVoiture)
+                        res.send(valeurAffiche)
                     })
                     .catch(err => {
                         res.send({ message: "REQUEST ERROR" })
@@ -38,8 +39,37 @@ const GetCarClient = (dataBase, req, res) => {
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
             })
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
 
-
+const GetCarOne = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionDbClient = dataBase.collection('Client')
+        const CollectionDbVoiture = dataBase.collection('Voiture')
+        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resClient => {
+                delete resClient._id
+                delete resClient.password
+                delete resClient.username
+                delete resClient.dateSubscribe
+                CollectionDbVoiture.findOne({
+                    $and: [
+                        { _id: new ObjectID(req.params.id) },
+                        { client: resClient },
+                    ]
+                }, { numero: 1, marque: 1, modele: 1 })
+                    .then(resultatVoiture => {
+                        res.send(resultatVoiture)
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                    })
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+            })
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
@@ -277,6 +307,7 @@ const LogoutClient = (res, req) => {
 
 exports.HomeClient = HomeClient
 exports.GetCarClient = GetCarClient
+exports.GetCarOne = GetCarOne
 exports.GetFactureClient = GetFactureClient
 exports.GetCarClientReception = GetCarClientReception
 exports.AddCarClient = AddCarClient

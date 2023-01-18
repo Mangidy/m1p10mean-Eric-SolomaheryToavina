@@ -48,7 +48,8 @@ const getAllCar = (dataBase, res) => {
     const CollectionDb = dataBase.collection('Voiture')
     CollectionDb.find().toArray()
         .then(resultat => {
-            res.send(resultat)
+            resAffiche = outil.TriageDataCarAdmin(resultat)
+            res.send(resAffiche)
         })
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
@@ -61,7 +62,8 @@ const getOneCar = (dataBase, res, req) => {
         try {
             CollectionDb.findOne({ _id: new ObjectID(req.params.id) })
                 .then(resultat => {
-                    res.send(resultat)
+                    resAffiche = outil.TriageDataCarOneAdmin(resultat)
+                    res.send(resAffiche)
                 })
                 .catch(err => {
                     res.send({ message: "REQUEST ERROR" })
@@ -85,53 +87,67 @@ const receptionneCar = (dataBase, res, req) => {
                     if (!dataUpdate.receptionne) {
                         CollectionDbAdmin.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
                             .then(resAdmin => {
-                                delete resAdmin.passwordAdmin
-                                delete resAdmin._id
-                                req.body.Total = outil.CalculTotal(req.body)
-                                if (req.body.Total !== 0) {
-                                    const updateDoc = {
-                                        $set: {
-                                            receptionne: true,
-                                            sortie: false,
-                                            paiement: false,
-                                            admin: resAdmin,
-                                            facture: req.body
-                                        }
-                                    };
-                                    const options = { upsert: true };
-                                    try {
-                                        CollectionDb.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
-                                            .then(resF => {
-                                                const CollectionActivite = dataBase.collection('Activite')
-                                                const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                                delete dataUpdate._id
-                                                delete dataUpdate.receptionne
-                                                delete dataUpdate.admin
-                                                delete dataUpdate.facture
-                                                delete resAdmin.dateSubscribe
-                                                dataActivite = {
-                                                    activite: "FACTURATION VOITURE",
+                                if (resAdmin) {
+                                    if (resAdmin.roleAdmin === "ATELIER") {
+                                        delete resAdmin.passwordAdmin
+                                        delete resAdmin._id
+                                        req.body.Total = outil.CalculTotal(req.body)
+                                        if (req.body.Total !== 0) {
+                                            const updateDoc = {
+                                                $set: {
+                                                    receptionne: true,
+                                                    sortie: false,
+                                                    paiement: false,
                                                     admin: resAdmin,
-                                                    voiture: dataUpdate,
-                                                    facture: req.body,
-                                                    dateDepot: new Date()
+                                                    facture: req.body
                                                 }
-                                                CollectionActivite.insertOne(dataActivite)
-                                                    .then(resActivite => {
-                                                        CollectionNotificationClient.insertOne(dataActivite)
-                                                            .then(resNotif => {
-                                                                res.send({ message: "FACTURE FOR CAR ADDED" })
+                                            };
+                                            const options = { upsert: true };
+                                            try {
+                                                CollectionDb.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
+                                                    .then(resF => {
+                                                        const CollectionActivite = dataBase.collection('Activite')
+                                                        const CollectionNotificationClient = dataBase.collection('NotificationClient')
+                                                        delete dataUpdate._id
+                                                        delete dataUpdate.receptionne
+                                                        delete dataUpdate.admin
+                                                        delete dataUpdate.facture
+                                                        voitureCl = dataUpdate.client
+                                                        delete dataUpdate.client
+                                                        reparationCl = dataUpdate.reparation
+                                                        delete dataUpdate.reparation
+                                                        delete resAdmin.dateSubscribe
+                                                        dataActivite = {
+                                                            activite: "FACTURATION VOITURE",
+                                                            admin: resAdmin,
+                                                            voiture: dataUpdate,
+                                                            client: voitureCl,
+                                                            reparation: reparationCl,
+                                                            facture: req.body,
+                                                            dateDepot: new Date()
+                                                        }
+                                                        CollectionActivite.insertOne(dataActivite)
+                                                            .then(resActivite => {
+                                                                CollectionNotificationClient.insertOne(dataActivite)
+                                                                    .then(resNotif => {
+                                                                        res.send({ message: "FACTURE FOR CAR ADDED" })
+                                                                    })
+                                                                    .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                                                             })
                                                             .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                                                     })
-                                                    .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                            })
-                                            .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" }))
-                                    } catch (error) {
-                                        res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" })
+                                                    .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" }))
+                                            } catch (error) {
+                                                res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" })
+                                            }
+                                        } else {
+                                            res.send({ message: "REQUEST ERROR", detailled: "INVALID INTEGER" })
+                                        }
+                                    } else {
+                                        res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT ALLOWED FOR THIS POST" })
                                     }
                                 } else {
-                                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INTEGER" })
+                                    res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT FOUND" })
                                 }
                             })
                             .catch(err => {
