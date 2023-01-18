@@ -164,15 +164,15 @@ const getOneCar = (dataBase, res, req) => {
     }
 }
 
-const receptionneCar = (dataBase, res, req) => {
-    if (req.params.id !== undefined) {
+const receptionneCarFacture = (dataBase, res, req) => {
+    if (req.params.idVoiture !== undefined) {
         const CollectionDb = dataBase.collection('Voiture')
         const CollectionDbAdmin = dataBase.collection('Admin')
         try {
-            CollectionDb.findOne({ _id: new ObjectID(req.params.id) })
+            CollectionDb.findOne({ _id: new ObjectID(req.params.idVoiture) })
                 .then(resultat => {
-                    dataUpdate = resultat
-                    if (!dataUpdate.receptionne) {
+                    if (resultat) {
+                        dataUpdate = resultat
                         CollectionDbAdmin.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
                             .then(resAdmin => {
                                 if (resAdmin) {
@@ -181,19 +181,19 @@ const receptionneCar = (dataBase, res, req) => {
                                         delete resAdmin._id
                                         req.body.Total = outil.CalculTotal(req.body)
                                         if (req.body.Total !== 0) {
-                                            req.body.avance = (outil.CalculTotal(req.body) / 2)
+                                            req.body.Avance = outil.CalculHalf(req.body.Total)
+                                            req.body.Reste = outil.CalculHalf(req.body.Total)
                                             const updateDoc = {
                                                 $set: {
-                                                    receptionne: true,
                                                     sortie: false,
                                                     paiement: false,
-                                                    admin: resAdmin,
+                                                    validationClient: false,
                                                     facture: req.body
                                                 }
                                             };
                                             const options = { upsert: true };
                                             try {
-                                                CollectionDb.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
+                                                CollectionDb.updateOne({ _id: new ObjectID(req.params.idVoiture) }, updateDoc, options)
                                                     .then(resF => {
                                                         const CollectionActivite = dataBase.collection('Activite')
                                                         const CollectionNotificationClient = dataBase.collection('NotificationClient')
@@ -243,7 +243,7 @@ const receptionneCar = (dataBase, res, req) => {
                                 res.send({ message: "REQUEST ERROR" })
                             })
                     } else {
-                        res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY RECEPTIONNED" })
+                        res.send({ message: "REQUEST ERROR", detailled: "CAR NOT FOUND" })
                     }
                 })
                 .catch(err => {
@@ -265,6 +265,7 @@ const AddCarReparation = (dataBase, req, res) => {
         .then(resAdmin => {
             if (req.params.numero !== undefined) {
                 if (resAdmin.roleAdmin === "ATELIER") {
+                    delete resAdmin._id
                     delete resAdmin.passwordAdmin
                     delete resAdmin.dateSubscribe
                     CollectionVoiture.findOne({ $and: [{ numero: req.params.numero }, { reparation: {} }] })
@@ -273,7 +274,7 @@ const AddCarReparation = (dataBase, req, res) => {
                                 resCar.reparation = req.body
                                 newValeurReparation = resCar
                                 const updateDoc = {
-                                    $set: { reparation: req.body }
+                                    $set: { reparation: req.body, admin: resAdmin, receptionne: true }
                                 };
                                 const options = { upsert: true };
                                 try {
@@ -379,7 +380,7 @@ exports.HomeAdmin = HomeAdmin
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
 exports.getOneCar = getOneCar
-exports.receptionneCar = receptionneCar
+exports.receptionneCarFacture = receptionneCarFacture
 exports.AddAdmin = AddAdmin
 exports.LoginAdmin = LoginAdmin
 exports.LogoutAdmin = LogoutAdmin

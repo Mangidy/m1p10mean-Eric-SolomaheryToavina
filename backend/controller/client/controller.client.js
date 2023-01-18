@@ -248,9 +248,14 @@ const AddCarClient = (dataBase, req, res) => {
                                             dateDepot: dataCar.dateDepot
                                         }
                                         const CollectionActivite = dataBase.collection('Activite')
+                                        const CollectionNotificationClient = dataBase.collection('NotificationClient')
                                         CollectionActivite.insertOne(dataActivite)
                                             .then(resActivite => {
-                                                res.send({ message: "NEW CAR ADDED", client: req.body.user })
+                                                CollectionNotificationClient.insertOne(dataActivite)
+                                                    .then(resNotifClient => {
+                                                        res.send({ message: "NEW CAR ADDED", client: req.body.user })
+                                                    })
+                                                    .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                                             })
                                             .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                                     })

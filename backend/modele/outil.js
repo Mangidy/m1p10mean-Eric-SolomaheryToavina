@@ -24,11 +24,22 @@ const CalculTotal = (jsonData) => {
     }
 }
 
+const CalculHalf = (data) => {
+    if (data > 0) {
+        return data / 2
+    } else {
+        return 0
+    }
+}
+
 const TriageDataFactureAdmin = (data) => {
     Newdata = data.map(resultat => {
         if (resultat.receptionne === true) {
             return {
                 id: resultat._id,
+                validationClient: resultat.validationClient,
+                paiement: resultat.paiement,
+                sortie: resultat.sortie,
                 voiture: {
                     numero: resultat.numero,
                     marque: resultat.marque,
@@ -36,6 +47,7 @@ const TriageDataFactureAdmin = (data) => {
                     annee: resultat.annee,
                 },
                 client: resultat.client,
+                admin: resultat.admin,
                 facture: resultat.facture,
                 reparation: resultat.reparation,
                 dateDepot: resultat.dateDepot,
@@ -54,14 +66,19 @@ const TriageDataFacture = (data) => {
         if (resultat.receptionne === true) {
             return {
                 id: resultat._id,
+                validationClient: resultat.validationClient,
+                paiement: resultat.paiement,
+                sortie: resultat.sortie,
                 voiture: {
                     numero: resultat.numero,
                     marque: resultat.marque,
                     modele: resultat.modele,
                     annee: resultat.annee,
                 },
+                admin: resultat.admin,
                 facture: resultat.facture,
                 reparation: resultat.reparation,
+                validation: resultat.validationClient,
                 dateDepot: resultat.dateDepot,
             }
         } else {
@@ -78,13 +95,18 @@ const TriageDataFactureOne = (resultat) => {
     if (resultat.receptionne === true) {
         return {
             id: resultat._id,
+            validationClient: resultat.validationClient,
+            paiement: resultat.paiement,
+            sortie: resultat.sortie,
             voiture: {
                 numero: resultat.numero,
                 marque: resultat.marque,
                 modele: resultat.modele,
                 annee: resultat.annee,
             },
+            admin: resultat.admin,
             facture: resultat.facture,
+            validation: resultat.validationClient,
             reparation: resultat.reparation,
             dateDepot: resultat.dateDepot,
         }
@@ -109,7 +131,7 @@ const TriageDataCar = (data) => {
                 reparation: resultat.reparation,
                 facture: resultat.facture,
                 validation: resultat.validation,
-                sorite: resultat.sorite,
+                sortie: resultat.sortie,
                 dateDepot: resultat.dateDepot,
             }
         } else {
@@ -232,6 +254,7 @@ exports.TriageDataCarAdmin = TriageDataCarAdmin
 exports.TriageDataCarOne = TriageDataCarOne
 exports.TriageDataCarOneAdmin = TriageDataCarOneAdmin
 exports.CalculTotal = CalculTotal
+exports.CalculHalf = CalculHalf
 exports.TriageDataFactureAdmin = TriageDataFactureAdmin
 exports.TriageDataFacture = TriageDataFacture
 exports.TriageDataFactureOne = TriageDataFactureOne
