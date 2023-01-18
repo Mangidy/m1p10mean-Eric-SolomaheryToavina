@@ -41,8 +41,7 @@ const start = (port, routeAdmin, routeClient) => {
             app.post("/client/logout", routeClient.logout)
 
             app.use((req, res) => {
-                res.setHeader("Content-Type", "text/plain")
-                res.send(404, "PAGE NOT FOUND")
+                res.send(404, { message: "PAGE NOT FOUND" })
             })
 
             app.listen(port, console.log(`Server running on port ${port}`))
