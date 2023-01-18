@@ -28,6 +28,7 @@ const TriageDataFacture = (data) => {
     Newdata = data.map(resultat => {
         if (resultat.receptionne === true) {
             return {
+                id: resultat._id,
                 voiture: {
                     numero: resultat.numero,
                     marque: resultat.marque,
@@ -45,6 +46,28 @@ const TriageDataFacture = (data) => {
         }
     })
     return Newdata
+}
+
+
+const TriageDataFactureOne = (resultat) => {
+    if (resultat.receptionne === true) {
+        return {
+            id: resultat._id,
+            voiture: {
+                numero: resultat.numero,
+                marque: resultat.marque,
+                modele: resultat.modele,
+                annee: resultat.annee,
+            },
+            facture: resultat.facture,
+            reparation: resultat.reparation,
+            dateDepot: resultat.dateDepot,
+        }
+    } else {
+        return {
+            message: "Aucune facture pour le moment"
+        }
+    }
 }
 
 const TriageDataCar = (data) => {
@@ -185,3 +208,4 @@ exports.TriageDataCarOne = TriageDataCarOne
 exports.TriageDataCarOneAdmin = TriageDataCarOneAdmin
 exports.CalculTotal = CalculTotal
 exports.TriageDataFacture = TriageDataFacture
+exports.TriageDataFactureOne = TriageDataFactureOne

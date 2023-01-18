@@ -39,6 +39,8 @@ const start = (port, routeAdmin, routeClient) => {
             app.get("/client/car/:id", routeClient.carOne)
             app.get("/client/car/reception/:valeur", routeClient.carClientReception)
             app.get("/client/facture", routeClient.facture)
+            app.get("/client/facture/:id", routeClient.factureId)
+            // app.get("/client/facture/:id/valid", routeClient.factureValid)
             app.post("/client/car", routeClient.car)
             app.post("/client/car/reparation/:numero", routeClient.carreparation)
             app.post("/client/subscribe", routeClient.subscribe)

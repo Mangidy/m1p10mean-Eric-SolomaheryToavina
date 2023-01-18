@@ -25,6 +25,10 @@ const facture = (req, res) => {
     controllerClient.GetFactureClient(dataBase, req, res)
 }
 
+const factureId = (req, res) => {
+    controllerClient.GetFactureIdClient(dataBase, req, res)
+}
+
 const carClient = (req, res) => {
     controllerClient.GetCarClient(dataBase, req, res)
 }
@@ -53,6 +57,7 @@ exports.home = home
 exports.car = car
 exports.notificationClient = notificationClient
 exports.facture = facture
+exports.factureId = factureId
 exports.carClient = carClient
 exports.carOne = carOne
 exports.carClientReception = carClientReception

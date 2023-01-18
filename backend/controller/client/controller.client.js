@@ -136,6 +136,40 @@ const GetFactureClient = (dataBase, req, res) => {
     }
 }
 
+
+const GetFactureIdClient = (dataBase, req, res) => {
+    if (req.session.clientId) {
+        const CollectionDbClient = dataBase.collection('Client')
+        const CollectionDbVoiture = dataBase.collection('Voiture')
+        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resClient => {
+                delete resClient._id
+                delete resClient.password
+                delete resClient.username
+                delete resClient.dateSubscribe
+                if (req.params.id !== undefined) {
+                    CollectionDbVoiture.findOne({ $and: [{ _id: new ObjectID(req.params.id) }, { client: resClient }] })
+                        .then(resultatVoiture => {
+                            valeurAffiche = outil.TriageDataFactureOne(resultatVoiture)
+                            res.send(valeurAffiche)
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "FACTURE NOT FOUND" })
+                }
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+
+
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
 const GetCarClientReception = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionDbClient = dataBase.collection('Client')
@@ -341,6 +375,7 @@ exports.NotificationClient = NotificationClient
 exports.GetCarClient = GetCarClient
 exports.GetCarOne = GetCarOne
 exports.GetFactureClient = GetFactureClient
+exports.GetFactureIdClient = GetFactureIdClient
 exports.GetCarClientReception = GetCarClientReception
 exports.AddCarClient = AddCarClient
 exports.AddCarReparation = AddCarReparation
