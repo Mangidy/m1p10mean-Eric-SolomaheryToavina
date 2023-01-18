@@ -59,12 +59,13 @@ const GetCarOne = (dataBase, req, res) => {
                         { _id: new ObjectID(req.params.id) },
                         { client: resClient },
                     ]
-                }, { numero: 1, marque: 1, modele: 1 })
+                })
                     .then(resultatVoiture => {
-                        res.send(resultatVoiture)
+                        valeurAffiche = outil.TriageDataCarOne(resultatVoiture)
+                        res.send(valeurAffiche)
                     })
                     .catch(err => {
-                        res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                        res.send({ message: "REQUEST ERROR", detailled: "TRAITEMENT ERROR" })
                     })
             })
             .catch(err => {
