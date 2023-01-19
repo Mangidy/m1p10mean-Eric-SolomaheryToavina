@@ -6,7 +6,11 @@ const HomeAdmin = (dataBase, req, res) => {
     const CollectionDb = dataBase.collection('Admin')
     CollectionDb.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
         .then(resultat => {
-            res.send({ message: "ADMIN CONNECTED", admin: resultat })
+            if (resultat) {
+                res.send({ message: "ADMIN CONNECTED", admin: resultat })
+            } else {
+                res.send({ message: "REQUEST ERROR", detailled: "INVALID ADMIN SESSION" })
+            }
         })
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
@@ -17,7 +21,21 @@ const getAllClient = (dataBase, res) => {
     const CollectionDb = dataBase.collection('Client')
     CollectionDb.find().toArray()
         .then(resultat => {
-            res.send(resultat)
+            if (resultat) {
+                res.send(resultat.map(resAff => {
+                    return {
+                        _id: resAff._id,
+                        username: resAff.username,
+                        nom: resAff.nom,
+                        prenom: resAff.prenom,
+                        adress: resAff.adress,
+                        phone: resAff.phone,
+                        dateSubscribe: resAff.dateSubscribe,
+                    }
+                }))
+            } else {
+                res.send({ message: "DATA EMPTY" })
+            }
         })
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
@@ -30,7 +48,19 @@ const getOneClient = (dataBase, res, req) => {
         try {
             CollectionDb.findOne({ _id: new ObjectID(req.params.id) })
                 .then(resultat => {
-                    res.send(resultat)
+                    if (resultat) {
+                        res.send({
+                            _id: resultat._id,
+                            username: resultat.username,
+                            nom: resultat.nom,
+                            prenom: resultat.prenom,
+                            adress: resultat.adress,
+                            phone: resultat.phone,
+                            dateSubscribe: resultat.dateSubscribe,
+                        })
+                    } else {
+                        res.send({ message: "DATA EMPTY" })
+                    }
                 })
                 .catch(err => {
                     res.send({ message: "REQUEST ERROR" })
@@ -47,8 +77,12 @@ const getAllCar = (dataBase, res) => {
     const CollectionDb = dataBase.collection('Voiture')
     CollectionDb.find().toArray()
         .then(resultat => {
-            resAffiche = outil.TriageDataCarAdmin(resultat)
-            res.send(resAffiche)
+            if (resultat) {
+                resAffiche = outil.TriageDataCarAdmin(resultat)
+                res.send(resAffiche)
+            } else {
+                res.send({ message: "DATA EMPTY" })
+            }
         })
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
@@ -59,8 +93,13 @@ const getAllFacture = (dataBase, res) => {
     const CollectionDb = dataBase.collection('Voiture')
     CollectionDb.find({ receptionne: true }).toArray()
         .then(resFacture => {
-            resAffiche = outil.TriageDataFactureAdmin(resFacture)
-            res.send(resAffiche)
+            if (resFacture) {
+                resAffiche = outil.TriageDataFactureAdmin(resFacture)
+                res.send(resAffiche)
+            } else {
+                res.send({ message: "DATA EMPTY" })
+            }
+
         })
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
@@ -245,8 +284,12 @@ const getOneCar = (dataBase, res, req) => {
         try {
             CollectionDb.findOne({ _id: new ObjectID(req.params.id) })
                 .then(resultat => {
-                    resAffiche = outil.TriageDataCarOneAdmin(resultat)
-                    res.send(resAffiche)
+                    if (resAffiche) {
+                        resAffiche = outil.TriageDataCarOneAdmin(resultat)
+                        res.send(resAffiche)
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                    }
                 })
                 .catch(err => {
                     res.send({ message: "REQUEST ERROR" })

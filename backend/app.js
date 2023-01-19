@@ -23,32 +23,102 @@ const start = (port, routeAdmin, routeClient) => {
             }))
             app.use(cookieParser())
 
+            // GET REQUEST
+            // API ADMIN CONNECTED
+            // REQUIRED INFORMATION : NOTHING
             app.get("/admin/", routeAdmin.home)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API ADMIN GET ALL CLIENT SUBSCRIBED
+            // REQUIRED INFORMATION : NOTHING
             app.get("/admin/client", routeAdmin.client)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API ADMIN GET ONE CLIENT SUBSCRIBED -- ID CAR
+            // REQUIRED INFORMATION : ID CAR
             app.get("/admin/client/:id", routeAdmin.clientOne)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API ADMIN GET ALL CAR ADDED IN THE GARAGE
+            // REQUIRED INFORMATION : NOTHING
             app.get("/admin/car", routeAdmin.carList)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API ADMIN GET ONE CAR ADDED IN THE GARAGE -- ID CAR
+            // REQUIRED INFORMATION : ID CAR
             app.get("/admin/car/:id", routeAdmin.carOne)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API ADMIN GET ALL INVOICE STATUT CLIENT 
+            // SHOW IF CLIENT HAS OR DOES NOT HAVE AN INVOICE
+            // REQUIRED INFORMATION : NOTHING
             app.get("/admin/facture", routeAdmin.facture)
-            app.get("/admin/facture/:valeur", routeAdmin.factureTF) //TRUE | FALSE
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API ADMIN GET ALL INVOICE CLIENT WITH CONDITION -- TRUE OR FALSE VALUE
+            // TRUE: CLIENT HAS INVOICE
+            // FALSE : CLIENT HAS NO INVOICE
+            // REQUIRED INFORMATION : CONDITION VALUE
+            app.get("/admin/facture/:valeur", routeAdmin.factureTF)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API ADMIN ADD REPAIR LIST CAR -- CAR NUMBER
+            // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
+            // REQUIRED INFORMATION : ALL REPAIR LIST INFORMATION ON POST REQUEST
             app.post("/admin/car/reparation/:numero", routeAdmin.carreparation)
+            // --------------------------------------------------------------------------------
 
-            // VERIFICATE
-            app.post("/admin/car/sortie/:idVoiture", routeAdmin.carOut)
-
-            // PAIEMENT
-            app.post("/admin/facture/validate/:id", routeAdmin.factureValidate)
-            // ADD FACTURE FOR CAR CLIENT
+            // POST REQUEST
+            // API ADMIN ADD CAR INVOICE AFTER ADDING REPAIR LIST -- CAR ID
+            // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
+            // REQUIRED INFORMATION : ALL INVOICE INFORMATION ON POST REQUEST
             app.post("/admin/car/facture/:idVoiture", routeAdmin.carReceptionneFacture)
+            // --------------------------------------------------------------------------------
 
+            // POST REQUEST
+            // API INVOICE PAYMENT VALIDATION --  CAR ID = INVOICE ID
+            // FOR ADMIN WHO HAS THE ROLE : 'FINANCIER'
+            // REQUIRED INFORMATION : NOTHING ON POST REQUEST
+            app.post("/admin/facture/validate/:id", routeAdmin.factureValidate)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API ADMIN CAR EXIT VOUCHER -- CAR ID
+            // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
+            // REQUIRED INFORMATION : NOTHING ON POST REQUEST
+            app.post("/admin/car/sortie/:idVoiture", routeAdmin.carOut)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API ADMIN ADD NEW ADMIN
+            // REQUIRED INFORMATION : usernameAdmin, passwordAdmin, roleAdmin ON POST REQUEST
             app.post("/admin/add", routeAdmin.add)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API ADMIN LOGIN
+            // REQUIRED INFORMATION : username, password ON POST REQUEST
             app.post("/admin/login", routeAdmin.login)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API ADMIN LOGOUT
+            // REQUIRED INFORMATION : NOTHING ON POST REQUEST
             app.post("/admin/logout", routeAdmin.logout)
+            // --------------------------------------------------------------------------------
 
             app.get("/client/", routeClient.home)
             app.get("/client/notification", routeClient.notificationClient)
             app.get("/client/car", routeClient.carClient)
             app.get("/client/car/:id", routeClient.carOne)
-            app.get("/client/car/reception/:valeur", routeClient.carClientReception) // GET CAR USER RECEPTIONNED TRUE|FALSE
+            app.get("/client/car/reception/:valeur", routeClient.carClientReception)
             app.get("/client/facture", routeClient.facture)
             app.get("/client/facture/:id", routeClient.factureId)
             app.post("/client/validate/:idVoiture", routeClient.validateCarFacture)
