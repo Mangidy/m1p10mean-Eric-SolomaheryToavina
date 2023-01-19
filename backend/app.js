@@ -23,8 +23,12 @@ const start = (port, routeAdmin, routeClient) => {
             }))
             app.use(cookieParser())
 
+            // --------------------------------------------------------------------------------
+            // ALL ADMIN MUST LOG IN TO CONTINUE
+            // --------------------------------------------------------------------------------
+
             // GET REQUEST
-            // API ADMIN CONNECTED
+            // API SHOW ADMIN CONNECTED
             // REQUIRED INFORMATION : NOTHING
             app.get("/admin/", routeAdmin.home)
             // --------------------------------------------------------------------------------
@@ -114,22 +118,92 @@ const start = (port, routeAdmin, routeClient) => {
             app.post("/admin/logout", routeAdmin.logout)
             // --------------------------------------------------------------------------------
 
-            app.get("/client/", routeClient.home)
-            app.get("/client/notification", routeClient.notificationClient)
-            app.get("/client/car", routeClient.carClient)
-            app.get("/client/car/:id", routeClient.carOne)
-            app.get("/client/car/reception/:valeur", routeClient.carClientReception)
-            app.get("/client/facture", routeClient.facture)
-            app.get("/client/facture/:id", routeClient.factureId)
-            app.post("/client/validate/:idVoiture", routeClient.validateCarFacture)
-            app.post("/client/car", routeClient.car)
-            app.post("/client/subscribe", routeClient.subscribe)
-            app.post("/client/login", routeClient.login)
-            app.post("/client/logout", routeClient.logout)
+            // *********************************************************************************
+            // *********************************************************************************
 
+            // --------------------------------------------------------------------------------
+            // ALL CLIENT MUST LOG IN TO CONTINUE
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API SHOW CLIENT CONNECTED
+            // REQUIRED INFORMATION : NOTHING
+            app.get("/client/", routeClient.home)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API SHOW CLIENT NOTIFICATION & ACTIVITE FROM THE GARAGE
+            // REQUIRED INFORMATION : NOTHING
+            app.get("/client/notification", routeClient.notificationClient)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API SHOW ALL CLIENT CAR DEPOSITED
+            // REQUIRED INFORMATION : NOTHING
+            app.get("/client/car", routeClient.carClient)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API SHOW ONE CLIENT CAR BY HIS ID
+            // REQUIRED INFORMATION : CAR ID
+            app.get("/client/car/:id", routeClient.carOne)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API SHOW ALL INVOICE CLIENT
+            // REQUIRED INFORMATION : NOTHING
+            app.get("/client/facture", routeClient.facture)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API SHOW ONE INVOICE CLIENT BY HIS ID
+            // REQUIRED INFORMATION : INVOICE ID = CAR ID
+            app.get("/client/facture/:id", routeClient.factureId)
+            // --------------------------------------------------------------------------------
+
+            // GET REQUEST
+            // API SHOW ALL CAR CLIENT RECEIVED OR NOT IN THE GARAGE
+            // TRUE : CAR RECEIVED BY AN ADMIN
+            // FALSE : CAR NOT ALREADY RECEIVED BY AN ADMIN
+            // REQUIRED INFORMATION : TRUE OR FALSE VALUE
+            app.get("/client/car/reception/:valeur", routeClient.carClientReception)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API CLIENT ADD NEW CAR IN THE GARAGE
+            // REQUIRED INFORMATION : numero, marque, modele, annee ON POST REQUEST
+            app.post("/client/car", routeClient.car)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API CLIENT VALIDATE THE INVOICE CAR
+            // REQUIRED INFORMATION : CAR ID = INVOICE ID 
+            app.post("/client/validate/:idVoiture", routeClient.validateCarFacture)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API CLIENT FOR SUBSCRIBING
+            // REQUIRED INFORMATION : username, password, nom, prenom, adress, phone, email
+            app.post("/client/subscribe", routeClient.subscribe)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API CLIENT FOR CLIENT LOGIN
+            // REQUIRED INFORMATION : phone, password
+            app.post("/client/login", routeClient.login)
+            // --------------------------------------------------------------------------------
+
+            // POST REQUEST
+            // API CLIENT LOGOUT
+            // REQUIRED INFORMATION : NOTHING ON POST REQUEST
+            app.post("/client/logout", routeClient.logout)
+            // --------------------------------------------------------------------------------
+
+            // 404 PAGE NOT FOUND
             app.use((req, res) => {
                 res.send({ message: "API FOR GARAGE WEB" })
             })
+            // --------------------------------------------------------------------------------
 
             app.listen(port, console.log(`Server running on port ${port}`))
         })

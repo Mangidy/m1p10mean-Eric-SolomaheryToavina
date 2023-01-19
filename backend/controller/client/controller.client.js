@@ -23,21 +23,25 @@ const NotificationClient = (dataBase, req, res) => {
         const CollectionDbNotificationClient = dataBase.collection('NotificationClient')
         CollectionDb.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resUser => {
-                delete resUser._id
-                delete resUser.password
-                delete resUser.username
-                delete resUser.dateSubscribe
-                CollectionDbNotificationClient.find({ client: resUser }).toArray()
-                    .then(resNotif => {
-                        if (resNotif) {
-                            res.send(resNotif)
-                        } else {
-                            res.send({ message: "Aucune notification pour le moment" })
-                        }
-                    })
-                    .catch(err => {
-                        res.send({ message: "REQUEST ERROR" })
-                    })
+                if (resUser) {
+                    delete resUser._id
+                    delete resUser.password
+                    delete resUser.username
+                    delete resUser.dateSubscribe
+                    CollectionDbNotificationClient.find({ client: resUser }).toArray()
+                        .then(resNotif => {
+                            if (resNotif) {
+                                res.send(resNotif)
+                            } else {
+                                res.send({ message: "Aucune notification pour le moment" })
+                            }
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                }
             })
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
@@ -53,18 +57,22 @@ const GetCarClient = (dataBase, req, res) => {
         const CollectionDbVoiture = dataBase.collection('Voiture')
         CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
-                delete resClient._id
-                delete resClient.password
-                delete resClient.username
-                delete resClient.dateSubscribe
-                CollectionDbVoiture.find({ client: resClient }).toArray()
-                    .then(resultatVoiture => {
-                        valeurAffiche = outil.TriageDataCar(resultatVoiture)
-                        res.send(valeurAffiche)
-                    })
-                    .catch(err => {
-                        res.send({ message: "REQUEST ERROR" })
-                    })
+                if (resClient) {
+                    delete resClient._id
+                    delete resClient.password
+                    delete resClient.username
+                    delete resClient.dateSubscribe
+                    CollectionDbVoiture.find({ client: resClient }).toArray()
+                        .then(resultatVoiture => {
+                            valeurAffiche = outil.TriageDataCar(resultatVoiture)
+                            res.send(valeurAffiche)
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                }
             })
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
@@ -80,26 +88,30 @@ const GetCarOne = (dataBase, req, res) => {
         const CollectionDbVoiture = dataBase.collection('Voiture')
         CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
-                delete resClient._id
-                delete resClient.password
-                delete resClient.username
-                delete resClient.dateSubscribe
-                CollectionDbVoiture.findOne({
-                    $and: [
-                        { _id: new ObjectID(req.params.id) },
-                        { client: resClient },
-                    ]
-                })
-                    .then(resultatVoiture => {
-                        valeurAffiche = outil.TriageDataCarOne(resultatVoiture)
-                        res.send(valeurAffiche)
+                if (resClient) {
+                    delete resClient._id
+                    delete resClient.password
+                    delete resClient.username
+                    delete resClient.dateSubscribe
+                    CollectionDbVoiture.findOne({
+                        $and: [
+                            { _id: new ObjectID(req.params.id) },
+                            { client: resClient },
+                        ]
                     })
-                    .catch(err => {
-                        res.send({ message: "REQUEST ERROR", detailled: "TRAITEMENT ERROR" })
-                    })
+                        .then(resultatVoiture => {
+                            valeurAffiche = outil.TriageDataCarOne(resultatVoiture)
+                            res.send(valeurAffiche)
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR", detailled: "TRAITEMENT ERROR" })
+                        })
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                }
             })
             .catch(err => {
-                res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                res.send({ message: "REQUEST ERROR" })
             })
     } else {
         res.send({ message: "USER NOT CONNECTED" })
@@ -113,18 +125,22 @@ const GetFactureClient = (dataBase, req, res) => {
         const CollectionDbVoiture = dataBase.collection('Voiture')
         CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
-                delete resClient._id
-                delete resClient.password
-                delete resClient.username
-                delete resClient.dateSubscribe
-                CollectionDbVoiture.find({ client: resClient }).toArray()
-                    .then(resultatVoiture => {
-                        valeurAffiche = outil.TriageDataFacture(resultatVoiture)
-                        res.send(valeurAffiche)
-                    })
-                    .catch(err => {
-                        res.send({ message: "REQUEST ERROR" })
-                    })
+                if (resClient) {
+                    delete resClient._id
+                    delete resClient.password
+                    delete resClient.username
+                    delete resClient.dateSubscribe
+                    CollectionDbVoiture.find({ client: resClient }).toArray()
+                        .then(resultatVoiture => {
+                            valeurAffiche = outil.TriageDataFacture(resultatVoiture)
+                            res.send(valeurAffiche)
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                }
             })
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
@@ -143,21 +159,25 @@ const GetFactureIdClient = (dataBase, req, res) => {
         const CollectionDbVoiture = dataBase.collection('Voiture')
         CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
-                delete resClient._id
-                delete resClient.password
-                delete resClient.username
-                delete resClient.dateSubscribe
-                if (req.params.id !== undefined) {
-                    CollectionDbVoiture.findOne({ $and: [{ _id: new ObjectID(req.params.id) }, { client: resClient }] })
-                        .then(resultatVoiture => {
-                            valeurAffiche = outil.TriageDataFactureOne(resultatVoiture)
-                            res.send(valeurAffiche)
-                        })
-                        .catch(err => {
-                            res.send({ message: "REQUEST ERROR" })
-                        })
+                if (resClient) {
+                    delete resClient._id
+                    delete resClient.password
+                    delete resClient.username
+                    delete resClient.dateSubscribe
+                    if (req.params.id !== undefined) {
+                        CollectionDbVoiture.findOne({ $and: [{ _id: new ObjectID(req.params.id) }, { client: resClient }] })
+                            .then(resultatVoiture => {
+                                valeurAffiche = outil.TriageDataFactureOne(resultatVoiture)
+                                res.send(valeurAffiche)
+                            })
+                            .catch(err => {
+                                res.send({ message: "REQUEST ERROR" })
+                            })
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "FACTURE NOT FOUND" })
+                    }
                 } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "FACTURE NOT FOUND" })
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
                 }
             })
             .catch(err => {
@@ -169,29 +189,32 @@ const GetFactureIdClient = (dataBase, req, res) => {
 }
 
 
-
 const GetCarClientReception = (dataBase, req, res) => {
     if (req.session.clientId) {
         const CollectionDbClient = dataBase.collection('Client')
         const CollectionDbVoiture = dataBase.collection('Voiture')
         CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
-                delete resClient._id
-                delete resClient.password
-                delete resClient.username
-                delete resClient.dateSubscribe
-                CollectionDbVoiture.find({ client: resClient }).toArray()
-                    .then(resultatVoiture => {
-                        if (req.params.valeur === undefined) {
-                            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
-                        } else {
-                            valeurAffiche = outil.TriageDataReceptionne(resultatVoiture, JSON.parse(req.params.valeur))
-                            res.send(valeurAffiche)
-                        }
-                    })
-                    .catch(err => {
-                        res.send({ message: "REQUEST ERROR" })
-                    })
+                if (resClient) {
+                    delete resClient._id
+                    delete resClient.password
+                    delete resClient.username
+                    delete resClient.dateSubscribe
+                    CollectionDbVoiture.find({ client: resClient }).toArray()
+                        .then(resultatVoiture => {
+                            if (req.params.valeur === undefined) {
+                                res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                            } else {
+                                valeurAffiche = outil.TriageDataReceptionne(resultatVoiture, JSON.parse(req.params.valeur))
+                                res.send(valeurAffiche)
+                            }
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                }
             })
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
@@ -380,7 +403,7 @@ const LoginClient = (dataBase, res, req) => {
 
 const SubScribeClient = (dataBase, res, req) => {
     const CollectionDb = dataBase.collection('Client')
-    if (req.body.username !== undefined && req.body.password !== undefined && req.body.nom !== undefined && req.body.prenom !== undefined && req.body.adress !== undefined && req.body.phone !== undefined) {
+    if (req.body.username !== undefined && req.body.password !== undefined && req.body.nom !== undefined && req.body.prenom !== undefined && req.body.adress !== undefined && req.body.phone !== undefined && req.body.email !== undefined) {
         req.body.dateSubscribe = new Date()
         let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
         req.body.password = hashPassword
