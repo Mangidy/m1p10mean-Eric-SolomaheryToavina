@@ -65,8 +65,8 @@ async function start(port, routeAdmin, routeClient) {
 
     // GET REQUEST
     // API ADMIN GET ALL INVOICE CLIENT WITH CONDITION -- TRUE OR FALSE VALUE
-    // TRUE: CLIENT HAS INVOICE
-    // FALSE : CLIENT HAS NO INVOICE
+    // TRUE: VALIDATE THE INVOICE
+    // FALSE : NOT ALREADY VALIDATE THE INVOICE 
     // REQUIRED INFORMATION : CONDITION VALUE
     app.get("/admin/facture/:valeur", routeAdmin.factureTF)
     // --------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ async function start(port, routeAdmin, routeClient) {
     // POST REQUEST
     // API ADMIN ADD REPAIR LIST CAR -- CAR NUMBER
     // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
-    // REQUIRED INFORMATION : ALL REPAIR LIST INFORMATION ON POST REQUEST
+    // REQUIRED INFORMATION : ALL REPAIR LIST INFORMATION ON POST REQUEST AND CAR NUMBER
     app.post("/admin/car/reparation/:numero", routeAdmin.carreparation)
     // --------------------------------------------------------------------------------
 

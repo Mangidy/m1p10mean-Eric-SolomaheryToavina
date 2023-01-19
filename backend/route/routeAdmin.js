@@ -1,107 +1,198 @@
 const controllerAdminClient = require('../controller/admin/controller.admin.client')
 var clientCo
 
-const sendDb = (client) => {
+function sendDb(client) {
     clientCo = client
 }
 
-const home = (req, res) => {
+async function home(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.HomeAdmin(dataBase, req, res)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.HomeAdmin(clientCo, req, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const facture = (req, res) => {
+async function facture(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.getAllFacture(dataBase, res)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.getAllFacture(clientCo, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const factureTF = (req, res) => {
+async function factureTF(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.getAllFactureTr(dataBase, res, req)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.getAllFactureTr(clientCo, res, req)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const factureValidate = (req, res) => {
+async function factureValidate(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.ValidFacture(dataBase, res, req)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.ValidFacture(clientCo, res, req)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const carOut = (req, res) => {
+async function carOut(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.CarClientOut(dataBase, res, req)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.CarClientOut(clientCo, res, req)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const client = (req, res) => {
+async function client(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.getAllClient(dataBase, res)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.getAllClient(clientCo, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const clientOne = (req, res) => {
+async function clientOne(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.getOneClient(dataBase, res, req)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.getOneClient(clientCo, res, req)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const carList = (req, res) => {
+async function carList(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.getAllCar(dataBase, res)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.getAllCar(clientCo, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const carOne = (req, res) => {
+async function carOne(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.getOneCar(dataBase, res, req)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.getOneCar(clientCo, res, req)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const carreparation = (req, res) => {
+async function carreparation(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.AddCarReparation(dataBase, req, res)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.AddCarReparation(clientCo, req, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const carReceptionneFacture = (req, res) => {
+async function carReceptionneFacture(req, res) {
     if (req.session.usernameAdmin) {
-        controllerAdminClient.receptionneCarFacture(dataBase, res, req)
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.receptionneCarFacture(clientCo, res, req)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
     } else {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
 
-const login = (req, res) => {
-    controllerAdminClient.LoginAdmin(dataBase, res, req)
+async function login(req, res) {
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.LoginAdmin(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
+    }
 }
 
-const add = (req, res) => {
-    controllerAdminClient.AddAdmin(dataBase, res, req)
+async function add(req, res) {
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.AddAdmin(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
+    }
 }
 
-const logout = (req, res) => {
+function logout(req, res) {
     controllerAdminClient.LogoutAdmin(res, req)
 }
 

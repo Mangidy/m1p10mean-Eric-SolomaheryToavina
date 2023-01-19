@@ -2,9 +2,8 @@ const { ObjectID } = require("bson")
 const crypto = require('crypto')
 const outil = require('../../modele/outil')
 
-const HomeAdmin = (dataBase, req, res) => {
-    const CollectionDb = dataBase.collection('Admin')
-    CollectionDb.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+async function HomeAdmin(clientConnex, req, res) {
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
         .then(resultat => {
             if (resultat) {
                 res.send({ message: "ADMIN CONNECTED", admin: resultat })
@@ -17,9 +16,8 @@ const HomeAdmin = (dataBase, req, res) => {
         })
 }
 
-const getAllClient = (dataBase, res) => {
-    const CollectionDb = dataBase.collection('Client')
-    CollectionDb.find().toArray()
+async function getAllClient(clientConnex, res) {
+    await clientConnex.db("Garage").collection('Client').find().toArray()
         .then(resultat => {
             if (resultat) {
                 res.send(resultat.map(resAff => {
@@ -42,11 +40,10 @@ const getAllClient = (dataBase, res) => {
         })
 }
 
-const getOneClient = (dataBase, res, req) => {
+async function getOneClient(clientConnex, res, req) {
     if (req.params.id !== undefined) {
-        const CollectionDb = dataBase.collection('Client')
         try {
-            CollectionDb.findOne({ _id: new ObjectID(req.params.id) })
+            await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.params.id) })
                 .then(resultat => {
                     if (resultat) {
                         res.send({
@@ -73,9 +70,8 @@ const getOneClient = (dataBase, res, req) => {
     }
 }
 
-const getAllCar = (dataBase, res) => {
-    const CollectionDb = dataBase.collection('Voiture')
-    CollectionDb.find().toArray()
+async function getAllCar(clientConnex, res) {
+    await clientConnex.db("Garage").collection('Voiture').find().toArray()
         .then(resultat => {
             if (resultat) {
                 resAffiche = outil.TriageDataCarAdmin(resultat)
@@ -89,9 +85,8 @@ const getAllCar = (dataBase, res) => {
         })
 }
 
-const getAllFacture = (dataBase, res) => {
-    const CollectionDb = dataBase.collection('Voiture')
-    CollectionDb.find({ receptionne: true }).toArray()
+async function getAllFacture(clientConnex, res) {
+    await clientConnex.db("Garage").collection('Voiture').find({ receptionne: true }).toArray()
         .then(resFacture => {
             if (resFacture) {
                 resAffiche = outil.TriageDataFactureAdmin(resFacture)
@@ -99,17 +94,15 @@ const getAllFacture = (dataBase, res) => {
             } else {
                 res.send({ message: "DATA EMPTY" })
             }
-
         })
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
         })
 }
 
-const getAllFactureTr = (dataBase, res, req) => {
-    const CollectionDb = dataBase.collection('Voiture')
+async function getAllFactureTr(clientConnex, res, req) {
     if (req.params.valeur && req.params.valeur == "false" || req.params.valeur == "true") {
-        CollectionDb.find({ $and: [{ receptionne: true }, { validationClient: JSON.parse(req.params.valeur) }] }).toArray()
+        await clientConnex.db("Garage").collection('Voiture').find({ $and: [{ receptionne: true }, { validationClient: JSON.parse(req.params.valeur) }] }).toArray()
             .then(resFacture => {
                 if (resFacture) {
                     resAffiche = outil.TriageDataFactureAdmin(resFacture)
@@ -126,71 +119,17 @@ const getAllFactureTr = (dataBase, res, req) => {
     }
 }
 
-const ValidFacture = (dataBase, res, req) => {
-    const CollectionDb = dataBase.collection('Admin')
-    CollectionDb.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+async function ValidFacture(clientConnex, res, req) {
+    var continueVar = false
+    var continueVar1 = false
+    var continueVar2 = false
+    var resAdminR = {}
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
         .then(resAdmin => {
+            resAdminR = resAdmin
             if (resAdmin.roleAdmin === "FINANCIER") {
-                const CollectionDbVoiture = dataBase.collection('Voiture')
-                if (req.params.id !== undefined) {
-                    CollectionDbVoiture.findOne({ $and: [{ receptionne: true }, { paiement: false }, { _id: new ObjectID(req.params.id) }] })
-                        .then(resFacture => {
-                            if (resFacture) {
-                                dataUpdate = resFacture
-                                delete resAdmin.passwordAdmin
-                                delete resAdmin._id
-                                const updateDoc = {
-                                    $set: {
-                                        paiement: true,
-                                        adminPaiement: resAdmin,
-                                    }
-                                };
-                                const options = { upsert: true };
-                                try {
-                                    CollectionDbVoiture.updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
-                                        .then(resUpdate => {
-                                            const CollectionActivite = dataBase.collection('Activite')
-                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                            delete dataUpdate._id
-                                            delete dataUpdate.receptionne
-                                            delete dataUpdate.admin
-                                            voitureCl = dataUpdate.client
-                                            delete dataUpdate.client
-                                            reparationCl = dataUpdate.reparation
-                                            delete dataUpdate.reparation
-                                            delete resAdmin.dateSubscribe
-                                            dataActivite = {
-                                                activite: "VALIDATION PAIEMENT",
-                                                admin: resAdmin,
-                                                voiture: dataUpdate,
-                                                client: voitureCl,
-                                                reparation: reparationCl,
-                                                facture: dataUpdate.facture,
-                                                dateDepot: new Date()
-                                            }
-                                            CollectionActivite.insertOne(dataActivite)
-                                                .then(resActivite => {
-                                                    CollectionNotificationClient.insertOne(dataActivite)
-                                                        .then(resNotif => {
-                                                            res.send({ message: "VALIDATE PAYMENT" })
-                                                        })
-                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                                })
-                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                        })
-                                        .catch(err => {
-                                            res.send({ message: "REQUEST ERROR" })
-                                        })
-                                } catch (error) {
-                                    res.send({ message: "REQUEST ERROR" })
-                                }
-                            } else {
-                                res.send({ message: "REQUEST ERROR", detailled: "FACTURE ALREADY VALIDATE" })
-                            }
-                        })
-                        .catch(err => {
-                            res.send({ message: "REQUEST ERROR" })
-                        })
+                if (req.params.id !== undefined && req.params.id) {
+                    continueVar = true
                 } else {
                     res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
                 }
@@ -201,88 +140,181 @@ const ValidFacture = (dataBase, res, req) => {
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
         })
-}
 
-const CarClientOut = (dataBase, res, req) => {
-    const CollectionDb = dataBase.collection('Admin')
-    CollectionDb.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
-        .then(resAdmin => {
-            if (resAdmin.roleAdmin === "ATELIER") {
-                if (req.params.idVoiture !== undefined) {
-                    const CollectionDbVoiture = dataBase.collection('Voiture')
-                    CollectionDbVoiture.findOne({ $and: [{ receptionne: true }, { paiement: true }, { _id: new ObjectID(req.params.idVoiture) }] })
-                        .then(resVoiture => {
-                            if (resVoiture) {
-                                if (!resVoiture.sortie) {
-                                    const updateDoc = {
-                                        $set: {
-                                            sortie: true,
-                                        }
-                                    };
-                                    const options = { upsert: true };
-                                    CollectionDbVoiture.updateOne({ _id: new ObjectID(req.params.idVoiture) }, updateDoc, options)
-                                        .then(resUpdate => {
-                                            const CollectionActivite = dataBase.collection('Activite')
-                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                            delete resVoiture._id
-                                            delete resVoiture.receptionne
-                                            delete resVoiture.admin
-                                            factureCl = resVoiture.facture
-                                            delete resVoiture.facture
-                                            voitureCl = resVoiture.client
-                                            delete resVoiture.client
-                                            reparationCl = resVoiture.reparation
-                                            delete resVoiture.reparation
-                                            delete resAdmin.dateSubscribe
-                                            dataActivite = {
-                                                activite: "VALIDATION BON DE SORTIE VOITURE",
-                                                admin: resAdmin,
-                                                voiture: resVoiture,
-                                                client: voitureCl,
-                                                reparation: reparationCl,
-                                                facture: factureCl,
-                                                dateDepot: new Date()
-                                            }
-                                            CollectionActivite.insertOne(dataActivite)
-                                                .then(resActivite => {
-                                                    CollectionNotificationClient.insertOne(dataActivite)
-                                                        .then(resNotif => {
-                                                            res.send({ message: "CAR OUT" })
-                                                        })
-                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                                })
-                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-
-                                        }).catch(err => {
-                                            res.send({ message: "REQUEST ERROR" })
-                                        })
-                                } else {
-                                    res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY OUT" })
-                                }
-                            } else {
-                                res.send({ message: "REQUEST ERROR", detailled: "CAR NOT FOUND" })
-                            }
-                        })
-                        .catch(err => {
-                            res.send({ message: "REQUEST ERROR" })
-                        })
-                } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
-                }
-            } else {
-                res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT ALLOWED FOR THIS POST" })
-            }
-        })
-        .catch(err => {
-            res.send({ message: "REQUEST ERROR" })
-        })
-}
-
-const getOneCar = (dataBase, res, req) => {
-    if (req.params.id !== undefined) {
-        const CollectionDb = dataBase.collection('Voiture')
+    if (continueVar) {
+        var updateDoc = {}
+        var options = {}
+        var dataUpdate = {}
         try {
-            CollectionDb.findOne({ _id: new ObjectID(req.params.id) })
+            await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ receptionne: true }, { paiement: false }, { validationClient: true }, { _id: new ObjectID(req.params.id) }] })
+                .then(resFacture => {
+                    if (resFacture) {
+                        dataUpdate = resFacture
+                        delete resAdminR.passwordAdmin
+                        delete resAdminR._id
+                        updateDoc = {
+                            $set: {
+                                paiement: true,
+                                adminPaiement: resAdminR,
+                            }
+                        };
+                        options = { upsert: true };
+                        continueVar1 = true
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "VERIFICATE THE INFORMATION", option1: "CAR NOT RECEIVED BY AN ADMIN", option2: "CLIENT DOESN'T VALIDATE", option3: "CAR ALREADY VALIDATE", option4: "INVALID INFORMATION" })
+                    }
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+
+            if (continueVar1) {
+                var dataActivite = {}
+                try {
+                    await clientConnex.db("Garage").collection('Voiture').updateOne({ _id: new ObjectID(req.params.id) }, updateDoc, options)
+                        .then(resUpdate => {
+                            delete dataUpdate._id
+                            delete dataUpdate.receptionne
+                            delete dataUpdate.admin
+                            voitureCl = dataUpdate.client
+                            delete dataUpdate.client
+                            reparationCl = dataUpdate.reparation
+                            delete dataUpdate.reparation
+                            delete resAdminR.dateSubscribe
+                            dataActivite = {
+                                activite: "VALIDATION PAIEMENT",
+                                admin: resAdminR,
+                                voiture: dataUpdate,
+                                client: voitureCl,
+                                reparation: reparationCl,
+                                facture: dataUpdate.facture,
+                                dateDepot: new Date()
+                            }
+                            continueVar2 = true
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                    if (continueVar2) {
+                        await clientConnex.db("Garage").collection('Activite').insertOne(dataActivite)
+                            .then(resActivite => {
+                                console.log("Continue...");
+                            })
+                            .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                        await clientConnex.db("Garage").collection('NotificationClient').insertOne(dataActivite)
+                            .then(resNotif => {
+                                res.send({ message: "VALIDATE PAYMENT" })
+                            })
+                            .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                    }
+                } catch (error) {
+                    res.send({ message: "REQUEST ERROR" })
+                }
+            }
+        } catch (error) {
+            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+        }
+    }
+}
+
+async function CarClientOut(clientConnex, res, req) {
+    if (req.params.idVoiture !== undefined) {
+        var continueVar = false
+        var continueVar1 = false
+        var continueVar2 = false
+        var resAdminR = {}
+        await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+            .then(resAdmin => {
+                resAdminR = resAdmin
+                if (resAdmin.roleAdmin === "ATELIER") {
+                    continueVar = true
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT ALLOWED FOR THIS POST" })
+                }
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+
+        if (continueVar) {
+            var updateDoc = {}
+            var options = {}
+            var resVoitureR = {}
+            await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ receptionne: true }, { paiement: true }, { _id: new ObjectID(req.params.idVoiture) }] })
+                .then(resVoiture => {
+                    resVoitureR = resVoiture
+                    if (resVoiture) {
+                        if (!resVoiture.sortie) {
+                            updateDoc = {
+                                $set: {
+                                    sortie: true,
+                                    Datesortie: new Date(),
+                                }
+                            };
+                            options = { upsert: true };
+                            continueVar1 = true
+                        } else {
+                            res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY OUT" })
+                        }
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "CAR NOT FOUND" })
+                    }
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+
+            if (continueVar1) {
+                var dataActivite = {}
+                await clientConnex.db("Garage").collection('Voiture').updateOne({ _id: new ObjectID(req.params.idVoiture) }, updateDoc, options)
+                    .then(resUpdate => {
+                        delete resVoitureR._id
+                        delete resVoitureR.receptionne
+                        delete resVoitureR.admin
+                        factureCl = resVoitureR.facture
+                        delete resVoitureR.facture
+                        voitureCl = resVoitureR.client
+                        delete resVoitureR.client
+                        reparationCl = resVoitureR.reparation
+                        delete resVoitureR.reparation
+                        delete resAdminR.dateSubscribe
+                        dataActivite = {
+                            activite: "VALIDATION BON DE SORTIE VOITURE",
+                            admin: resAdminR,
+                            voiture: resVoitureR,
+                            client: voitureCl,
+                            reparation: reparationCl,
+                            facture: factureCl,
+                            dateDepot: new Date()
+                        }
+                        continueVar2 = true
+                    }).catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+                if (continueVar2) {
+                    await clientConnex.db("Garage").collection('Activite').insertOne(dataActivite)
+                        .then(resActivite => {
+                            console.log("Continue...");
+                        })
+                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                    await clientConnex.db("Garage").collection('NotificationClient').insertOne(dataActivite)
+                        .then(resNotif => {
+                            res.send({ message: "CAR OUT" })
+                        })
+                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                }
+            }
+        }
+
+    } else {
+        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+    }
+}
+
+async function getOneCar(clientConnex, res, req) {
+    if (req.params.id !== undefined) {
+        try {
+            await clientConnex.db("Garage").collection('Voiture').findOne({ _id: new ObjectID(req.params.id) })
                 .then(resultat => {
                     if (resAffiche) {
                         resAffiche = outil.TriageDataCarOneAdmin(resultat)
@@ -302,84 +334,19 @@ const getOneCar = (dataBase, res, req) => {
     }
 }
 
-const receptionneCarFacture = (dataBase, res, req) => {
+async function receptionneCarFacture(clientConnex, res, req) {
     if (req.params.idVoiture !== undefined) {
-        const CollectionDb = dataBase.collection('Voiture')
-        const CollectionDbAdmin = dataBase.collection('Admin')
+        var continueVar = false
+        var continueVar1 = false
+        var continueVar2 = false
+        var dataUpdate = {}
+        var resAdminR = {}
         try {
-            CollectionDb.findOne({ _id: new ObjectID(req.params.idVoiture) })
+            await clientConnex.db("Garage").collection('Voiture').findOne({ _id: new ObjectID(req.params.idVoiture) })
                 .then(resultat => {
                     if (resultat) {
                         dataUpdate = resultat
-                        CollectionDbAdmin.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
-                            .then(resAdmin => {
-                                if (resAdmin) {
-                                    if (resAdmin.roleAdmin === "ATELIER") {
-                                        delete resAdmin.passwordAdmin
-                                        delete resAdmin._id
-                                        req.body.Total = outil.CalculTotal(req.body)
-                                        if (req.body.Total !== 0) {
-                                            req.body.Avance = outil.CalculHalf(req.body.Total)
-                                            req.body.Reste = outil.CalculHalf(req.body.Total)
-                                            const updateDoc = {
-                                                $set: {
-                                                    sortie: false,
-                                                    paiement: false,
-                                                    validationClient: false,
-                                                    facture: req.body
-                                                }
-                                            };
-                                            const options = { upsert: true };
-                                            try {
-                                                CollectionDb.updateOne({ _id: new ObjectID(req.params.idVoiture) }, updateDoc, options)
-                                                    .then(resF => {
-                                                        const CollectionActivite = dataBase.collection('Activite')
-                                                        const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                                        delete dataUpdate._id
-                                                        delete dataUpdate.receptionne
-                                                        delete dataUpdate.admin
-                                                        delete dataUpdate.facture
-                                                        voitureCl = dataUpdate.client
-                                                        delete dataUpdate.client
-                                                        reparationCl = dataUpdate.reparation
-                                                        delete dataUpdate.reparation
-                                                        delete resAdmin.dateSubscribe
-                                                        dataActivite = {
-                                                            activite: "FACTURATION VOITURE",
-                                                            admin: resAdmin,
-                                                            voiture: dataUpdate,
-                                                            client: voitureCl,
-                                                            reparation: reparationCl,
-                                                            facture: req.body,
-                                                            dateDepot: new Date()
-                                                        }
-                                                        CollectionActivite.insertOne(dataActivite)
-                                                            .then(resActivite => {
-                                                                CollectionNotificationClient.insertOne(dataActivite)
-                                                                    .then(resNotif => {
-                                                                        res.send({ message: "FACTURE FOR CAR ADDED" })
-                                                                    })
-                                                                    .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                                            })
-                                                            .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                                    })
-                                                    .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" }))
-                                            } catch (error) {
-                                                res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" })
-                                            }
-                                        } else {
-                                            res.send({ message: "REQUEST ERROR", detailled: "INVALID INTEGER" })
-                                        }
-                                    } else {
-                                        res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT ALLOWED FOR THIS POST" })
-                                    }
-                                } else {
-                                    res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT FOUND" })
-                                }
-                            })
-                            .catch(err => {
-                                res.send({ message: "REQUEST ERROR" })
-                            })
+                        continueVar = true
                     } else {
                         res.send({ message: "REQUEST ERROR", detailled: "CAR NOT FOUND" })
                     }
@@ -387,6 +354,88 @@ const receptionneCarFacture = (dataBase, res, req) => {
                 .catch(err => {
                     res.send({ message: "REQUEST ERROR" })
                 })
+            if (continueVar) {
+                var updateDoc = {}
+                var options = {}
+                await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+                    .then(resAdmin => {
+                        resAdminR = resAdmin
+                        if (resAdmin) {
+                            if (resAdmin.roleAdmin === "ATELIER") {
+                                delete resAdmin.passwordAdmin
+                                delete resAdmin._id
+                                req.body.Total = outil.CalculTotal(req.body)
+                                if (req.body.Total !== 0) {
+                                    req.body.Avance = outil.CalculHalf(req.body.Total)
+                                    req.body.Reste = outil.CalculHalf(req.body.Total)
+                                    req.body.Prix = "Ariary"
+                                    updateDoc = {
+                                        $set: {
+                                            sortie: false,
+                                            paiement: false,
+                                            validationClient: false,
+                                            facture: req.body
+                                        }
+                                    };
+                                    options = { upsert: true };
+                                    continueVar1 = true
+                                } else {
+                                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INTEGER" })
+                                }
+                            } else {
+                                res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT ALLOWED FOR THIS POST" })
+                            }
+                        } else {
+                            res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT FOUND" })
+                        }
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+                if (continueVar1) {
+                    var dataActivite = {}
+                    try {
+                        await clientConnex.db("Garage").collection('Voiture').updateOne({ _id: new ObjectID(req.params.idVoiture) }, updateDoc, options)
+                            .then(resF => {
+                                delete dataUpdate._id
+                                delete dataUpdate.receptionne
+                                delete dataUpdate.admin
+                                delete dataUpdate.facture
+                                voitureCl = dataUpdate.client
+                                delete dataUpdate.client
+                                reparationCl = dataUpdate.reparation
+                                delete dataUpdate.reparation
+                                delete resAdminR.dateSubscribe
+                                dataActivite = {
+                                    activite: "FACTURATION VOITURE",
+                                    admin: resAdminR,
+                                    voiture: dataUpdate,
+                                    client: voitureCl,
+                                    reparation: reparationCl,
+                                    facture: req.body,
+                                    dateDepot: new Date()
+                                }
+                                continueVar2 = true
+                            })
+                            .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" }))
+
+                        if (continueVar2) {
+                            await clientConnex.db("Garage").collection('Activite').insertOne(dataActivite)
+                                .then(resActivite => {
+                                    console.log("Contine...");
+                                })
+                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                            await clientConnex.db("Garage").collection('NotificationClient').insertOne(dataActivite)
+                                .then(resNotif => {
+                                    res.send({ message: "FACTURE FOR CAR ADDED" })
+                                })
+                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                        }
+                    } catch (error) {
+                        res.send({ message: "REQUEST ERROR", detailled: "FACTURE FOR CAR ADDED FAILED" })
+                    }
+                }
+            }
         } catch (error) {
             res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
         }
@@ -396,57 +445,20 @@ const receptionneCarFacture = (dataBase, res, req) => {
     }
 }
 
-const AddCarReparation = (dataBase, req, res) => {
-    const CollectionAdmin = dataBase.collection('Admin')
-    const CollectionVoiture = dataBase.collection('Voiture')
-    CollectionAdmin.findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+async function AddCarReparation(clientConnex, req, res) {
+    var continueVar = false
+    var continueVar1 = false
+    var continueVar2 = false
+    var resAdminR = {}
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
         .then(resAdmin => {
             if (req.params.numero !== undefined) {
                 if (resAdmin.roleAdmin === "ATELIER") {
                     delete resAdmin._id
                     delete resAdmin.passwordAdmin
                     delete resAdmin.dateSubscribe
-                    CollectionVoiture.findOne({ $and: [{ numero: req.params.numero }, { reparation: {} }] })
-                        .then(resCar => {
-                            if (resCar) {
-                                resCar.reparation = req.body
-                                newValeurReparation = resCar
-                                const updateDoc = {
-                                    $set: { reparation: req.body, admin: resAdmin, receptionne: true }
-                                };
-                                const options = { upsert: true };
-                                try {
-                                    CollectionVoiture.updateOne({ _id: newValeurReparation._id }, updateDoc, options)
-                                        .then(resF => {
-                                            const CollectionActivite = dataBase.collection('Activite')
-                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                            dataActivite = {
-                                                activite: "LISTE REPARATION VOITURE",
-                                                admin: resAdmin,
-                                                voiture: resCar,
-                                                client: resCar.client,
-                                                reparation: resCar.reparation,
-                                                dateDepot: new Date()
-                                            }
-                                            CollectionActivite.insertOne(dataActivite)
-                                                .then(resActivite => {
-                                                    CollectionNotificationClient.insertOne(dataActivite)
-                                                        .then(resNotif => {
-                                                            res.send({ message: "CAR REPARATION ADDED" })
-                                                        })
-                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                                })
-                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                        })
-                                        .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" }))
-                                } catch (error) {
-                                    res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" })
-                                }
-                            } else {
-                                res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION INFORMATION" })
-                            }
-                        })
-                        .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION", err: err }))
+                    resAdminR = resAdmin
+                    continueVar = true
                 } else {
                     res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT ALLOWED FOR THIS POST" })
                 }
@@ -457,11 +469,62 @@ const AddCarReparation = (dataBase, req, res) => {
         .catch(err => {
             res.send({ message: "REQUEST ERROR" })
         })
+    if (continueVar) {
+        var updateDoc = {}
+        var options = {}
+        var newValeurReparation = {}
+        await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ numero: req.params.numero }, { reparation: {} }] })
+            .then(resCar => {
+                if (resCar) {
+                    resCar.reparation = req.body
+                    newValeurReparation = resCar
+                    updateDoc = {
+                        $set: { reparation: req.body, admin: resAdminR, receptionne: true }
+                    };
+                    options = { upsert: true };
+                    continueVar1 = true
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY RECEIVED BY AN ADMIN" })
+                }
+            })
+            .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION", err: err }))
+        if (continueVar1) {
+            var dataActivite = {}
+            try {
+                await clientConnex.db("Garage").collection('Voiture').updateOne({ _id: newValeurReparation._id }, updateDoc, options)
+                    .then(resF => {
+                        dataActivite = {
+                            activite: "LISTE REPARATION VOITURE",
+                            admin: resAdminR,
+                            voiture: newValeurReparation,
+                            client: newValeurReparation.client,
+                            reparation: newValeurReparation.reparation,
+                            dateDepot: new Date()
+                        }
+                        continueVar2 = true
+                    })
+                    .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" }))
+                if (continueVar2) {
+                    await clientConnex.db("Garage").collection('Activite').insertOne(dataActivite)
+                        .then(resActivite => {
+                            console.log("Continue...");
+                        })
+                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                    await clientConnex.db("Garage").collection('NotificationClient').insertOne(dataActivite)
+                        .then(resNotif => {
+                            res.send({ message: "CAR REPARATION ADDED" })
+                        })
+                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                }
+            } catch (error) {
+                res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" })
+            }
+        }
+    }
 }
 
-const LoginAdmin = (dataBase, res, req) => {
-    const CollectionDb = dataBase.collection('Admin')
-    CollectionDb.findOne({ usernameAdmin: req.body.username })
+async function LoginAdmin(clientConnex, res, req) {
+    await clientConnex.db("Garage").collection('Admin').findOne({ usernameAdmin: req.body.username })
         .then(resultat => {
             if (resultat) {
                 let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
@@ -480,10 +543,11 @@ const LoginAdmin = (dataBase, res, req) => {
         })
 }
 
-const AddAdmin = (dataBase, res, req) => {
-    const CollectionDbAdmin = dataBase.collection('Admin')
+async function AddAdmin(clientConnex, res, req) {
     if (req.body.usernameAdmin !== undefined && req.body.passwordAdmin !== undefined && req.body.roleAdmin !== undefined) {
-        CollectionDbAdmin.findOne({ usernameAdmin: req.body.usernameAdmin })
+        var continueVar = false
+        var newVal = {}
+        await clientConnex.db("Garage").collection('Admin').findOne({ usernameAdmin: req.body.usernameAdmin })
             .then(resAdmin => {
                 if (resAdmin) {
                     res.send({ message: "ADMIN ADD FAILED", detailled: "ADMIN ALREADY ADDED" })
@@ -491,21 +555,26 @@ const AddAdmin = (dataBase, res, req) => {
                     req.body.dateSubscribe = new Date()
                     let hashPassword = crypto.createHash('md5').update(req.body.passwordAdmin).digest("hex")
                     req.body.passwordAdmin = hashPassword
-                    CollectionDbAdmin.insertOne(req.body)
-                        .then(resultat => {
-                            res.send({ message: "ADMIN ADDED SUCCESSFULLY" })
-                        })
-                        .catch(err => res.send({ message: "ADMIN ADD FAILED", detailled: "INVALID INFORMATION" }))
+                    continueVar = true
+                    newVal = req.body
                 }
             })
             .catch(err => res.send({ message: "ADMIN ADD FAILED", detailled: "INVALID INFORMATION" }))
+
+        if (continueVar) {
+            await clientConnex.db("Garage").collection('Admin').insertOne(newVal)
+                .then(resultat => {
+                    res.send({ message: "ADMIN ADDED SUCCESSFULLY" })
+                })
+                .catch(err => res.send({ message: "ADMIN ADD FAILED", detailled: "INVALID INFORMATION" }))
+        }
 
     } else {
         res.send({ message: "ADMIN ADD FAILED", detailled: "INVALID INFORMATION" })
     }
 }
 
-const LogoutAdmin = (res, req) => {
+function LogoutAdmin(res, req) {
     req.session.destroy()
     res.send({ message: "LOGOUT SUCCESSFULLY" })
 }

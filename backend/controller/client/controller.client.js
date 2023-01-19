@@ -275,6 +275,7 @@ async function ValidateCar(clientConnex, req, res) {
         var updateDoc = {}
         var options = {}
         var dataActivite = {}
+        var resVoitureR = {}
         await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
                 if (resClient) {
@@ -299,6 +300,7 @@ async function ValidateCar(clientConnex, req, res) {
         if (continueVar && resClientN) {
             await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ _id: new ObjectID(req.params.idVoiture) }, { client: resClientN }] })
                 .then(resVoiture => {
+                    resVoitureR = resVoiture
                     if (!resVoiture.validationClient) {
                         updateDoc = {
                             $set: {
@@ -319,16 +321,17 @@ async function ValidateCar(clientConnex, req, res) {
                     .then(resUpdate => {
                         dataActivite = {
                             activite: "VALIDATION FACTURE VOITURE",
-                            client: resClient,
+                            client: resClientN,
                             voiture: {
-                                numero: resVoiture.numero,
-                                marque: resVoiture.marque,
-                                modele: resVoiture.modele,
-                                annee: resVoiture.annee,
+                                numero: resVoitureR.numero,
+                                marque: resVoitureR.marque,
+                                modele: resVoitureR.modele,
+                                annee: resVoitureR.annee,
                             },
-                            admin: resVoiture.admin,
-                            facture: resVoiture.facture,
-                            dateDepot: resVoiture.dateDepot,
+                            admin: resVoitureR.admin,
+                            reparation: resVoitureR.reparation,
+                            facture: resVoitureR.facture,
+                            dateDepot: resVoitureR.dateDepot,
                         }
                         continueVar2 = true
                     })

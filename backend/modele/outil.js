@@ -34,11 +34,13 @@ const CalculHalf = (data) => {
 
 const TriageDataFactureAdmin = (data) => {
     Newdata = data.map(resultat => {
-        if (resultat.receptionne === true) {
+        if (resultat.receptionne === true && resultat.facture) {
             return {
                 id: resultat._id,
                 validationClient: resultat.validationClient,
                 paiement: resultat.paiement,
+                facture: resultat.facture,
+                reparation: resultat.reparation,
                 sortie: resultat.sortie,
                 voiture: {
                     numero: resultat.numero,
@@ -48,8 +50,6 @@ const TriageDataFactureAdmin = (data) => {
                 },
                 client: resultat.client,
                 admin: resultat.admin,
-                facture: resultat.facture,
-                reparation: resultat.reparation,
                 dateDepot: resultat.dateDepot,
             }
         } else {
@@ -68,6 +68,8 @@ const TriageDataFacture = (data) => {
                 id: resultat._id,
                 validationClient: resultat.validationClient,
                 paiement: resultat.paiement,
+                facture: resultat.facture,
+                reparation: resultat.reparation,
                 sortie: resultat.sortie,
                 voiture: {
                     numero: resultat.numero,
@@ -75,10 +77,6 @@ const TriageDataFacture = (data) => {
                     modele: resultat.modele,
                     annee: resultat.annee,
                 },
-                admin: resultat.admin,
-                facture: resultat.facture,
-                reparation: resultat.reparation,
-                validation: resultat.validationClient,
                 dateDepot: resultat.dateDepot,
             }
         } else {
@@ -97,6 +95,8 @@ const TriageDataFactureOne = (resultat) => {
             id: resultat._id,
             validationClient: resultat.validationClient,
             paiement: resultat.paiement,
+            facture: resultat.facture,
+            reparation: resultat.reparation,
             sortie: resultat.sortie,
             voiture: {
                 numero: resultat.numero,
@@ -104,10 +104,6 @@ const TriageDataFactureOne = (resultat) => {
                 modele: resultat.modele,
                 annee: resultat.annee,
             },
-            admin: resultat.admin,
-            facture: resultat.facture,
-            validation: resultat.validationClient,
-            reparation: resultat.reparation,
             dateDepot: resultat.dateDepot,
         }
     } else {
