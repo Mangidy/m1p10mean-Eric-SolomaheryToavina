@@ -152,6 +152,7 @@ async function ValidFacture(clientConnex, res, req) {
                         dataUpdate = resFacture
                         delete resAdminR.passwordAdmin
                         delete resAdminR._id
+                        delete resAdminR.dateSubscribe
                         updateDoc = {
                             $set: {
                                 paiement: true,
@@ -245,10 +246,15 @@ async function CarClientOut(clientConnex, res, req) {
                     resVoitureR = resVoiture
                     if (resVoiture) {
                         if (!resVoiture.sortie) {
+                            dateSortie = new Date()
+                            diffDate = outil.dateDiff(new Date(resVoitureR.dateDepot), dateSortie)
                             updateDoc = {
                                 $set: {
                                     sortie: true,
-                                    Datesortie: new Date(),
+                                    Datesortie: dateSortie,
+                                    TempsReparation: {
+                                        jour: diffDate.day,
+                                    },
                                 }
                             };
                             options = { upsert: true };
@@ -308,6 +314,26 @@ async function CarClientOut(clientConnex, res, req) {
 
     } else {
         res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+    }
+}
+
+async function ListCarClientOut(clientConnex, res, req) {
+    var continueVar = false
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+        .then(resAdmin => {
+            continueVar = true
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+    if (continueVar) {
+        await clientConnex.db("Garage").collection('Voiture').find({ $and: [{ sortie: true }] }).toArray()
+            .then(resList => {
+                res.send(outil.TriageDataCarOut(resList))
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
     }
 }
 
@@ -585,6 +611,7 @@ exports.getAllFactureTr = getAllFactureTr
 exports.AddCarReparation = AddCarReparation
 exports.ValidFacture = ValidFacture
 exports.CarClientOut = CarClientOut
+exports.ListCarClientOut = ListCarClientOut
 exports.HomeAdmin = HomeAdmin
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar

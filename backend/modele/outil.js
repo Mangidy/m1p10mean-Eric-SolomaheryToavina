@@ -113,6 +113,49 @@ const TriageDataFactureOne = (resultat) => {
     }
 }
 
+const TriageDataCarOut = (data) => {
+    Newdata = data.map(resultat => {
+        diffDate = dateDiff(new Date(resultat.dateDepot), new Date(resultat.Datesortie))
+        return {
+            TempsReparation: {
+                jour: diffDate.day,
+            },
+            dateDepot: resultat.dateDepot,
+            Datesortie: resultat.Datesortie,
+            _id: resultat._id,
+            numero: resultat.numero,
+            marque: resultat.marque,
+            modele: resultat.modele,
+            annee: resultat.annee,
+            receptionne: resultat.receptionne,
+            reparation: resultat.reparation,
+            client: resultat.client,
+            adminAtelier: resultat.admin,
+            adminFinancier: resultat.adminPaiement,
+        }
+    })
+    return Newdata
+}
+
+const dateDiff = (date1, date2) => {
+    var diff = {}
+    var tmp = date2 - date1;
+
+    tmp = Math.floor(tmp / 1000);
+    diff.sec = tmp % 60;
+
+    tmp = Math.floor((tmp - diff.sec) / 60);
+    diff.min = tmp % 60;
+
+    tmp = Math.floor((tmp - diff.min) / 60);
+    diff.hour = tmp % 24;
+
+    tmp = Math.floor((tmp - diff.hour) / 24);
+    diff.day = tmp;
+
+    return diff;
+}
+
 const TriageDataCar = (data) => {
     Newdata = data.map(resultat => {
         if (resultat.receptionne === true) {
@@ -246,7 +289,9 @@ const TriageDataCarOneAdmin = (resultat) => {
 
 exports.TriageDataReceptionne = TriageDataReceptionne
 exports.TriageDataCar = TriageDataCar
+exports.TriageDataCarOut = TriageDataCarOut
 exports.TriageDataCarAdmin = TriageDataCarAdmin
+exports.dateDiff = dateDiff
 exports.TriageDataCarOne = TriageDataCarOne
 exports.TriageDataCarOneAdmin = TriageDataCarOneAdmin
 exports.CalculTotal = CalculTotal

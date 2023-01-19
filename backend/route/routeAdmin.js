@@ -80,6 +80,21 @@ async function carOut(req, res) {
     }
 }
 
+async function carOutList(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.ListCarClientOut(clientCo, res, req)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
 async function client(req, res) {
     if (req.session.usernameAdmin) {
         try {
@@ -202,6 +217,7 @@ exports.client = client
 exports.facture = facture
 exports.factureTF = factureTF
 exports.carOut = carOut
+exports.carOutList = carOutList
 exports.factureValidate = factureValidate
 exports.clientOne = clientOne
 exports.carList = carList
