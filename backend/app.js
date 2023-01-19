@@ -207,9 +207,4 @@ async function start(port, routeAdmin, routeClient) {
     app.listen(port, console.log(`Server running on port ${port}`))
 }
 
-async function createListing(client, newListing) {
-    const result = await client.db("Garage").collection("Test").insertOne(newListing);
-    console.log(`New listing created with the following id: ${result.insertedId}`);
-}
-
 exports.start = start
