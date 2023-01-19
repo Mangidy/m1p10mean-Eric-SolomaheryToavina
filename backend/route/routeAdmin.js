@@ -1,8 +1,8 @@
 const controllerAdminClient = require('../controller/admin/controller.admin.client')
-var dataBase
+var clientCo
 
-const sendDb = (db) => {
-    dataBase = db
+const sendDb = (client) => {
+    clientCo = client
 }
 
 const home = (req, res) => {

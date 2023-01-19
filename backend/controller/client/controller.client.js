@@ -2,10 +2,10 @@ const { ObjectID } = require("bson");
 const crypto = require('crypto')
 const outil = require('../../modele/outil')
 
-const HomeClient = (dataBase, req, res) => {
+
+async function HomeClient(clientConnex, req, res) {
     if (req.session.clientId) {
-        const CollectionDb = dataBase.collection('Client')
-        CollectionDb.findOne({ _id: new ObjectID(req.session.clientId) })
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resultat => {
                 res.send({ message: "USER CONNECTED", user: resultat })
             })
@@ -17,201 +17,96 @@ const HomeClient = (dataBase, req, res) => {
     }
 }
 
-const NotificationClient = (dataBase, req, res) => {
+async function NotificationClient(clientConnex, req, res) {
     if (req.session.clientId) {
-        const CollectionDb = dataBase.collection('Client')
-        const CollectionDbNotificationClient = dataBase.collection('NotificationClient')
-        CollectionDb.findOne({ _id: new ObjectID(req.session.clientId) })
+        var continueVar = false
+        var resUserN = {}
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resUser => {
                 if (resUser) {
                     delete resUser._id
                     delete resUser.password
                     delete resUser.username
                     delete resUser.dateSubscribe
-                    CollectionDbNotificationClient.find({ client: resUser }).toArray()
-                        .then(resNotif => {
-                            if (resNotif) {
-                                res.send(resNotif)
-                            } else {
-                                res.send({ message: "Aucune notification pour le moment" })
-                            }
-                        })
-                        .catch(err => {
-                            res.send({ message: "REQUEST ERROR" })
-                        })
+                    resUserN = resUser
+                    continueVar = true
                 } else {
                     res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
-                }
-            })
-            .catch(err => {
-                res.send({ message: "REQUEST ERROR" })
-            })
-    } else {
-        res.send({ message: "USER NOT CONNECTED" })
-    }
-}
-
-const GetCarClient = (dataBase, req, res) => {
-    if (req.session.clientId) {
-        const CollectionDbClient = dataBase.collection('Client')
-        const CollectionDbVoiture = dataBase.collection('Voiture')
-        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
-            .then(resClient => {
-                if (resClient) {
-                    delete resClient._id
-                    delete resClient.password
-                    delete resClient.username
-                    delete resClient.dateSubscribe
-                    CollectionDbVoiture.find({ client: resClient }).toArray()
-                        .then(resultatVoiture => {
-                            valeurAffiche = outil.TriageDataCar(resultatVoiture)
-                            res.send(valeurAffiche)
-                        })
-                        .catch(err => {
-                            res.send({ message: "REQUEST ERROR" })
-                        })
-                } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
-                }
-            })
-            .catch(err => {
-                res.send({ message: "REQUEST ERROR" })
-            })
-    } else {
-        res.send({ message: "USER NOT CONNECTED" })
-    }
-}
-
-const GetCarOne = (dataBase, req, res) => {
-    if (req.session.clientId) {
-        const CollectionDbClient = dataBase.collection('Client')
-        const CollectionDbVoiture = dataBase.collection('Voiture')
-        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
-            .then(resClient => {
-                if (resClient) {
-                    delete resClient._id
-                    delete resClient.password
-                    delete resClient.username
-                    delete resClient.dateSubscribe
-                    CollectionDbVoiture.findOne({
-                        $and: [
-                            { _id: new ObjectID(req.params.id) },
-                            { client: resClient },
-                        ]
-                    })
-                        .then(resultatVoiture => {
-                            valeurAffiche = outil.TriageDataCarOne(resultatVoiture)
-                            res.send(valeurAffiche)
-                        })
-                        .catch(err => {
-                            res.send({ message: "REQUEST ERROR", detailled: "TRAITEMENT ERROR" })
-                        })
-                } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
-                }
-            })
-            .catch(err => {
-                res.send({ message: "REQUEST ERROR" })
-            })
-    } else {
-        res.send({ message: "USER NOT CONNECTED" })
-    }
-}
-
-
-const GetFactureClient = (dataBase, req, res) => {
-    if (req.session.clientId) {
-        const CollectionDbClient = dataBase.collection('Client')
-        const CollectionDbVoiture = dataBase.collection('Voiture')
-        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
-            .then(resClient => {
-                if (resClient) {
-                    delete resClient._id
-                    delete resClient.password
-                    delete resClient.username
-                    delete resClient.dateSubscribe
-                    CollectionDbVoiture.find({ client: resClient }).toArray()
-                        .then(resultatVoiture => {
-                            valeurAffiche = outil.TriageDataFacture(resultatVoiture)
-                            res.send(valeurAffiche)
-                        })
-                        .catch(err => {
-                            res.send({ message: "REQUEST ERROR" })
-                        })
-                } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                    continueVar = false
                 }
             })
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
             })
 
-
-    } else {
-        res.send({ message: "USER NOT CONNECTED" })
-    }
-}
-
-
-const GetFactureIdClient = (dataBase, req, res) => {
-    if (req.session.clientId) {
-        const CollectionDbClient = dataBase.collection('Client')
-        const CollectionDbVoiture = dataBase.collection('Voiture')
-        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
-            .then(resClient => {
-                if (resClient) {
-                    delete resClient._id
-                    delete resClient.password
-                    delete resClient.username
-                    delete resClient.dateSubscribe
-                    if (req.params.id !== undefined) {
-                        CollectionDbVoiture.findOne({ $and: [{ _id: new ObjectID(req.params.id) }, { client: resClient }] })
-                            .then(resultatVoiture => {
-                                valeurAffiche = outil.TriageDataFactureOne(resultatVoiture)
-                                res.send(valeurAffiche)
-                            })
-                            .catch(err => {
-                                res.send({ message: "REQUEST ERROR" })
-                            })
+        if (continueVar) {
+            await clientConnex.db("Garage").collection('NotificationClient').find({ client: resUserN }).toArray()
+                .then(resNotif => {
+                    if (resNotif) {
+                        res.send(resNotif)
                     } else {
-                        res.send({ message: "REQUEST ERROR", detailled: "FACTURE NOT FOUND" })
+                        res.send({ message: "Aucune notification pour le moment" })
                     }
-                } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
-                }
-            })
-            .catch(err => {
-                res.send({ message: "REQUEST ERROR" })
-            })
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+        }
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
 }
 
-
-const GetCarClientReception = (dataBase, req, res) => {
+async function GetCarClient(clientConnex, req, res) {
     if (req.session.clientId) {
-        const CollectionDbClient = dataBase.collection('Client')
-        const CollectionDbVoiture = dataBase.collection('Voiture')
-        CollectionDbClient.findOne({ _id: new ObjectID(req.session.clientId) })
+        var continueVar = false
+        var resClientN = {}
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
                 if (resClient) {
                     delete resClient._id
                     delete resClient.password
                     delete resClient.username
                     delete resClient.dateSubscribe
-                    CollectionDbVoiture.find({ client: resClient }).toArray()
-                        .then(resultatVoiture => {
-                            if (req.params.valeur === undefined) {
-                                res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
-                            } else {
-                                valeurAffiche = outil.TriageDataReceptionne(resultatVoiture, JSON.parse(req.params.valeur))
-                                res.send(valeurAffiche)
-                            }
-                        })
-                        .catch(err => {
-                            res.send({ message: "REQUEST ERROR" })
-                        })
+                    resClientN = resClient
+                    continueVar = true
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                    continueVar = false
+                }
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+
+        if (continueVar) {
+            await clientConnex.db("Garage").collection('Voiture').find({ client: resClientN }).toArray()
+                .then(resultatVoiture => {
+                    valeurAffiche = outil.TriageDataCar(resultatVoiture)
+                    res.send(valeurAffiche)
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+        }
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
+async function GetCarOne(clientConnex, req, res) {
+    if (req.session.clientId) {
+        var continueVar = false
+        var resClientN = {}
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resClient => {
+                if (resClient) {
+                    delete resClient._id
+                    delete resClient.password
+                    delete resClient.username
+                    delete resClient.dateSubscribe
+                    continueVar = true
+                    resClientN = resClient
                 } else {
                     res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
                 }
@@ -220,16 +115,167 @@ const GetCarClientReception = (dataBase, req, res) => {
                 res.send({ message: "REQUEST ERROR" })
             })
 
+        if (continueVar) {
+            await clientConnex.db("Garage").collection('Voiture').findOne({
+                $and: [
+                    { _id: new ObjectID(req.params.id) },
+                    { client: resClientN },
+                ]
+            })
+                .then(resultatVoiture => {
+                    valeurAffiche = outil.TriageDataCarOne(resultatVoiture)
+                    res.send(valeurAffiche)
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR", detailled: "TRAITEMENT ERROR" })
+                })
+        }
 
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
 }
 
-const ValidateCar = (dataBase, req, res) => {
+
+async function GetFactureClient(clientConnex, req, res) {
     if (req.session.clientId) {
-        const CollectionClient = dataBase.collection('Client')
-        CollectionClient.findOne({ _id: new ObjectID(req.session.clientId) })
+        var continueVar = false
+        var resClientN = {}
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+            .then(resClient => {
+                if (resClient) {
+                    delete resClient._id
+                    delete resClient.password
+                    delete resClient.username
+                    delete resClient.dateSubscribe
+                    continueVar = true
+                    resClientN = resClient
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                }
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+
+        if (continueVar) {
+            await clientConnex.db("Garage").collection('Voiture').find({ client: resClientN }).toArray()
+                .then(resultatVoiture => {
+                    valeurAffiche = outil.TriageDataFacture(resultatVoiture)
+                    res.send(valeurAffiche)
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+        }
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
+async function GetFactureIdClient(clientConnex, req, res) {
+    if (req.session.clientId) {
+        var continueVar = false
+        var resClientN = {}
+        if (req.params.id !== undefined && typeof req.params.id === "string") {
+            try {
+                await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+                    .then(resClient => {
+                        if (resClient) {
+                            delete resClient._id
+                            delete resClient.password
+                            delete resClient.username
+                            delete resClient.dateSubscribe
+                            continueVar = true
+                            resClientN = resClient
+                        } else {
+                            res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                        }
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+            } catch (error) {
+                res.send({ message: "REQUEST ERROR" })
+            }
+
+            if (continueVar) {
+                try {
+                    await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ _id: new ObjectID(req.params.id) }, { client: resClientN }] })
+                        .then(resultatVoiture => {
+                            valeurAffiche = outil.TriageDataFactureOne(resultatVoiture)
+                            res.send(valeurAffiche)
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                } catch (error) {
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                }
+            }
+        } else {
+            res.send({ message: "REQUEST ERROR", detailled: "FACTURE NOT FOUND" })
+        }
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
+async function GetCarClientReception(clientConnex, req, res) {
+    if (req.session.clientId) {
+        try {
+            var continueVar = false
+            var resClientN = {}
+            if (req.params.valeur === undefined && req.params.valeur) {
+                res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+            } else {
+                await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+                    .then(resClient => {
+                        if (resClient) {
+                            delete resClient._id
+                            delete resClient.password
+                            delete resClient.username
+                            delete resClient.dateSubscribe
+                            continueVar = true
+                            resClientN = resClient
+                        } else {
+                            res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                        }
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+
+                if (continueVar) {
+                    await clientConnex.db("Garage").collection('Voiture').find({ client: resClientN }).toArray()
+                        .then(resultatVoiture => {
+                            valeurAffiche = outil.TriageDataReceptionne(resultatVoiture, JSON.parse(req.params.valeur))
+                            res.send(valeurAffiche)
+                        })
+                        .catch(err => {
+                            res.send({ message: "REQUEST ERROR" })
+                        })
+                }
+
+            }
+        } catch (error) {
+            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+        }
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
+async function ValidateCar(clientConnex, req, res) {
+    if (req.session.clientId) {
+        var continueVar = false
+        var continueVar1 = false
+        var continueVar2 = false
+        var resClientN = {}
+        var updateDoc = {}
+        var options = {}
+        var dataActivite = {}
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resClient => {
                 if (resClient) {
                     if (req.params.idVoiture !== undefined) {
@@ -237,52 +283,8 @@ const ValidateCar = (dataBase, req, res) => {
                         delete resClient.password
                         delete resClient.username
                         delete resClient.dateSubscribe
-                        const CollectionVoiture = dataBase.collection('Voiture')
-                        CollectionVoiture.findOne({ $and: [{ _id: new ObjectID(req.params.idVoiture) }, { client: resClient }] })
-                            .then(resVoiture => {
-                                if (!resVoiture.validationClient) {
-                                    const updateDoc = {
-                                        $set: {
-                                            validationClient: true,
-                                        }
-                                    };
-                                    const options = { upsert: true };
-                                    CollectionVoiture.updateOne({ _id: new ObjectID(req.params.idVoiture) }, updateDoc, options)
-                                        .then(resUpdate => {
-                                            dataActivite = {
-                                                activite: "VALIDATION FACTURE VOITURE",
-                                                client: resClient,
-                                                voiture: {
-                                                    numero: resVoiture.numero,
-                                                    marque: resVoiture.marque,
-                                                    modele: resVoiture.modele,
-                                                    annee: resVoiture.annee,
-                                                },
-                                                admin: resVoiture.admin,
-                                                facture: resVoiture.facture,
-                                                dateDepot: resVoiture.dateDepot,
-                                            }
-                                            const CollectionActivite = dataBase.collection('Activite')
-                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                            CollectionActivite.insertOne(dataActivite)
-                                                .then(resActivite => {
-                                                    CollectionNotificationClient.insertOne(dataActivite)
-                                                        .then(resNotifClient => {
-                                                            res.send({ message: "VALIDATION FACTURE DONE" })
-                                                        })
-                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                                })
-                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                        })
-                                        .catch(err => {
-                                            res.send({ message: "REQUEST ERROR" })
-                                        })
-                                } else {
-                                    res.send({ message: "REQUEST ERROR", detailled: "ALREADY VALIDATE" })
-                                }
-                            }).catch(err => {
-                                res.send({ message: "REQUEST ERROR" })
-                            })
+                        continueVar = true
+                        resClientN = resClient
                     } else {
                         res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
                     }
@@ -293,92 +295,156 @@ const ValidateCar = (dataBase, req, res) => {
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
             })
+
+        if (continueVar && resClientN) {
+            await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ _id: new ObjectID(req.params.idVoiture) }, { client: resClientN }] })
+                .then(resVoiture => {
+                    if (!resVoiture.validationClient) {
+                        updateDoc = {
+                            $set: {
+                                validationClient: true,
+                            }
+                        };
+                        options = { upsert: true };
+                        continueVar1 = true
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "ALREADY VALIDATE" })
+                    }
+                }).catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+
+            if (continueVar1 && updateDoc && options) {
+                await clientConnex.db("Garage").collection('Voiture').updateOne({ _id: new ObjectID(req.params.idVoiture) }, updateDoc, options)
+                    .then(resUpdate => {
+                        dataActivite = {
+                            activite: "VALIDATION FACTURE VOITURE",
+                            client: resClient,
+                            voiture: {
+                                numero: resVoiture.numero,
+                                marque: resVoiture.marque,
+                                modele: resVoiture.modele,
+                                annee: resVoiture.annee,
+                            },
+                            admin: resVoiture.admin,
+                            facture: resVoiture.facture,
+                            dateDepot: resVoiture.dateDepot,
+                        }
+                        continueVar2 = true
+                    })
+                    .catch(err => {
+                        res.send({ message: "REQUEST ERROR" })
+                    })
+                if (continueVar2 && dataActivite) {
+                    await clientConnex.db("Garage").collection('Activite').insertOne(dataActivite)
+                        .then(resActivite => {
+                            console.log("Continue...");
+                        })
+                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                    await clientConnex.db("Garage").collection('NotificationClient').insertOne(dataActivite)
+                        .then(resNotifClient => {
+                            res.send({ message: "VALIDATION FACTURE DONE" })
+                        })
+                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                }
+            }
+        }
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
 }
 
-const AddCarClient = (dataBase, req, res) => {
+async function AddCarClient(clientConnex, req, res) {
     if (req.session.clientId) {
-        const CollectionClient = dataBase.collection('Client')
-        CollectionClient.findOne({ _id: new ObjectID(req.session.clientId) })
-            .then(resultat => {
-                if (resultat) {
-                    const CollectionVoiture = dataBase.collection('Voiture')
-                    if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
-                        CollectionVoiture.findOne({ numero: req.body.numero, receptionne: false })
-                            .then(resTwo => {
-                                if (resTwo) {
-                                    res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY ADDED" })
-                                } else {
-                                    req.body.user = resultat
-
-                                    delete req.body.user.password
-                                    delete req.body.user.username
-                                    delete req.body.user._id
-                                    delete req.body.user.dateSubscribe
-
-                                    dataCar = {
-                                        numero: req.body.numero,
-                                        marque: req.body.marque,
-                                        modele: req.body.modele,
-                                        annee: req.body.annee,
-                                        receptionne: false,
-                                        admin: {},
-                                        client: req.body.user,
-                                        reparation: {},
-                                        dateDepot: new Date()
-                                    }
-
-                                    CollectionVoiture.insertOne(dataCar)
-                                        .then(resFinal => {
-                                            dataActivite = {
-                                                activite: "DEPOT VOITURE",
-                                                client: req.body.user,
-                                                voiture: {
-                                                    numero: req.body.numero,
-                                                    marque: req.body.marque,
-                                                    modele: req.body.modele,
-                                                    annee: req.body.annee,
-                                                },
-                                                dateDepot: dataCar.dateDepot
-                                            }
-                                            const CollectionActivite = dataBase.collection('Activite')
-                                            const CollectionNotificationClient = dataBase.collection('NotificationClient')
-                                            CollectionActivite.insertOne(dataActivite)
-                                                .then(resActivite => {
-                                                    CollectionNotificationClient.insertOne(dataActivite)
-                                                        .then(resNotifClient => {
-                                                            res.send({ message: "NEW CAR ADDED", client: req.body.user })
-                                                        })
-                                                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                                })
-                                                .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                        })
-                                        .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
-                                }
-                            }).catch(err => {
-                                res.send({ message: "REQUEST ERROR VOITURE" })
-                            })
+        if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
+            var continueVar = false
+            var continueVar1 = false
+            var continueVar2 = false
+            var resClientN = {}
+            await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+                .then(resClient => {
+                    resClientN = resClient
+                    if (resClient) {
+                        continueVar = true
                     } else {
                         res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
                     }
-                } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+
+            if (continueVar) {
+                var dataCar = {}
+                await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ numero: req.body.numero }, { receptionne: false }] })
+                    .then(resTwo => {
+                        if (resTwo) {
+                            res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY ADDED" })
+                        } else {
+                            req.body.user = resClientN
+                            delete req.body.user.password
+                            delete req.body.user.username
+                            delete req.body.user._id
+                            delete req.body.user.dateSubscribe
+                            dataCar = {
+                                numero: req.body.numero,
+                                marque: req.body.marque,
+                                modele: req.body.modele,
+                                annee: req.body.annee,
+                                receptionne: false,
+                                admin: {},
+                                client: req.body.user,
+                                reparation: {},
+                                dateDepot: new Date()
+                            }
+                            continueVar1 = true
+                        }
+                    }).catch(err => {
+                        res.send({ message: "REQUEST ERROR VOITURE" })
+                    })
+
+                if (continueVar1) {
+                    var dataActivite = {}
+                    await clientConnex.db("Garage").collection('Voiture').insertOne(dataCar)
+                        .then(resFinal => {
+                            dataActivite = {
+                                activite: "DEPOT VOITURE",
+                                client: req.body.user,
+                                voiture: {
+                                    numero: req.body.numero,
+                                    marque: req.body.marque,
+                                    modele: req.body.modele,
+                                    annee: req.body.annee,
+                                },
+                                dateDepot: dataCar.dateDepot
+                            }
+                            continueVar2 = true
+                        })
+                        .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                    if (continueVar2) {
+                        await clientConnex.db("Garage").collection('Activite').insertOne(dataActivite)
+                            .then(resActivite => {
+                                console.log("Continue...");
+                            })
+                            .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                        await clientConnex.db("Garage").collection('NotificationClient').insertOne(dataActivite)
+                            .then(resNotifClient => {
+                                res.send({ message: "NEW CAR ADDED", client: req.body.user })
+                            })
+                            .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                    }
                 }
-            })
-            .catch(err => {
-                res.send({ message: "REQUEST ERROR" })
-            })
+            }
+        } else {
+            res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+        }
     } else {
         res.send({ message: "USER NOT CONNECTED" })
     }
 }
 
-
-const LoginClient = (dataBase, res, req) => {
-    const CollectionDb = dataBase.collection('Client')
-    CollectionDb.findOne({ phone: req.body.phone })
+async function LoginClient(clientConnex, res, req) {
+    await clientConnex.db("Garage").collection('Client').findOne({ phone: req.body.phone })
         .then(resultat => {
             if (resultat) {
                 if (req.body.phone !== undefined) {
@@ -401,32 +467,38 @@ const LoginClient = (dataBase, res, req) => {
         })
 }
 
-const SubScribeClient = (dataBase, res, req) => {
-    const CollectionDb = dataBase.collection('Client')
+async function SubScribeClient(clientConnex, res, req) {
     if (req.body.username !== undefined && req.body.password !== undefined && req.body.nom !== undefined && req.body.prenom !== undefined && req.body.adress !== undefined && req.body.phone !== undefined && req.body.email !== undefined) {
         req.body.dateSubscribe = new Date()
         let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
         req.body.password = hashPassword
-        CollectionDb.findOne({ phone: req.body.phone })
+        continueVar = false
+        await clientConnex.db("Garage")
+            .collection('Client').findOne({ phone: req.body.phone })
             .then(resUser => {
+                console.log(req.body);
                 if (resUser) {
                     res.send({ message: "SUBSCRIBE FAILED", detailled: "PHONE ALREADY USED" })
+                    continueVar = false
                 } else {
-                    CollectionDb.insertOne(req.body)
-                        .then(resultat => {
-                            res.send({ message: "SUBSCRIBE SUCCESSFULLY" })
-                        })
-                        .catch(err => res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION" }))
+                    continueVar = true
                 }
             })
             .catch(err => res.send({ message: "SUBSCRIBE FAILED", detailled: "TRAITEMENT FAILED" }))
 
+        if (continueVar) {
+            await clientConnex.db("Garage").collection('Client').insertOne(req.body)
+                .then(resultat => {
+                    res.send({ message: "SUBSCRIBE SUCCESSFULLY" })
+                })
+                .catch(err => res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION", err: err }))
+        }
     } else {
         res.send({ message: "SUBSCRIBE FAILED", detailled: "INVALID INFORMATION" })
     }
 }
 
-const LogoutClient = (res, req) => {
+function LogoutClient(res, req) {
     req.session.destroy()
     res.send({ message: "LOGOUT SUCCESSFULLY" })
 }

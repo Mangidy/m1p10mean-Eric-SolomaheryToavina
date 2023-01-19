@@ -54,7 +54,7 @@ const TriageDataFactureAdmin = (data) => {
             }
         } else {
             return {
-                message: "Aucune facture pour le moment"
+                message: "DATA EMPTY"
             }
         }
     })
@@ -83,7 +83,7 @@ const TriageDataFacture = (data) => {
             }
         } else {
             return {
-                message: "Aucune facture pour le moment"
+                message: "DATA EMPTY"
             }
         }
     })
@@ -112,7 +112,7 @@ const TriageDataFactureOne = (resultat) => {
         }
     } else {
         return {
-            message: "Aucune facture pour le moment"
+            message: "DATA EMPTY"
         }
     }
 }
