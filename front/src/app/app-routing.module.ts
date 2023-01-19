@@ -1,13 +1,34 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DepositComponent } from './deposit/deposit.component';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
+import { AdminComponent } from './components/admin/admin-home/admin.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { NotfoundComponent } from './components/notfound/notfound.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { AdminGuard } from './guard/admin.guard';
+import { AtelierGuard } from './guard/atelier.guard';
+import { ClientGuard } from './guard/client.guard';
+import {  FinancierGuard } from './guard/financier.guard';
 
 const routes: Routes = [
-  { path:'', component: HomeComponent},
+  { path:'home', component: HomeComponent},
   { path:'login', component: LoginComponent},
-  { path:'deposit', component: DepositComponent}
+  { path:'signup', component: SignUpComponent}, 
+   { path:'', redirectTo:'home', pathMatch:'full'},
+   {
+    path:'admin',canActivate: [AdminGuard],loadChildren: ()=>import('./modules/admin/admin.module').then((m)=>m.AdminModule)
+   },
+   {
+    path:'client',canActivate: [ClientGuard],loadChildren: ()=>import('./modules/client/client.module').then((m)=>m.ClientModule)
+   },
+   {
+    path:'atelier',canActivate: [AtelierGuard],loadChildren: ()=>import('./modules/atelier/atelier.module').then((m)=>m.AtelierModule)
+   },
+   {
+    path:'financier',canActivate:[FinancierGuard],loadChildren:()=>import('./modules/financier/financier.module').then((m)=>m.FinancierModule)
+   },
+  { path:'**', component: NotfoundComponent}
+
 ];
 
 @NgModule({
