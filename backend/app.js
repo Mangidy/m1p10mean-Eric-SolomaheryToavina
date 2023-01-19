@@ -34,10 +34,12 @@ const start = (port, routeAdmin, routeClient) => {
 
             // VERIFICATE
             app.post("/admin/car/sortie/:idVoiture", routeAdmin.carOut)
-            // VERIFICATE
+
+            // PAIEMENT
+            app.post("/admin/facture/validate/:id", routeAdmin.factureValidate)
+            // ADD FACTURE FOR CAR CLIENT
             app.post("/admin/car/facture/:idVoiture", routeAdmin.carReceptionneFacture)
 
-            app.post("/admin/facture/validate/:id", routeAdmin.factureValidate)
             app.post("/admin/add", routeAdmin.add)
             app.post("/admin/login", routeAdmin.login)
             app.post("/admin/logout", routeAdmin.logout)
@@ -56,7 +58,7 @@ const start = (port, routeAdmin, routeClient) => {
             app.post("/client/logout", routeClient.logout)
 
             app.use((req, res) => {
-                res.send({ message: "PAGE NOT FOUND" })
+                res.send({ message: "API FOR GARAGE WEB" })
             })
 
             app.listen(port, console.log(`Server running on port ${port}`))
