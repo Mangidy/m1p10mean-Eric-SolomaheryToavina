@@ -71,7 +71,7 @@ async function getOneClient(clientConnex, res, req) {
 }
 
 async function getAllCar(clientConnex, res) {
-    await clientConnex.db("Garage").collection('Voiture').find().toArray()
+    await clientConnex.db("Garage").collection('Voiture').find({ sortie: false }).toArray()
         .then(resultat => {
             if (resultat) {
                 resAffiche = outil.TriageDataCarAdmin(resultat)

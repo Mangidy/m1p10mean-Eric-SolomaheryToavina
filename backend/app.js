@@ -78,8 +78,6 @@ async function start(port, routeAdmin, routeClient) {
     app.get("/admin/facture/:valeur", routeAdmin.factureTF)
     // --------------------------------------------------------------------------------
 
-
-
     // POST REQUEST
     // API ADMIN ADD REPAIR LIST CAR -- CAR NUMBER
     // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
