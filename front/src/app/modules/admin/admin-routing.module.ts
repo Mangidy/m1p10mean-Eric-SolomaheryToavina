@@ -6,7 +6,7 @@ const routes: Routes = [
   { path:'', component : AdminComponent,
   children:[
     { path:'home', component: AdminComponent},
-    {path:'',redirectTo:'/admin/home',pathMatch:'full'}
+    {path:'',redirectTo:'/admin',pathMatch:'full'}
 
   ]}
 ];
