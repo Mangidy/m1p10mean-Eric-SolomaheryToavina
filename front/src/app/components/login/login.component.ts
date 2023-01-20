@@ -18,6 +18,9 @@ export class LoginComponent {
   }
   onSubmit():void{
     if (this.loginForm.valid) {
+      console.log(this.loginForm.value);
+     //this.auth.logAdmin({usernameAdmin:'admin99',passwordAdmin:'admin'}).subscribe((val => console.log(val)));
+     //this.auth.addAdmin(({ usernameAdmin:'admin99', passwordAdmin:'admin',roleAdmin:'1'})).subscribe((val => console.log(val)));
       this.auth.login(this.loginForm.value).subscribe(
         (result) => {
           console.log(result);

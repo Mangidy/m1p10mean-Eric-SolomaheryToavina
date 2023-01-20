@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,private http:HttpClient) {}
+  logAdmin({ usernameAdmin, passwordAdmin }: any): Observable<any>{
+    return this.http.post<any>("/api/admin/login",{ usernameAdmin, passwordAdmin });
+  }
+  addAdmin({ usernameAdmin, passwordAdmin,roleAdmin }: any): Observable<any>{
+    return this.http.post<any>("/api/admin/add",{ usernameAdmin, passwordAdmin,roleAdmin});
+  }
   setPrivilage(a: string):void{
     localStorage.setItem('privilage', a);
   }
