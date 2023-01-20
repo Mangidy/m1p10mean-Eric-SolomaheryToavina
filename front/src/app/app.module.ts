@@ -28,6 +28,7 @@ import { FinancierPayementComponent } from './components/financier/financier-pay
 import { FinancierStatistiqueComponent } from './components/financier/financier-statistique/financier-statistique.component';
 import { ClientHomeComponent } from './components/client/client-home/client-home.component';
 import { AdminComponent } from './components/admin/admin-home/admin.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { AdminComponent } from './components/admin/admin-home/admin.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

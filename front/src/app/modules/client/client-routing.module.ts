@@ -16,7 +16,7 @@ const routes: Routes = [
   { path:'billing', component: BillingComponent}, 
   { path:'recovery', component: CarRecoveryComponent}, 
   { path:'history', component: RepairHistoryComponent}, 
-  {path:'',redirectTo:'client/home',pathMatch:'full'}
+  {path:'',redirectTo:'client',pathMatch:'full'}
 ]}
 ];
 

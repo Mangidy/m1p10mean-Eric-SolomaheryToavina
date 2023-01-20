@@ -11,16 +11,16 @@ constructor(private router:Router){}
 
 takeHome():void{
   if(Number(localStorage.getItem('privilage'))==1){
-    this.router.navigate(['client/home']);
+    this.router.navigate(['client']);
   }
   else if(Number(localStorage.getItem('privilage'))==2){
-    this.router.navigate(['atelier/home']);
+    this.router.navigate(['atelier']);
   }
   else if(Number(localStorage.getItem('privilage'))==3){
-    this.router.navigate(['financier/home']);
+    this.router.navigate(['financier']);
   }
   else if(Number(localStorage.getItem('privilage'))==4){
-    this.router.navigate(['admin/home']);
+    this.router.navigate(['admin']);
   }
 
  
