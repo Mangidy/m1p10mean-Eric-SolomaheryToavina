@@ -447,19 +447,19 @@ async function AddCarClient(clientConnex, req, res) {
 }
 
 async function LoginClient(clientConnex, res, req) {
-    await clientConnex.db("Garage").collection('Client').findOne({ phone: req.body.phone })
+    await clientConnex.db("Garage").collection('Client').findOne({ email: req.body.email })
         .then(resultat => {
             if (resultat) {
-                if (req.body.phone !== undefined) {
+                if (req.body.email !== undefined) {
                     let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
-                    if (resultat.phone === req.body.phone && resultat.password === hashPassword) {
+                    if (resultat.email === req.body.email && resultat.password === hashPassword) {
                         req.session.clientId = resultat._id
                         res.send({ message: "LOGIN SUCCESSFULLY" })
                     } else {
-                        res.send({ message: "LOGIN FAILED", detailled: "PHONE OR PASSWORD INVALID" })
+                        res.send({ message: "LOGIN FAILED", detailled: "EMAIL OR PASSWORD INVALID" })
                     }
                 } else {
-                    res.send({ message: "LOGIN FAILED", detailled: "PHONE INVALID" })
+                    res.send({ message: "LOGIN FAILED", detailled: "EMAIL INVALID" })
                 }
             } else {
                 res.send({ message: "LOGIN FAILED", detailled: "INFORMATION NOT FOUND" })
@@ -477,11 +477,11 @@ async function SubScribeClient(clientConnex, res, req) {
         req.body.password = hashPassword
         continueVar = false
         await clientConnex.db("Garage")
-            .collection('Client').findOne({ phone: req.body.phone })
+            .collection('Client').findOne({ email: req.body.email })
             .then(resUser => {
                 console.log(req.body);
                 if (resUser) {
-                    res.send({ message: "SUBSCRIBE FAILED", detailled: "PHONE ALREADY USED" })
+                    res.send({ message: "SUBSCRIBE FAILED", detailled: "EMAIL ALREADY USED" })
                     continueVar = false
                 } else {
                     continueVar = true
