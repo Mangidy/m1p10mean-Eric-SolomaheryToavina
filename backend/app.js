@@ -7,7 +7,7 @@ const app = express()
 
 async function start(port, routeAdmin, routeClient) {
     const uriBd = "mongodb://localhost:27017";
-    // const uriBd = "mongodb+srv://RicMongo:HFN8JS.pk8eCsF@cluster0.xwatw38.mongodb.net/?retryWrites=true&w=majority";
+    // const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uriBd, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     routeAdmin.sendDb(client)
