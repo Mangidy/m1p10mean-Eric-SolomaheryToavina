@@ -85,6 +85,58 @@ async function getAllCar(clientConnex, res) {
         })
 }
 
+async function carSearchControlleAdmin(clientCo, req, res) {
+    if (req.body.cleSearch) {
+        await clientCo.db("Garage").collection('Voiture').findOne({
+            $or: [
+                { numero: req.body.cleSearch },
+                { modele: req.body.cleSearch },
+                { annee: req.body.cleSearch }
+            ]
+        })
+            .then(resRecherche => {
+                valeurAffiche = outil.TriageDataCarOne(resRecherche)
+                res.send(valeurAffiche)
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+    } else {
+        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+    }
+}
+async function clientSearchControlleAdmin(clientCo, req, res) {
+    if (req.body.cleSearch) {
+        await clientCo.db("Garage").collection('Client').findOne({
+            $or: [
+                { username: req.body.cleSearch },
+                { nom: req.body.cleSearch },
+                { prenom: req.body.cleSearch },
+                { adress: req.body.cleSearch },
+                { phone: req.body.cleSearch },
+            ]
+        })
+            .then(resultat => {
+                res.send(resultat.map(resAff => {
+                    return {
+                        _id: resAff._id,
+                        username: resAff.username,
+                        nom: resAff.nom,
+                        prenom: resAff.prenom,
+                        adress: resAff.adress,
+                        phone: resAff.phone,
+                        dateSubscribe: resAff.dateSubscribe,
+                    }
+                }))
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+    } else {
+        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+    }
+}
+
 async function getAllFacture(clientConnex, res) {
     await clientConnex.db("Garage").collection('Voiture').find({ receptionne: true }).toArray()
         .then(resFacture => {
@@ -612,11 +664,13 @@ exports.AddCarReparation = AddCarReparation
 exports.ValidFacture = ValidFacture
 exports.CarClientOut = CarClientOut
 exports.ListCarClientOut = ListCarClientOut
+exports.clientSearchControlleAdmin = clientSearchControlleAdmin
 exports.HomeAdmin = HomeAdmin
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
 exports.getOneCar = getOneCar
 exports.receptionneCarFacture = receptionneCarFacture
+exports.carSearchControlleAdmin = carSearchControlleAdmin
 exports.AddAdmin = AddAdmin
 exports.LoginAdmin = LoginAdmin
 exports.LogoutAdmin = LogoutAdmin

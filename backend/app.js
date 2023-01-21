@@ -6,8 +6,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express()
 
 async function start(port, routeAdmin, routeClient) {
-    // const uriBd = "mongodb://localhost:27017";
-    const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
+    const uriBd = "mongodb://localhost:27017";
+    // const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uriBd, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     routeAdmin.sendDb(client)
@@ -90,6 +90,18 @@ async function start(port, routeAdmin, routeClient) {
     // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
     // REQUIRED INFORMATION : ALL INVOICE INFORMATION ON POST REQUEST
     app.post("/admin/car/facture/:idVoiture", routeAdmin.carReceptionneFacture)
+    // --------------------------------------------------------------------------------
+
+    // POST REQUEST
+    // API ADMIN SEARCH CAR
+    // REQUIRED INFORMATION : cleSearch ON POST REQUEST
+    app.post("/admin/car/search", routeClient.carSearchAdmin)
+    // --------------------------------------------------------------------------------
+
+    // POST REQUEST
+    // API ADMIN SEARCH CLIENT
+    // REQUIRED INFORMATION : cleSearch ON POST REQUEST
+    app.post("/admin/client/search", routeClient.clientSearchAdmin)
     // --------------------------------------------------------------------------------
 
     // POST REQUEST

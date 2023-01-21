@@ -125,6 +125,35 @@ async function clientOne(req, res) {
     }
 }
 
+async function carSearchAdmin(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.carSearchControlleAdmin(clientCo, req, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+async function clientSearchAdmin(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.clientSearchControlleAdmin(clientCo, req, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+
 async function carList(req, res) {
     if (req.session.usernameAdmin) {
         try {
@@ -216,6 +245,7 @@ exports.carreparation = carreparation
 exports.client = client
 exports.facture = facture
 exports.factureTF = factureTF
+exports.carSearchAdmin = carSearchAdmin
 exports.carOut = carOut
 exports.carOutList = carOutList
 exports.factureValidate = factureValidate
@@ -223,6 +253,7 @@ exports.clientOne = clientOne
 exports.carList = carList
 exports.carOne = carOne
 exports.carReceptionneFacture = carReceptionneFacture
+exports.clientSearchAdmin = clientSearchAdmin
 exports.add = add
 exports.login = login
 exports.logout = logout
