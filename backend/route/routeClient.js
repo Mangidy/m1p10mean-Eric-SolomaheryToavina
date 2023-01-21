@@ -104,6 +104,17 @@ async function validateCarFacture(req, res) {
     }
 }
 
+async function carSearch(req, res) {
+    try {
+        await clientCo.connect();
+        await controllerClient.carSearchControlle(clientCo, req, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
+    }
+}
+
 
 async function login(req, res) {
     try {
@@ -138,6 +149,7 @@ exports.facture = facture
 exports.factureId = factureId
 exports.carClient = carClient
 exports.carOne = carOne
+exports.carSearch = carSearch
 exports.carClientReception = carClientReception
 exports.validateCarFacture = validateCarFacture
 

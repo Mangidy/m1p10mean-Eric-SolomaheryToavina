@@ -446,6 +446,31 @@ async function AddCarClient(clientConnex, req, res) {
     }
 }
 
+async function carSearchControlle(clientConnex, req, res) {
+    if (req.session.clientId) {
+        if (req.body.cleSearch) {
+            await clientConnex.db("Garage").collection('Voiture').findOne({
+                $or: [
+                    { numero: req.body.cleSearch },
+                    { modele: req.body.cleSearch },
+                    { annee: req.body.cleSearch }
+                ]
+            })
+                .then(resRecherche => {
+                    valeurAffiche = outil.TriageDataCarOne(resRecherche)
+                    res.send(valeurAffiche)
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+        } else {
+            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+        }
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
+
 async function LoginClient(clientConnex, res, req) {
     await clientConnex.db("Garage").collection('Client').findOne({ email: req.body.email })
         .then(resultat => {
@@ -510,6 +535,7 @@ exports.HomeClient = HomeClient
 exports.NotificationClient = NotificationClient
 exports.GetCarClient = GetCarClient
 exports.GetCarOne = GetCarOne
+exports.carSearchControlle = carSearchControlle
 exports.GetFactureClient = GetFactureClient
 exports.GetFactureIdClient = GetFactureIdClient
 exports.GetCarClientReception = GetCarClientReception

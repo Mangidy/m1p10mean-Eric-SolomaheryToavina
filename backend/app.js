@@ -176,6 +176,12 @@ async function start(port, routeAdmin, routeClient) {
     // --------------------------------------------------------------------------------
 
     // POST REQUEST
+    // API CLIENT SEARCH CAR CLIENT
+    // REQUIRED INFORMATION : cleSearch ON POST REQUEST
+    app.post("/client/car/search", routeClient.carSearch)
+    // --------------------------------------------------------------------------------
+
+    // POST REQUEST
     // API CLIENT ADD NEW CAR IN THE GARAGE
     // REQUIRED INFORMATION : numero, marque, modele, annee ON POST REQUEST
     app.post("/client/car", routeClient.car)
