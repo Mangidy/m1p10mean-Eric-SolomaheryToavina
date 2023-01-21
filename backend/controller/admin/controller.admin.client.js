@@ -90,13 +90,18 @@ async function carSearchControlleAdmin(clientCo, req, res) {
         await clientCo.db("Garage").collection('Voiture').findOne({
             $or: [
                 { numero: req.body.cleSearch },
+                { marque: req.body.cleSearch },
                 { modele: req.body.cleSearch },
                 { annee: req.body.cleSearch }
             ]
         })
             .then(resRecherche => {
-                valeurAffiche = outil.TriageDataCarOne(resRecherche)
-                res.send(valeurAffiche)
+                if (resRecherche) {
+                    valeurAffiche = outil.TriageDataCarOne(resRecherche)
+                    res.send(valeurAffiche)
+                } else {
+                    res.send({ message: "DATA EMPTY" })
+                }
             })
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })
@@ -107,27 +112,23 @@ async function carSearchControlleAdmin(clientCo, req, res) {
 }
 async function clientSearchControlleAdmin(clientCo, req, res) {
     if (req.body.cleSearch) {
-        await clientCo.db("Garage").collection('Client').findOne({
-            $or: [
-                { username: req.body.cleSearch },
-                { nom: req.body.cleSearch },
-                { prenom: req.body.cleSearch },
-                { adress: req.body.cleSearch },
-                { phone: req.body.cleSearch },
-            ]
-        })
+        await clientCo.db("Garage").collection('Client').findOne({ $or: [{ username: req.body.cleSearch }, { nom: req.body.cleSearch }, { prenom: req.body.cleSearch }, { adress: req.body.cleSearch }, { phone: req.body.cleSearch }] })
             .then(resultat => {
-                res.send(resultat.map(resAff => {
-                    return {
-                        _id: resAff._id,
-                        username: resAff.username,
-                        nom: resAff.nom,
-                        prenom: resAff.prenom,
-                        adress: resAff.adress,
-                        phone: resAff.phone,
-                        dateSubscribe: resAff.dateSubscribe,
-                    }
-                }))
+                if (resultat) {
+                    res.send({
+                        _id: resultat._id,
+                        username: resultat.username,
+                        nom: resultat.nom,
+                        prenom: resultat.prenom,
+                        adress: resultat.adress,
+                        phone: resultat.phone,
+                        dateSubscribe: resultat.dateSubscribe,
+                    })
+                } else {
+                    res.send({
+                        message: "DATA EMPTY"
+                    })
+                }
             })
             .catch(err => {
                 res.send({ message: "REQUEST ERROR" })

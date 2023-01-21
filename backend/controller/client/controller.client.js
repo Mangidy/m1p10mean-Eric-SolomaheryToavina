@@ -449,20 +449,42 @@ async function AddCarClient(clientConnex, req, res) {
 async function carSearchControlle(clientConnex, req, res) {
     if (req.session.clientId) {
         if (req.body.cleSearch) {
+            var continueVar = false
+            var valRecherche = {}
             await clientConnex.db("Garage").collection('Voiture').findOne({
                 $or: [
                     { numero: req.body.cleSearch },
                     { modele: req.body.cleSearch },
+                    { marque: req.body.cleSearch },
                     { annee: req.body.cleSearch }
                 ]
             })
                 .then(resRecherche => {
-                    valeurAffiche = outil.TriageDataCarOne(resRecherche)
-                    res.send(valeurAffiche)
+                    valRecherche = resRecherche
+                    continueVar = true
                 })
                 .catch(err => {
                     res.send({ message: "REQUEST ERROR" })
                 })
+            if (continueVar) {
+                await clientConnex.db("Garage").collection("Client").findOne({ _id: new ObjectID(req.session.clientId) })
+                    .then(resClient => {
+                        if (resClient) {
+                            if (resClient.nom === valRecherche.client.nom) {
+                                if (valRecherche) {
+                                    valeurAffiche = outil.TriageDataCarOne(valRecherche)
+                                    res.send(valeurAffiche)
+                                } else {
+                                    res.send({ message: "DATA EMPTY" })
+                                }
+                            } else {
+                                res.send({ message: "DATA EMPTY" })
+                            }
+                        } else {
+                            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                        }
+                    })
+            }
         } else {
             res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
         }

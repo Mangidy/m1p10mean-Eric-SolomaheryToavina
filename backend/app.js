@@ -95,13 +95,13 @@ async function start(port, routeAdmin, routeClient) {
     // POST REQUEST
     // API ADMIN SEARCH CAR
     // REQUIRED INFORMATION : cleSearch ON POST REQUEST
-    app.post("/admin/car/search", routeClient.carSearchAdmin)
+    app.post("/admin/car/search", routeAdmin.carSearchAdmin)
     // --------------------------------------------------------------------------------
 
     // POST REQUEST
     // API ADMIN SEARCH CLIENT
     // REQUIRED INFORMATION : cleSearch ON POST REQUEST
-    app.post("/admin/client/search", routeClient.clientSearchAdmin)
+    app.post("/admin/client/search", routeAdmin.clientSearchAdmin)
     // --------------------------------------------------------------------------------
 
     // POST REQUEST
