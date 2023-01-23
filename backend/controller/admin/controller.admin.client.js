@@ -635,6 +635,8 @@ async function AddAdmin(clientConnex, res, req) {
                     let hashPassword = crypto.createHash('md5').update(req.body.passwordAdmin).digest("hex")
                     req.body.passwordAdmin = hashPassword
                     continueVar = true
+                    req.body.roleAdmin = req.body.roleAdmin.toUpperCase()
+                    req.body.usernameAdmin = req.body.usernameAdmin.toUpperCase()
                     newVal = req.body
                 }
             })

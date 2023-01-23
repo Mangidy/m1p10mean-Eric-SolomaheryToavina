@@ -526,9 +526,10 @@ async function SubScribeClient(clientConnex, res, req) {
         await clientConnex.db("Garage")
             .collection('Client').findOne({ email: req.body.email })
             .then(resUser => {
-                console.log(req.body);
                 if (resUser) {
                     res.send({ message: "SUBSCRIBE FAILED", detailled: "EMAIL ALREADY USED" })
+                    req.body.nom = req.body.nom.toUpperCase()
+                    req.body.prenom = req.body.prenom.toUpperCase()
                     continueVar = false
                 } else {
                     continueVar = true
