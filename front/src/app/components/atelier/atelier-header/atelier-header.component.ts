@@ -11,7 +11,7 @@ export class AtelierHeaderComponent {
   constructor(private auth: AuthService, private router: Router) {}
 
   logout(): void {
-    this.auth.logout();
+    this.auth.logoutTokenAdmin();
     this.auth.logoutAdmin().subscribe((val) => console.log(val));
   }
 
@@ -23,7 +23,7 @@ export class AtelierHeaderComponent {
       console.log(
         console.log(
           this.auth
-            .getOneCar('63d0c45b9076d8e5fb3b8b0d')
+            .getOneClient('63d0379b820754ef26e27b8e')
             .subscribe((val) => console.log(val))
         )
       );

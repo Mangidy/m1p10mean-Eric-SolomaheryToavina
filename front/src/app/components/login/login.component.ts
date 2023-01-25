@@ -14,44 +14,39 @@ export class LoginComponent {
     email: new FormControl(''),
     password: new FormControl(''),
   });
+
   constructor(private auth:AuthService, private router: Router){
 
   }
   onSubmit():void{
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
-      
+       //this.auth.addAdmin(({ usernameAdmin:'ad', passwordAdmin:'admin',roleAdmin:'ADMIN'})).subscribe((val => console.log(val)));
       //console.log(this.auth.getAllCar().subscribe((val => console.log(val))));
-  
-        //this.auth.logClient({email:'butcher@gmail.com',password:'butcher'}).subscribe((val => console.log(val)));
+      this.auth.removeAllToken();
+      this.auth.logClient({email:this.loginForm.value.email,password:this.loginForm.value.password}).subscribe(val => { if(val.message=='LOGIN SUCCESSFULLY'){
+        this.router.navigate(['/client']);
+        }
+        else{
+          alert('Incorrect email or password ');
+        }
+      }); 
+    /* this.auth.logClient({email:this.loginForm.value.email,password:this.loginForm.value.password}).subscribe(val => { if(val.message=='LOGIN SUCCESSFULLY'){
+      this.router.navigate(['/client']);
+      }
+      else{
+        alert('Incorrect email or password ');
+      }
+    }); */
+        
+    
      
-this.auth.logAdmin({username:'admin',password:'admin'}).subscribe((val => console.log(val)));
+//this.auth.logAdmin({username:'admin',password:'admin'}).subscribe((val => console.log(val)));
       
    
      //console.log(this.auth.getAllClient().subscribe((val => console.log(val))));
   //console.log(this.auth.getAdmin().subscribe((val => console.log(val))));
      //this.auth.addAdmin(({ usernameAdmin:'admin99', passwordAdmin:'admin',roleAdmin:'1'})).subscribe((val => console.log(val)));
-      this.auth.login(this.loginForm.value).subscribe(
-        (result) => {
-          console.log(result);
-          if(this.auth.getPrivilage()==1){
-            this.router.navigate(['/client']);
-          }
-          if(this.auth.getPrivilage()==2){
-            this.router.navigate(['/atelier']);
-          }
-          if(this.auth.getPrivilage()==3){
-            this.router.navigate(['/financier']);
-          }
-          if(this.auth.getPrivilage()==4){
-            this.router.navigate(['/admin']);
-          }
-          
-        },
-        (err: Error) => {
-          alert(err.message);
-        }
-      );
     }
     
   }

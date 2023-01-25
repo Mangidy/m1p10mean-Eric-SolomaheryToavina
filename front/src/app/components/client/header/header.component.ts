@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class HeaderComponent {
   constructor(private auth:AuthService,private router:Router){}
   logout(){
-    this.auth.logout();
+    this.auth.logoutTokenClient();
     this.auth.logoutClient().subscribe((val => console.log(val)));
   }
 

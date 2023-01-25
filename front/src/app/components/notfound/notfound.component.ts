@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-notfound',
@@ -7,25 +8,35 @@ import { Router } from '@angular/router';
   styleUrls: ['./notfound.component.css']
 })
 export class NotfoundComponent {
-constructor(private router:Router){}
 
-takeHome():void{
-  if(Number(localStorage.getItem('privilage'))==1){
+constructor(private router:Router,private auth:AuthService){}
+takeHome(){
+if(localStorage.getItem('tokenClient')!=null)
+  {
+    console.log(localStorage.getItem('tokenClient'));
+    this.takeHomeClient();
+  }
+ else if(localStorage.getItem('tokenAdmin')!=null)
+  {
+    this.takeHomeAdmin();
+  }
+  else{
+    this.router.navigate(['login']);
+  }
+}
+takeHomeClient():void{
+  if(this.auth.getClient().subscribe(val=>val!='USER NOT CONNECTED')){
     this.router.navigate(['client']);
   }
-  else if(Number(localStorage.getItem('privilage'))==2){
-    this.router.navigate(['atelier']);
+}
+takeHomeAdmin():void{
+  this.auth.getAdmin().subscribe( val => 
+       
+    this.router.navigate([val.admin.roleAdmin.toString().toLowerCase() ]))
   }
-  else if(Number(localStorage.getItem('privilage'))==3){
-    this.router.navigate(['financier']);
-  }
-  else if(Number(localStorage.getItem('privilage'))==4){
-    this.router.navigate(['admin']);
-  }
-
  
-else{
-  this.router.navigate(['home']);
+ 
 }
-}
-}
+
+
+

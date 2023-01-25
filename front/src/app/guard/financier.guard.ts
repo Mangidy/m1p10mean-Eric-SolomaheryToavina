@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
@@ -11,19 +10,23 @@ export class FinancierGuard implements CanActivate {
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean {
-if( Number(localStorage.getItem('privilage'))==3 &&this.auth.isLoggedIn()){
-      return this.auth.isLoggedIn();
+    state: RouterStateSnapshot): any {
+ 
+    
+      this.auth.getAdmin().subscribe(val => {if(val.admin.roleAdmin=='FINANCIER'&&this.auth.isLoggedInAdmin())
+      {
+        return this.auth.isLoggedInAdmin();
       }
       else{
-        if(localStorage.getItem('token')!=null)
+        if(localStorage.getItem('tokenAdmin')!=null)
         {
-          this.router.navigate(['notfound']);
+          this.router.navigate(['home']);
         }
         else{
           this.router.navigate(['login']);
         }
-        return false;
-      }
+      
+      return false;
+    }});
   }
 }

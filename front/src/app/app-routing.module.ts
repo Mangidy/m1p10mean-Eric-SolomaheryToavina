@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
@@ -12,6 +13,7 @@ import {  FinancierGuard } from './guard/financier.guard';
 const routes: Routes = [
   { path:'home', component: HomeComponent},
   { path:'login', component: LoginComponent},
+  { path:'adminlogin', component: AdminLoginComponent},
   { path:'signup', component: SignUpComponent}, 
    { path:'', redirectTo:'home', pathMatch:'full'},
    {

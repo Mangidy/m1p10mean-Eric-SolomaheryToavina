@@ -7,22 +7,29 @@ import { AuthService } from '../services/auth.service';
 })
 export class ClientGuard implements CanActivate {
   constructor(private auth:AuthService,private router:Router){}
+connected:any;
+
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean {
-if( Number(localStorage.getItem('privilage'))==1 &&this.auth.isLoggedIn()){
-      return this.auth.isLoggedIn();
+    state: RouterStateSnapshot): any {
+ 
+    
+      this.auth.getClient().subscribe(val => {if(val.message=='USER CONNECTED'&&this.auth.isLoggedInClient())
+      {
+        return this.auth.isLoggedInClient();
       }
       else{
-        if(localStorage.getItem('token')!=null)
+        if(localStorage.getItem('tokenClient')!=null)
         {
-          this.router.navigate(['notfound']);
+          console.log(localStorage.getItem('tokenClient'));
+          this.router.navigate(['home']);
         }
         else{
           this.router.navigate(['login']);
         }
-        return false;
-      }
+      
+      return false;
+    }});
   }
 }
