@@ -6,8 +6,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express()
 
 async function start(port, routeAdmin, routeClient) {
-    const uriBd = "mongodb://localhost:27017";
-    // const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
+    //const uriBd = "mongodb://localhost:27017";
+     const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uriBd, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     routeAdmin.sendDb(client)
@@ -49,6 +49,12 @@ async function start(port, routeAdmin, routeClient) {
     // API ADMIN GET ALL CAR ADDED IN THE GARAGE
     // REQUIRED INFORMATION : NOTHING
     app.get("/admin/car", routeAdmin.carList)
+    // --------------------------------------------------------------------------------
+
+     // GET REQUEST
+    // API ADMIN GET ALL CAR RECEPTIONNED IN THE GARAGE
+    // REQUIRED INFORMATION : NOTHING
+    app.get("/admin/car/reception", routeAdmin.carReceptionList)
     // --------------------------------------------------------------------------------
 
     // GET REQUEST
@@ -213,7 +219,7 @@ async function start(port, routeAdmin, routeClient) {
 
     // POST REQUEST
     // API CLIENT FOR CLIENT LOGIN
-    // REQUIRED INFORMATION : phone, password
+    // REQUIRED INFORMATION : email, password
     app.post("/client/login", routeClient.login)
     // --------------------------------------------------------------------------------
 

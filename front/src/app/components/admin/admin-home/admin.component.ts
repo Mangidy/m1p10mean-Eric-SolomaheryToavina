@@ -10,5 +10,6 @@ export class AdminComponent {
 constructor(private auth:AuthService){}
   logout(): void{
     this.auth.logout();
+    this.auth.logoutAdmin().subscribe((val => console.log(val)));
    }
 }

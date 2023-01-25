@@ -9,11 +9,75 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
 
   constructor(private router: Router,private http:HttpClient) {}
-  logAdmin({ usernameAdmin, passwordAdmin }: any): Observable<any>{
-    return this.http.post<any>("/api/admin/login",{ usernameAdmin, passwordAdmin });
+  logAdmin({ username, password }: any): Observable<any>{
+    return this.http.post<any>("/api/admin/login",{ username, password });
   }
+  logClient({ email, password }: any): Observable<any>{
+    return this.http.post<any>("/api/client/login",{ email, password });
+  }
+  getAdmin(): Observable<any>{
+    return this.http.get<any>("/api/admin/");
+  }
+  getAllCar(): Observable<any>{
+    return this.http.get<any>("/api/admin/car");
+  }
+  getAllCarReception(): Observable<any>{
+    return this.http.get<any>("/api/admin/car/reception");
+  }
+  getCarOut(): Observable<any>{
+    return this.http.get<any>("/api/admin/car/sortie");
+  }
+  getAllFacture(): Observable<any>{
+    return this.http.get<any>("/api/admin/facture");
+  }
+   //--------------not working yet---------------
+   getFactureTF(valeur: any): Observable<any>{
+    return this.http.get<any>("/api/admin/facture/:valeur",valeur);
+  }
+  //--------------------------------------------
+
+  //--------------not working yet---------------
+  getOneCar(id: any): Observable<any>{
+    return this.http.get<any>("/api/admin/car/:id",id);
+  }
+  //--------------------------------------------
+
+  getAllClient(): Observable<any>{
+    return this.http.get<any>("/api/admin/client");
+  } 
+
+  //--------------not working yet---------------
+  getOneClient(_id: any): Observable<any>{
+    return this.http.get<any>("/api/admin/client/:id" ,_id);
+  }
+  //--------------------------------------------
+
+  //--------------not tested yet---------------
+  addCarReparation({ numero}: any): Observable<any>{
+    return this.http.post<any>("/api/admin/car/reparation/:numero",{ numero});
+  }
+  //--------------------------------------------
+
+  //--------------not tested yet---------------
+  addCarFacture({ idVoiture}: any): Observable<any>{
+    return this.http.post<any>("/api/admin/car/facture/:idVoiture",{ idVoiture});
+  }
+  //--------------------------------------------
   addAdmin({ usernameAdmin, passwordAdmin,roleAdmin }: any): Observable<any>{
     return this.http.post<any>("/api/admin/add",{ usernameAdmin, passwordAdmin,roleAdmin});
+  }
+  logoutAdmin(): Observable<any>{
+    return this.http.post<any>("/api/admin/logout",null);
+  }
+  addClient({ username, password,nom,prenom,adress,phone,email }: any): Observable<any>{
+    return this.http.post<any>("/api/client/subscribe",{ username, password,nom,prenom,adress,phone,email });
+  }
+  addCarClient({ numero, marque, modele, annee}: any): Observable<any>{
+    return this.http.post<any>("/api/client/car",{ numero, marque, modele, annee });
+  }
+ 
+  logoutClient(): Observable<any>{
+    return this.http.post<any>("/api/client/logout",null);
   }
   setPrivilage(a: string):void{
     localStorage.setItem('privilage', a);

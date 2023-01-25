@@ -71,7 +71,22 @@ async function getOneClient(clientConnex, res, req) {
 }
 
 async function getAllCar(clientConnex, res) {
-    await clientConnex.db("Garage").collection('Voiture').find({ sortie: false }).toArray()
+    await clientConnex.db("Garage").collection('Voiture').find({ receptionne: false }).toArray()
+        .then(resultat => {
+            if (resultat) {
+                resAffiche = outil.TriageDataCarAdmin(resultat)
+                res.send(resAffiche)
+            } else {
+                res.send({ message: "DATA EMPTY" })
+            }
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
+
+async function getAllCarReception(clientConnex, res) {
+    await clientConnex.db("Garage").collection('Voiture').find({ receptionne: true }).toArray()
         .then(resultat => {
             if (resultat) {
                 resAffiche = outil.TriageDataCarAdmin(resultat)
@@ -671,6 +686,7 @@ exports.clientSearchControlleAdmin = clientSearchControlleAdmin
 exports.HomeAdmin = HomeAdmin
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
+exports.getAllCarReception=getAllCarReception
 exports.getOneCar = getOneCar
 exports.receptionneCarFacture = receptionneCarFacture
 exports.carSearchControlleAdmin = carSearchControlleAdmin
