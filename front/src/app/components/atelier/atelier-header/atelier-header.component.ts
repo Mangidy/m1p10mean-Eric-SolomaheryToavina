@@ -11,7 +11,7 @@ export class AtelierHeaderComponent {
   constructor(private auth: AuthService, private router: Router) {}
 
   logout(): void {
-    this.auth.logoutTokenAdmin();
+    this.auth.logoutTokenAdmin('financier');
     this.auth.logoutAdmin().subscribe((val) => console.log(val));
   }
 

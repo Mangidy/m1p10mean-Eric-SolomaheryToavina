@@ -15,21 +15,9 @@ connected:any;
     state: RouterStateSnapshot): any {
  
     
-      this.auth.getClient().subscribe(val => {if(val.message=='USER CONNECTED'&&this.auth.isLoggedInClient())
-      {
-        return this.auth.isLoggedInClient();
+      if (!this.auth.isLoggedInClient()) {
+        this.router.navigate(['/login']);
       }
-      else{
-        if(localStorage.getItem('tokenClient')!=null)
-        {
-          console.log(localStorage.getItem('tokenClient'));
-          this.router.navigate(['home']);
-        }
-        else{
-          this.router.navigate(['login']);
-        }
-      
-      return false;
-    }});
-  }
+      return this.auth.isLoggedInClient();
+}
 }

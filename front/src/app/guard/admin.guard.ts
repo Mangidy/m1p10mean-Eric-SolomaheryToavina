@@ -13,20 +13,17 @@ export class AdminGuard implements CanActivate {
     state: RouterStateSnapshot): any {
  
     
-      this.auth.getAdmin().subscribe(val => {if(val.admin.roleAdmin=='ADMIN'&&this.auth.isLoggedInAdmin())
-      {
-        return this.auth.isLoggedInAdmin();
+      if (!this.auth.isLoggedInAdmin('admin')) {
+       
+        this.router.navigate(['/adminlogin']);
+      }
+      else if(this.auth.isLoggedInAdmin('admin')!=null){
+    
+      
+      return this.auth.isLoggedInAdmin('admin');
       }
       else{
-        if(localStorage.getItem('tokenAdmin')!=null)
-        {
-          this.router.navigate(['home']);
-        }
-        else{
-          this.router.navigate(['login']);
-        }
-      
-      return false;
-    }});
+        this.router.navigate(['/home']);
+      }
+    }
   }
-}

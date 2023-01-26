@@ -7,5 +7,10 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./repair-progress.component.css']
 })
 export class RepairProgressComponent {
+  data:any;
   constructor(private auth:AuthService){}
+  ngOnInit() {
+    
+  this.auth.carClient().subscribe((val) =>{ this.data=val; console.log('JSON Response = ', JSON.stringify(val));});
+  }
 }

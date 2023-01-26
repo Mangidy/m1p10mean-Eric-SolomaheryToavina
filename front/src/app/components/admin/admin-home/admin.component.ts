@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class AdminComponent {
 constructor(private auth:AuthService){}
   logout(): void{
-    this.auth.logoutTokenAdmin();
+    this.auth.logoutTokenAdmin('financier');
     this.auth.logoutAdmin().subscribe((val => console.log(val)));
    }
 }

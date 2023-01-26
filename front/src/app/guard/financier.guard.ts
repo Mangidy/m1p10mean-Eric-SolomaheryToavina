@@ -12,21 +12,17 @@ export class FinancierGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): any {
  
+      if (!this.auth.isLoggedInAdmin('financier')) {
+       
+        this.router.navigate(['/adminlogin']);
+      }
+      else if(this.auth.isLoggedInAdmin('financier')!=null){
     
-      this.auth.getAdmin().subscribe(val => {if(val.admin.roleAdmin=='FINANCIER'&&this.auth.isLoggedInAdmin())
-      {
-        return this.auth.isLoggedInAdmin();
+      
+      return this.auth.isLoggedInAdmin('financier');
       }
       else{
-        if(localStorage.getItem('tokenAdmin')!=null)
-        {
-          this.router.navigate(['home']);
-        }
-        else{
-          this.router.navigate(['login']);
-        }
-      
-      return false;
-    }});
-  }
+        this.router.navigate(['/home']);
+      }
+}
 }

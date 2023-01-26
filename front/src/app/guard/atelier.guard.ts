@@ -12,25 +12,18 @@ export class AtelierGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): any {
  
+ 
+      if (!this.auth.isLoggedInAdmin('atelier')) {
+       
+        this.router.navigate(['/adminlogin']);
+      }
+      else if(this.auth.isLoggedInAdmin('atelier')!=null){
     
-      this.auth.getAdmin().subscribe(val => {
-        console.log(val.admin.roleAdmin,this.auth.isLoggedInAdmin());
-        if(val.admin.roleAdmin=='ATELIER'&&this.auth.isLoggedInAdmin())
-      {
-        return this.auth.isLoggedInAdmin();
+      
+      return this.auth.isLoggedInAdmin('atelier');
       }
       else{
-        if(localStorage.getItem('tokenAdmin')!=null)
-        {
-          console.log(localStorage.getItem('tokenAdmin'));
-          this.router.navigate(['home']);
-        }
-        else{
-          this.router.navigate(['login']);
-        }
-      
-      return false;
-    }});
-  }
-  
+        this.router.navigate(['/home']);
+      }
+}
 }

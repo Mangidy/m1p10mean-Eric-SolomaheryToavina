@@ -16,7 +16,15 @@ if(localStorage.getItem('tokenClient')!=null)
     console.log(localStorage.getItem('tokenClient'));
     this.takeHomeClient();
   }
- else if(localStorage.getItem('tokenAdmin')!=null)
+ else if(localStorage.getItem('tokenatelier')!=null)
+  {
+    this.takeHomeAdmin();
+  }
+  else if(localStorage.getItem('tokenfinancier')!=null)
+  {
+    this.takeHomeAdmin();
+  }
+  else if(localStorage.getItem('tokenadmin')!=null)
   {
     this.takeHomeAdmin();
   }

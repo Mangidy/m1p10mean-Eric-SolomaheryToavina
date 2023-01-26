@@ -8,20 +8,25 @@
                 <th scope="col">Car id</th>
                 <th scope="col">Car number</th>
                 <th scope="col">Deposit date</th>
+                <th scope="col">Owner</th>
                 <th scope="col">Receive</th>
               </tr>
             </thead>
             <tbody>
+              <ng-container *ngFor = "let news of data; let i = index;">
               <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
+                <th scope="row">{{i+1}}</th>
+                <td>{{ news.numero }}</td>
+                <td>{{ news.dateDepot }}</td>
+                <td>{{ news.client.nom }}</td>
                 <td>
-                    <button type="button" class="btn btn-primary"> Receive</button>
+                    <button type="button" class="btn btn-primary" (click)="addRepair(news._id)"> Receive</button>
                 </td>
               </tr>
+            </ng-container>
               <tr>
     
+             
             </tbody>
         </table>
 	</div>

@@ -7,9 +7,10 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class AuthService {
+ 
   constructor(private router: Router, private http: HttpClient) {}
   logAdmin({ username, password }: any): Observable<any> {
-    this.setTokenAdmin('abcdefghijklmnopqrstuvwxyz');
+   
     return this.http.post<any>('/api/admin/login', { username, password });
   }
 
@@ -111,7 +112,6 @@ export class AuthService {
     return this.http.get<any>('/api/client/notification');
   }
 
-    //--------------not tested yet---------------
   carClient(): Observable<any> {
     return this.http.get<any>('/api/client/car');
   }
@@ -194,34 +194,37 @@ export class AuthService {
   setTokenClient(token: string): void {
     localStorage.setItem('tokenClient', token);
   }
-  setTokenAdmin(token: string): void {
-    localStorage.setItem('tokenAdmin', token);
+  setTokenAdmin(token: string,role:string): void {
+    localStorage.setItem('token'+role, token);
   }
 
   getTokenClient(): string | null {
     return localStorage.getItem('tokenClient');
   }
-  getTokenAdmin(): string | null {
-    return localStorage.getItem('tokenAdmin');
+  getTokenAdmin(role:string): string | null {
+    return localStorage.getItem('token'+role);
   }
 
   isLoggedInClient() {
     return this.getTokenClient() !== null;
   }
-  isLoggedInAdmin() {
-    return this.getTokenAdmin() !== null;
+  isLoggedInAdmin(role:string) {
+    return this.getTokenAdmin(role) !== null;
   }
   removeAllToken(){
     localStorage.removeItem('tokenClient');
     localStorage.removeItem('tokenAdmin');
+    localStorage.removeItem('tokenatelier');
+    localStorage.removeItem('tokenfinancier');
+    localStorage.removeItem('tokenadmin');
     localStorage.removeItem('token');
   }
   logoutTokenClient() {
     localStorage.removeItem('tokenClient');
     this.router.navigate(['home']);
   }
-  logoutTokenAdmin() {
-    localStorage.removeItem('tokenAdmin');
+  logoutTokenAdmin(role:string) {
+    this.removeAllToken();
     this.router.navigate(['home']);
   }
 
