@@ -12,29 +12,27 @@ export class AuthService {
     this.setTokenAdmin('abcdefghijklmnopqrstuvwxyz');
     return this.http.post<any>('/api/admin/login', { username, password });
   }
-  logClient({ email, password }: any): Observable<any> {
-    this.setTokenClient('abcdefghijklmnopqrstuvwxyz');
-    return this.http.post<any>('/api/client/login', { email, password });
-    
-  }
+
   getAdmin(): Observable<any> {
     return this.http.get<any>('/api/admin/');
   }
-  getClient(): Observable<any> {
-    return this.http.get<any>('/api/client/');
-  }
+
   getAllCar(): Observable<any> {
     return this.http.get<any>('/api/admin/car');
   }
+  
   getAllCarReception(): Observable<any> {
     return this.http.get<any>('/api/admin/car/reception');
   }
+
   getCarOut(): Observable<any> {
     return this.http.get<any>('/api/admin/car/sortie');
   }
+
   getAllFacture(): Observable<any> {
     return this.http.get<any>('/api/admin/facture');
   }
+
   //--------------not tested yet---------------
   getFactureTF(valeur: any): Observable<any> {
     return this.http.get<any>('/api/admin/facture/'+ valeur);
@@ -53,9 +51,8 @@ export class AuthService {
     return this.http.get<any>('/api/admin/client/'+ _id);
   }
 
-
-  //--------------not tested yet---------------
-  addCarReparation({ numero }: any): Observable<any> {
+   //--------------not tested yet---------------
+   addCarReparation({ numero }: any): Observable<any> {
     return this.http.post<any>('/api/admin/car/reparation/:numero', { numero });
   }
   //--------------------------------------------
@@ -67,6 +64,32 @@ export class AuthService {
     });
   }
   //--------------------------------------------
+
+  //--------------not tested yet---------------
+  adminCarSearch({ cleSearch }: any): Observable<any> {
+    return this.http.post<any>('/api/admin/car/search', { cleSearch});
+  }
+  //--------------------------------------------
+  
+  //--------------not tested yet---------------
+  adminClientSearch({ cleSearch }: any): Observable<any> {
+   return this.http.post<any>('/api/admin/client/search', { cleSearch});
+  }
+  //--------------------------------------------
+
+  //--------------not tested yet---------------
+  validateFacture({ id }: any): Observable<any> {
+    return this.http.post<any>('/api/admin/facture/validate/:id', { id});
+   }
+   //--------------------------------------------
+      
+    //--------------not tested yet---------------
+  carOut({ id }: any): Observable<any> {
+    return this.http.post<any>('/api/admin/car/sortie/:idVoiture', { id});
+   }
+
+   //--------------------------------------------
+
   addAdmin({ usernameAdmin, passwordAdmin, roleAdmin }: any): Observable<any> {
     return this.http.post<any>('/api/admin/add', {
       usernameAdmin,
@@ -74,9 +97,64 @@ export class AuthService {
       roleAdmin,
     });
   }
+
   logoutAdmin(): Observable<any> {
     return this.http.post<any>('/api/admin/logout', null);
   }
+
+  getClient(): Observable<any> {
+    return this.http.get<any>('/api/client/');
+  }
+
+    //--------------not tested yet---------------
+  notificationClient(): Observable<any> {
+    return this.http.get<any>('/api/client/notification');
+  }
+
+    //--------------not tested yet---------------
+  carClient(): Observable<any> {
+    return this.http.get<any>('/api/client/car');
+  }
+
+    //--------------not tested yet---------------
+  carOneClient(id: any): Observable<any> {
+    return this.http.get<any>('/api/client/car/'+id);
+  }
+
+  //--------------not tested yet---------------
+  factureClient(): Observable<any> {
+    return this.http.get<any>('/api/client/facture');
+  }
+
+     //--------------not tested yet---------------
+ factureOneClient(id: any): Observable<any> {
+    return this.http.get<any>('/api/client/facture/'+id);
+  }
+
+   //--------------not tested yet---------------
+  carClientReception(valeur: any): Observable<any> {
+    return this.http.get<any>('/api/client/car/reception/'+valeur);
+  }
+
+  //--------------not tested yet---------------
+   clientCarSearch({ cleSearch }: any): Observable<any> {
+    return this.http.post<any>('/api/client/car/search', { cleSearch});
+  }
+
+  addCarClient({ numero, marque, modele, annee }: any): Observable<any> {
+    return this.http.post<any>('/api/client/car', {
+      numero,
+      marque,
+      modele,
+      annee,
+    });
+  }
+
+   //--------------not tested yet---------------
+   validateFactureClient({ idVoiture}: any): Observable<any> {
+    return this.http.post<any>('/api/client/validate/:idVoiture', { idVoiture});
+   }
+
   addClient({
     username,
     password,
@@ -96,18 +174,17 @@ export class AuthService {
       email,
     });
   }
-  addCarClient({ numero, marque, modele, annee }: any): Observable<any> {
-    return this.http.post<any>('/api/client/car', {
-      numero,
-      marque,
-      modele,
-      annee,
-    });
+
+  logClient({ email, password }: any): Observable<any> {
+    this.setTokenClient('abcdefghijklmnopqrstuvwxyz');
+    return this.http.post<any>('/api/client/login', { email, password });
   }
+ 
 
   logoutClient(): Observable<any> {
     return this.http.post<any>('/api/client/logout', null);
   }
+
   setPrivilage(a: string): void {
     localStorage.setItem('privilage', a);
   }
@@ -148,27 +225,5 @@ export class AuthService {
     this.router.navigate(['home']);
   }
 
-  /* login({ email, password }: any): Observable<any> {
-    if (email === 'client@gmail.com' && password === 'client') {
-      this.setToken('abcdefghijklmnopqrstuvwxyz');
-      this.setPrivilage('1');
-      return of({ name: 'Solomahery', email: 'admin@gmail.com' });
-    }
-    if (email === 'admin@gmail.com' && password === 'admin123') {
-      this.setToken('abcdefghijklmnopqrstuvwxyz');
-      this.setPrivilage('2');
-      return of({ name: 'Solomahery', email: 'admin@gmail.com' });
-    }
-    if (email === 'admin@gmail.com' && password === 'admin321') {
-      this.setToken('abcdefghijklmnopqrstuvwxyz');
-      this.setPrivilage('3');
-      return of({ name: 'Solomahery', email: 'admin@gmail.com' });
-    }
-    if (email === 'admin@gmail.com' && password === 'admin') {
-      this.setToken('abcdefghijklmnopqrstuvwxyz');
-      this.setPrivilage('4');
-      return of({ name: 'Solomahery', email: 'admin@gmail.com' });
-    }
-    return throwError(new Error('Failed to login'));
-  } */
+
 }

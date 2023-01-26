@@ -1,35 +1,51 @@
 <div class="limiter">
 	<div class="container-login100" style="background-image: url('assets/login/images/bg-01.jpg');">
 		<div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form" [formGroup]="depositForm" (ngSubmit)="onSubmit()">
 					<span class="login100-form-title p-b-26">
 						Deposit your car 
 					</span>
 					
-					<div class="wrap-input100 validate-input m-b-23">
+					<div class="wrap-input100 validate-input m-b-23" [class.is-invalid]="numero?.invalid && numero?.touched">
 						<span class="label-input100">Number</span>
-						<input class="input100" type="text" placeholder="Number of your car">
+						<input class="input100" type="text" placeholder="Number of your car" formControlName="numero">
 						
 					</div>
-					<div class="wrap-input100 validate-input m-b-23"  >
+					<div *ngIf="(numero?.invalid && numero?.touched) || numero?.dirty">
+						<small *ngIf="numero?.errors?.['required']" class="text-danger">Number is required</small>
+						
+					  </div>
+					<div class="wrap-input100 validate-input m-b-23" [class.is-invalid]="marque?.invalid && marque?.touched" >
 						<span class="label-input100">Brand</span>
-						<input class="input100" type="text" placeholder="Brand of your car"  name="email" >
+						<input class="input100" type="text" placeholder="Brand of your car"  name="email" formControlName="marque">
 					
 					</div>
+					<div *ngIf="(marque?.invalid && marque?.touched) || marque?.dirty">
+						<small *ngIf="marque?.errors?.['required']" class="text-danger">Brand is required</small>
+						
+					  </div>
 
 
-						<div class="wrap-input100 validate-input" >
+						<div class="wrap-input100 validate-input"[class.is-invalid]="modele?.invalid && modele?.touched" >
 						<span class="label-input100">Model</span>
-						<input class="input100" type="text" placeholder="Model of your car" name="pass" >
+						<input class="input100" type="text" placeholder="Model of your car" name="pass" formControlName="modele">
 					
 					</div>
+					<div *ngIf="(modele?.invalid && modele?.touched) || modele?.dirty">
+						<small *ngIf="modele?.errors?.['required']" class="text-danger">Model is required</small>
+						
+					  </div>
 					
-                    <div class="wrap-input100 validate-input" >
+                    <div class="wrap-input100 validate-input" [class.is-invalid]="annee?.invalid && annee?.touched">
 					
 						<span class="label-input100">Year</span>
-						<input class="input100" type="text" placeholder="Year of your car" name="pass" >
+						<input class="input100" type="text" placeholder="Year of your car" name="pass"formControlName="annee" >
 					
 					</div>
+					<div *ngIf="(annee?.invalid && annee?.touched) || annee?.dirty">
+						<small *ngIf="annee?.errors?.['required']" class="text-danger">Year is required</small>
+						
+					  </div>
 					<div class="text-right p-t-8 p-b-31">
 						
 					</div>

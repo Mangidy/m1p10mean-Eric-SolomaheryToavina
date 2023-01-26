@@ -12,7 +12,7 @@
         <span class="login100-form-title p-b-26"> Create an account </span>
         <div
           class="wrap-input100 validate-input m-b-23"
-          data-validate="First name is required"
+          data-validate="First name is required"  [class.is-invalid]="firstName?.invalid && firstName?.touched"
         >
           <span class="label-input100">First Name</span>
           <input
@@ -24,9 +24,13 @@
           />
           <span class="focus-input100" data-symbol="&#xf206;"></span>
         </div>
+        <div *ngIf="(firstName?.invalid && firstName?.touched) || firstName?.dirty">
+          <small *ngIf="firstName?.errors?.['required']" class="text-danger">First Name is required</small>
+          
+          </div>
         <div
           class="wrap-input100 validate-input m-b-23"
-          data-validate="Last name is required"
+          data-validate="Last name is required" [class.is-invalid]="lastName?.invalid && lastName?.touched"
         >
           <span class="label-input100">Last name</span>
           <input
@@ -38,9 +42,14 @@
           />
           <span class="focus-input100" data-symbol="&#xf206;"></span>
         </div>
+        <div *ngIf="(lastName?.invalid && lastName?.touched) || lastName?.dirty">
+          <small *ngIf="lastName?.errors?.['required']" class="text-danger">Last Name is required</small>
+          
+          </div>
+        
         <div
           class="wrap-input100 validate-input m-b-23"
-          data-validate="Username is required"
+          data-validate="Username is required" [class.is-invalid]="username?.invalid && username?.touched"
         >
           <span class="label-input100">Username</span>
           <input
@@ -52,9 +61,13 @@
           />
           <span class="focus-input100" data-symbol="&#9786;"></span>
         </div>
+        <div *ngIf="(username?.invalid && username?.touched) || username?.dirty">
+          <small *ngIf="username?.errors?.['required']" class="text-danger">Username is required</small>
+          
+          </div>
         <div
           class="wrap-input100 validate-input m-b-23"
-          data-validate="Valid email is: a@b.c"
+          data-validate="Valid email is: a@b.c" [class.is-invalid]="email?.invalid && email?.touched"
         >
           <span class="label-input100">Email</span>
           <input
@@ -66,9 +79,14 @@
           />
           <span class="focus-input100" data-symbol="&#9993;"></span>
         </div>
+        <div *ngIf="(email?.invalid && email?.touched) || email?.dirty">
+          <small *ngIf="email?.errors?.['required']" class="text-danger">Email is required</small>
+          <!--question mark(?) is a safe navigation operator-->
+          <small *ngIf="email?.errors?.['pattern']" class="text-danger">Please provide a valid email address</small>
+          </div>
         <div
           class="wrap-input100 validate-input m-b-23"
-          data-validate="Adress is required"
+          data-validate="Adress is required" [class.is-invalid]="adress?.invalid && adress?.touched"
         >
           <span class="label-input100">Adress</span>
           <input
@@ -80,9 +98,13 @@
           />
           <span class="focus-input100" data-symbol="&#64;"></span>
         </div>
+        <div *ngIf="(adress?.invalid && adress?.touched) || adress?.dirty">
+          <small *ngIf="adress?.errors?.['required']" class="text-danger">Adress is required</small>
+          
+          </div>
         <div
           class="wrap-input100 validate-input m-b-23"
-          data-validate="Phone number is required"
+          data-validate="Phone number is required" [class.is-invalid]="phone?.invalid && phone?.touched"
         >
           <span class="label-input100">Phone number</span>
           <input
@@ -94,10 +116,14 @@
           />
           <span class="focus-input100" data-symbol="&#9742;"></span>
         </div>
+        <div *ngIf="(phone?.invalid && phone?.touched) || phone?.dirty">
+          <small *ngIf="phone?.errors?.['required']" class="text-danger">Phone is required</small>
+          
+          </div>
 
         <div
           class="wrap-input100 validate-input"
-          data-validate="Password is required"
+          data-validate="Password is required" [class.is-invalid]="password1?.invalid && password1?.touched"
         >
           <span class="label-input100">Password</span>
           <input
@@ -109,10 +135,14 @@
           />
           <span class="focus-input100" data-symbol="&#xf190;"></span>
         </div>
+        <div *ngIf="(password1?.invalid && password1?.touched) || username?.dirty">
+          <small *ngIf="password1?.errors?.['required']" class="text-danger">Password is required</small>
+          
+          </div>
 
         <div
           class="wrap-input100 validate-input"
-          data-validate="Re-enter your password"
+          data-validate="Re-enter your password" [class.is-invalid]="password2?.invalid && password2?.touched"
         >
           <span class="label-input100">Password</span>
           <input
@@ -124,6 +154,11 @@
           />
           <span class="focus-input100" data-symbol="&#xf190;"></span>
         </div>
+        <div *ngIf="(password2?.invalid && password2?.touched) || password2?.dirty">
+          <small *ngIf="password2?.errors?.['required']" class="text-danger">Password is required</small>
+          <small *ngIf="signupForm.get('password2')?.errors?.['confirmPasswordValidator']" class="text-danger">Password doesn't match</small>
+          
+          </div>
         <div class="text-right p-t-8 p-b-31"></div>
 
         <div class="container-login100-form-btn">
