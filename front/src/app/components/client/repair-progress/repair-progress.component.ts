@@ -11,7 +11,7 @@ export class RepairProgressComponent {
   constructor(private auth:AuthService){}
   ngOnInit() {
     
-  this.auth.carClient().subscribe((val) =>{ this.data=val; console.log('JSON Response = ', JSON.stringify(val));});
+  this.auth.carClient().subscribe((val) =>{ this.data=val; console.log(val);});
   }
   public cancel(_id:any){
  

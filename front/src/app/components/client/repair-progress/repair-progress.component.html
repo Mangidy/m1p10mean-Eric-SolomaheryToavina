@@ -20,7 +20,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let news of data; let i = index">
-            <tr *ngIF="news.sortie==false">
+            <tr >
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ news.numero }}</td>
               <td>{{ news.marque }}</td>
