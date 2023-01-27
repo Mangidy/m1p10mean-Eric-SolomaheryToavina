@@ -1,4 +1,31 @@
 const { ObjectID } = require("bson")
+const nodemailer = require('nodemailer')
+
+async function SendMail(userEmail, subject, content, DataHTML) {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'mical.garage266@gmail.com',
+            pass: 'bcwshztyoymyavbk',
+        },
+    });
+    const mailOptions = {
+        from: 'mical.garage266@gmail.com',
+        to: userEmail,
+        subject: subject,
+        text: content,
+        html: DataHTML
+    };
+
+    await transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+}
 
 const TriageDataReceptionne = (data, valeur) => {
     dataFinal = data.map(res => {
@@ -300,3 +327,4 @@ exports.CalculHalf = CalculHalf
 exports.TriageDataFactureAdmin = TriageDataFactureAdmin
 exports.TriageDataFacture = TriageDataFacture
 exports.TriageDataFactureOne = TriageDataFactureOne
+exports.SendMail = SendMail
