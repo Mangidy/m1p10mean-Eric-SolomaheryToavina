@@ -137,6 +137,7 @@ const TriageDataCarOut = (data) => {
     return Newdata
 }
 
+
 const dateDiff = (date1, date2) => {
     var diff = {}
     var tmp = date2 - date1;
