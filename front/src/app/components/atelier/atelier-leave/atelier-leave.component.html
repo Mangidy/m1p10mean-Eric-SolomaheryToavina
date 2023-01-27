@@ -5,22 +5,27 @@
 		<table class="table">
             <thead>
               <tr>
-                <th scope="col">Your car</th>
+                <th scope="col">Car id</th>
                 <th scope="col">Car number</th>
                 <th scope="col">Deposit date</th>
-                <th scope="col">Disposing</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Receive</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
+              <ng-container *ngFor = "let news of data; let i = index;">
+              <tr *ngIf="news && objectKeys(news).length > 1&&news.validationClient==true&&news.sortie==false&&news.paiement==true" >
+                <th scope="row">{{i+1}}</th>
+                <td>{{ news.numero }}</td>
+                <td>{{ news.dateDepot }}</td>
+                <td>{{ news.client.nom }}</td>
                 <td>
-                    <button type="button" class="btn btn-primary"> Dispose</button>
+                    <button type="button" class="btn btn-primary" (click)="dispose(news._id)"> Dispose</button>
                 </td>
               </tr>
+            </ng-container>
               <tr>
+    
     
             </tbody>
         </table>

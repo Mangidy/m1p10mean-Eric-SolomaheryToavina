@@ -3,22 +3,30 @@
         <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
             <p>History of your repairs</p>
 		<table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Your car</th>
-                <th scope="col">Car number</th>
-                <th scope="col">Deposit date</th>
-                <th scope="col">Recovery date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
+      <thead>
+        <tr>
+          <th scope="col">Car id</th>
+          <th scope="col">Car number</th>
+          <th scope="col">Model</th>
+          <th scope="col">Cost</th>
+          <th scope="col">Currency</th>
+
+          <th scope="col">Deposit time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor = "let news of data; let i = index;">
+        <tr *ngIf="news && objectKeys(news).length > 1&&news.sortie==true">
+          <th scope="row">{{i+1}}</th>
+          <td>{{ news.voiture.numero }}</td>
+          <td>{{ news.voiture.modele }}</td>   
+          <td>{{ news.facture.Total }}</td>
+          <td>{{ news.facture.Prix }}</td>   
+          <td> {{ news.dateDepot }}</td>
+        </tr>
+      </ng-container>
+        <tr>
+
     
             </tbody>
         </table>

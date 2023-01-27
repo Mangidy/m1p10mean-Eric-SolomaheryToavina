@@ -6,19 +6,25 @@
 		<table class="table">
             <thead>
               <tr>
-                <th scope="col"></th>
-                <th scope="col">Bill id</th>
-                <th scope="col">Billing date</th>
-                <th scope="col">Billing status</th>
+                <th scope="col">Car id</th>
+                <th scope="col">Car number</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Pay</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+              <ng-container *ngFor = "let news of data; let i = index;">
+              <tr *ngIf="news && objectKeys(news).length > 1&&news.validationClient==false">
+                <th scope="row">{{i+1}}</th>
+                <td>{{ news.voiture.numero }}</td>
+                <td>{{ news.facture.Total }}</td>
+                <td>{{ news.facture.Prix }}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" (click)="payUp(news.id)"> Pay</button>
+                </td>
               </tr>
+            </ng-container>
               <tr>
     
             </tbody>

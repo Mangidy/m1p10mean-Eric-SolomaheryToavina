@@ -10,16 +10,35 @@
                 <th scope="col">Deposit date</th>
                 <th scope="col">Repair progress</th>
                 <th scope="col">Cost</th>
+                <th scope="col">Facture</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>200$</td>
-              </tr>
+              <ng-container *ngFor = "let news of data; let i = index;">
+               
+                <tr *ngIf="news && objectKeys(news).length > 2&&news.facture==null">
+                  <th scope="row">{{i+1}}</th>
+                  <td>{{ news.numero }}</td>
+                  <td>{{ news.dateDepot }}</td>
+                  <td>{{ news.client.nom }}</td>
+                  <td>
+                     <form  [formGroup]="repairForm"  >
+                    <div  class="form-group col-md-6" data-validate="Password is required" [class.is-invalid]="value?.invalid && value?.touched">
+                      <input class="form-control" id="inputCity" placeholder="Type the cost" name="pass" formControlName="value">
+                    
+                    </div>
+                  </form>
+                    <div *ngIf="(value?.invalid && value?.touched) || value?.dirty">
+                      <small *ngIf="value?.errors?.['required']" class="text-danger">Cost is required</small>
+                      
+                      </div>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-primary" (click)="addFacture(news._id)"> Facture</button>
+                  </td>
+                </tr>
+            
+              </ng-container>
               <tr>
     
             </tbody>

@@ -99,6 +99,20 @@ async function getAllCarReception(clientConnex, res) {
             res.send({ message: "REQUEST ERROR" })
         })
 }
+async function getAllCarReceptionNotriage(clientConnex, res) {
+    await clientConnex.db("Garage").collection('Voiture').find({ receptionne: true }).toArray()
+        .then(resultat => {
+            if (resultat) {
+                resAffiche = resultat
+                res.send(resAffiche)
+            } else {
+                res.send({ message: "DATA EMPTY" })
+            }
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
 
 async function carSearchControlleAdmin(clientCo, req, res) {
     if (req.body.cleSearch) {
@@ -693,3 +707,4 @@ exports.carSearchControlleAdmin = carSearchControlleAdmin
 exports.AddAdmin = AddAdmin
 exports.LoginAdmin = LoginAdmin
 exports.LogoutAdmin = LogoutAdmin
+exports.getAllCarReceptionNotriage=getAllCarReceptionNotriage

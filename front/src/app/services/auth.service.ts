@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -25,6 +25,9 @@ export class AuthService {
   getAllCarReception(): Observable<any> {
     return this.http.get<any>('/api/admin/car/reception');
   }
+  getAllCarReceptionAll(): Observable<any> {
+    return this.http.get<any>('/api/admin/car/reception/all');
+  }
 
   getCarOut(): Observable<any> {
     return this.http.get<any>('/api/admin/car/sortie');
@@ -34,11 +37,11 @@ export class AuthService {
     return this.http.get<any>('/api/admin/facture');
   }
 
-  //--------------not tested yet---------------
+
   getFactureTF(valeur: any): Observable<any> {
     return this.http.get<any>('/api/admin/facture/'+ valeur);
   }
-  //--------------------------------------------
+
 
   getOneCar(id: any): Observable<any> {
     return this.http.get<any>('/api/admin/car/' + id);
@@ -52,41 +55,44 @@ export class AuthService {
     return this.http.get<any>('/api/admin/client/'+ _id);
   }
 
-   //--------------not tested yet---------------
-   addCarReparation({ numero }: any): Observable<any> {
-    return this.http.post<any>('/api/admin/car/reparation/:numero', { numero });
+ 
+   addCarReparation(numero : any): Observable<any> {
+    console.log(numero);
+    
+    return this.http.post<any>('/api/admin/car/reparation/'+numero,{},{} );
   }
-  //--------------------------------------------
+
+
+
+  addCarFacture(idVoiture : any,value:number): Observable<any> {
+    console.log(idVoiture);
+    return this.http.post<any>('/api/admin/car/facture/'+idVoiture,{body:value},{});
+  }
+
 
   //--------------not tested yet---------------
-  addCarFacture({ idVoiture }: any): Observable<any> {
-    return this.http.post<any>('/api/admin/car/facture/:idVoiture', {
-      idVoiture,
-    });
-  }
-  //--------------------------------------------
-
-  //--------------not tested yet---------------
-  adminCarSearch({ cleSearch }: any): Observable<any> {
-    return this.http.post<any>('/api/admin/car/search', { cleSearch});
+  adminCarSearch( cleSearch : any): Observable<any> {
+    return this.http.post<any>('/api/admin/car/search',  cleSearch);
   }
   //--------------------------------------------
   
   //--------------not tested yet---------------
-  adminClientSearch({ cleSearch }: any): Observable<any> {
-   return this.http.post<any>('/api/admin/client/search', { cleSearch});
+  adminClientSearch( cleSearch : any): Observable<any> {
+   return this.http.post<any>('/api/admin/client/search',  cleSearch);
   }
   //--------------------------------------------
 
-  //--------------not tested yet---------------
-  validateFacture({ id }: any): Observable<any> {
-    return this.http.post<any>('/api/admin/facture/validate/:id', { id});
+  
+  validateFacture( id : any): Observable<any> {
+    return this.http.post<any>('/api/admin/facture/validate/'+  id,{},{});
    }
-   //--------------------------------------------
+   
+
       
     //--------------not tested yet---------------
-  carOut({ id }: any): Observable<any> {
-    return this.http.post<any>('/api/admin/car/sortie/:idVoiture', { id});
+  carOut( id : any): Observable<any> {
+    console.log(id);
+    return this.http.post<any>('/api/admin/car/sortie/'+  id,{},{});
    }
 
    //--------------------------------------------
@@ -121,7 +127,7 @@ export class AuthService {
     return this.http.get<any>('/api/client/car/'+id);
   }
 
-  //--------------not tested yet---------------
+
   factureClient(): Observable<any> {
     return this.http.get<any>('/api/client/facture');
   }
@@ -137,8 +143,8 @@ export class AuthService {
   }
 
   //--------------not tested yet---------------
-   clientCarSearch({ cleSearch }: any): Observable<any> {
-    return this.http.post<any>('/api/client/car/search', { cleSearch});
+   clientCarSearch( cleSearch : any): Observable<any> {
+    return this.http.post<any>('/api/client/car/search',  cleSearch);
   }
 
   addCarClient({ numero, marque, modele, annee }: any): Observable<any> {
@@ -150,10 +156,13 @@ export class AuthService {
     });
   }
 
-   //--------------not tested yet---------------
-   validateFactureClient({ idVoiture}: any): Observable<any> {
-    return this.http.post<any>('/api/client/validate/:idVoiture', { idVoiture});
+   
+   validateFactureClient( idVoiture: any): Observable<any> {
+    console.log(idVoiture);
+    return this.http.post<any>('/api/client/validate/'+idVoiture,{},{});
    }
+
+   
 
   addClient({
     username,

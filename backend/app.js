@@ -57,6 +57,12 @@ async function start(port, routeAdmin, routeClient) {
     app.get("/admin/car/reception", routeAdmin.carReceptionList)
     // --------------------------------------------------------------------------------
 
+     // GET REQUEST
+    // API ADMIN GET ALL CAR 
+    // REQUIRED INFORMATION : NOTHING
+    app.get("/admin/car/reception/all", routeAdmin.carReceptionListAll)
+    // --------------------------------------------------------------------------------
+
     // GET REQUEST
     // API ADMIN GET ALL CAR EXIT VOUCHER
     // REQUIRED INFORMATION : NOTHING
@@ -210,6 +216,7 @@ async function start(port, routeAdmin, routeClient) {
     // REQUIRED INFORMATION : CAR ID = INVOICE ID 
     app.post("/client/validate/:idVoiture", routeClient.validateCarFacture)
     // --------------------------------------------------------------------------------
+    
 
     // POST REQUEST
     // API CLIENT FOR SUBSCRIBING

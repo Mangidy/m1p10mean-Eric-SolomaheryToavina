@@ -182,6 +182,20 @@ async function carReceptionList(req, res) {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
+async function carReceptionListAll(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.getAllCarReceptionNotriage(clientCo, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
 
 async function carOne(req, res) {
     if (req.session.usernameAdmin) {
@@ -273,3 +287,4 @@ exports.add = add
 exports.login = login
 exports.logout = logout
 exports.sendDb = sendDb
+exports.carReceptionListAll=carReceptionListAll

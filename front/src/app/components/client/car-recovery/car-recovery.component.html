@@ -3,24 +3,29 @@
         <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
             <p>Recover your car</p>
 		<table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Your car</th>
-                <th scope="col">Car number</th>
-                <th scope="col">Deposit date</th>
-                <th scope="col">Recovery</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>
-                    <button type="button" class="btn btn-primary"> Recover</button>
-                </td>
-              </tr>
-              <tr>
+      <thead>
+        <tr>
+          <th scope="col">Car id</th>
+          <th scope="col">Car number</th>
+          <th scope="col">Cost</th>
+          <th scope="col">Currency</th>
+          <th scope="col">Pay</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor = "let news of data; let i = index;">
+        <tr *ngIf="news && objectKeys(news).length > 1&&news.sortie==true">
+          <th scope="row">{{i+1}}</th>
+          <td>{{ news.voiture.numero }}</td>
+          <td>{{ news.facture.Total }}</td>
+          <td>{{ news.facture.Prix }}</td>
+          <td>
+              <button type="button" class="btn btn-primary" (click)="recover(news.id)"> Recover</button>
+          </td>
+        </tr>
+      </ng-container>
+        <tr>
+
     
             </tbody>
         </table>

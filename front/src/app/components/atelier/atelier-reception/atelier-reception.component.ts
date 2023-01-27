@@ -12,11 +12,12 @@ export class AtelierReceptionComponent {
   constructor(private auth:AuthService){}
   ngOnInit() {
     
-  this.auth.getAllCar().subscribe((val) =>{ this.data=val; console.log('JSON Response = ', JSON.stringify(val));});
+  this.auth.getAllCar().subscribe((val) =>{ this.data=val; console.log(val);});
 
   }
-  public addRepair({numero}:any){
+  objectKeys = Object.keys;
+  public addRepair(numero:any){
     console.log(numero);
-    this.auth.addCarReparation(({numero})).subscribe((val => console.log(val)));
+    this.auth.addCarReparation(numero).subscribe((val => console.log(val)));
   }
 }
