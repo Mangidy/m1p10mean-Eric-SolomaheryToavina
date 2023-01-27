@@ -2,7 +2,7 @@ const { ObjectID } = require("bson")
 const nodemailer = require('nodemailer')
 
 
-async function SendMail(userEmail, subject, content) {
+async function SendMail(userEmail, subject, content, DataHTML) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -14,7 +14,8 @@ async function SendMail(userEmail, subject, content) {
         from: 'mical.garage266@gmail.com',
         to: userEmail,
         subject: subject,
-        text: content
+        text: content,
+        html: DataHTML
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
@@ -26,6 +27,7 @@ async function SendMail(userEmail, subject, content) {
     });
 
 }
+
 
 
 const TriageDataReceptionne = (data, valeur) => {
