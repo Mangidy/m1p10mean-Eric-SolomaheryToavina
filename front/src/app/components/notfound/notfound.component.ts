@@ -24,10 +24,6 @@ if(localStorage.getItem('tokenClient')!=null)
   {
     this.takeHomeAdmin();
   }
-  else if(localStorage.getItem('tokenadmin')!=null)
-  {
-    this.takeHomeAdmin();
-  }
   else{
     this.router.navigate(['login']);
   }

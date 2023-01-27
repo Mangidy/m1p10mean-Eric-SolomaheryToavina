@@ -27,7 +27,6 @@ import { FinancierHomeComponent } from './components/financier/financier-home/fi
 import { FinancierPayementComponent } from './components/financier/financier-payement/financier-payement.component';
 import { FinancierStatistiqueComponent } from './components/financier/financier-statistique/financier-statistique.component';
 import { ClientHomeComponent } from './components/client/client-home/client-home.component';
-import { AdminComponent } from './components/admin/admin-home/admin.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 
@@ -57,7 +56,6 @@ import { AdminLoginComponent } from './components/admin-login/admin-login.compon
     FinancierPayementComponent,
     FinancierStatistiqueComponent,
     ClientHomeComponent,
-    AdminComponent,
     AdminLoginComponent
   ],
   imports: [
