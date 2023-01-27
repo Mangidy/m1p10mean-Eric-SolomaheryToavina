@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-atelier-leave',
@@ -17,6 +18,11 @@ export class AtelierLeaveComponent {
   objectKeys = Object.keys;
   public dispose(id:any){
     console.log(id);
-    this.auth.carOut(id).subscribe((val => console.log(val)));
+    this.auth.carOut(id).subscribe((val => {if(val.message=="CAR OUT") {
+      Swal.fire('Success','Voiture recu par le client','success');
+      this.auth.reload('atelier/ticketing');
+    } else {
+      Swal.fire('erreur',val.detailled,'error');
+    }}));
   }
 }

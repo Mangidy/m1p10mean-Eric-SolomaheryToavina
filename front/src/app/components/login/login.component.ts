@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {  Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +38,7 @@ export class LoginComponent {
         this.router.navigate(['/client/home']);
         }
         else{
-          alert('Incorrect email or password ');
+          Swal.fire('Erreur','Email ou mot de passe incorrect','error');
         }
       }); 
     /* this.auth.logClient({email:this.loginForm.value.email,password:this.loginForm.value.password}).subscribe(val => { if(val.message=='LOGIN SUCCESSFULLY'){

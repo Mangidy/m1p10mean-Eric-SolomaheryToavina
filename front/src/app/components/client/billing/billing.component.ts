@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-billing',
@@ -17,6 +18,13 @@ export class BillingComponent {
   objectKeys = Object.keys;
   public payUp(idVoiture:any){
     console.log(idVoiture);
-    this.auth.validateFactureClient(idVoiture).subscribe((val => console.log(val)));
+    this.auth.validateFactureClient(idVoiture).subscribe((val => {if(val.message=="VALIDATION FACTURE DONE") {
+      Swal.fire('Success','Payement effectuer avec success','success');
+      this.auth.reload('client/billing');
+    } else {
+      Swal.fire('erreur',val.detailled,'error');
+    }}));
+
+};
   }
-}
+

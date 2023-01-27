@@ -9,6 +9,10 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
  
   constructor(private router: Router, private http: HttpClient) {}
+  async reload(url: string): Promise<boolean> {
+    await this.router.navigateByUrl('.', { skipLocationChange: true });
+    return this.router.navigateByUrl(url);
+  }
   logAdmin({ username, password }: any): Observable<any> {
    
     return this.http.post<any>('/api/admin/login', { username, password });

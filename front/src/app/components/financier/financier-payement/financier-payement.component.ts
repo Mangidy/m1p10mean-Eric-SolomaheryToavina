@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-financier-payement',
@@ -17,6 +18,12 @@ export class FinancierPayementComponent {
   objectKeys = Object.keys;
   public validate(id:any){
     console.log(id);
-    this.auth.validateFacture(id).subscribe((val => console.log(val)));
+    this.auth.validateFacture(id).subscribe((val =>  { if ((val.message = 'VALIDATE PAYMENT')) {
+     
+      Swal.fire('Success','Payement valider','success');
+      this.auth.reload('financier/paying');
+    } else {
+      Swal.fire('erreur',val.detailled,'error');
+    }}));
   }
 }

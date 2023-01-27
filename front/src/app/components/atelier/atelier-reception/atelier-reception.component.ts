@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-atelier-reception',
@@ -18,6 +19,11 @@ export class AtelierReceptionComponent {
   objectKeys = Object.keys;
   public addRepair(numero:any){
     console.log(numero);
-    this.auth.addCarReparation(numero).subscribe((val => console.log(val)));
+    this.auth.addCarReparation(numero).subscribe((val => {if(val.message=="CAR REPARATION ADDED") {
+      Swal.fire('Success','Voiture bien recu','success');
+      this.auth.reload('atelier/reception');
+    } else {
+      Swal.fire('erreur',val.detailled,'error');
+    }}));
   }
 }

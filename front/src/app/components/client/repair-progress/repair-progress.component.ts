@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-repair-progress',
@@ -26,6 +27,12 @@ export class RepairProgressComponent {
   public cancel(_id:any){
  
    console.log(_id);
-    this.auth.cancelCarClient(_id).subscribe((val => console.log(val)));
+    this.auth.cancelCarClient(_id).subscribe((val => { if ((val.message = 'DELETE SUCCESSFULLY')) {
+     
+      Swal.fire('Success','Voiture retire','success');
+      this.auth.reload('client/progress');
+    } else {
+      Swal.fire('erreur',val.detailled,'error');
+    }}));
     }
 }

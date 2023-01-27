@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-deposit',
@@ -41,14 +42,16 @@ export class DepositComponent {
           .subscribe((val) => {
             if ((val.message = 'NEW CAR ADDED')) {
               this.depositForm.reset();
-              alert('Nouvelle voiture ajoutée !');
-            } else {
-              alert(val.detailled);
-            }
+              
+     
+                Swal.fire('Sucess','Votre voiture a ete deposer','success');
+              } else {
+                Swal.fire('erreur',val.detailled,'error');
+              }
           })
       );
     } else {
-      alert('Missing details');
+      Swal.fire('erreur','Detaille manquante','error');
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-atelier-repair',
@@ -26,7 +27,12 @@ export class AtelierRepairComponent {
   public addFacture(_id:any){
     console.log(_id);
     if(this.repairForm.valid){
-    this.auth.addCarFacture(_id,Number(this.repairForm.value.value)).subscribe((val => console.log(val)));
+    this.auth.addCarFacture(_id,Number(this.repairForm.value.value)).subscribe((val => {if(val.message=="FACTURE FOR CAR ADDED") {
+      Swal.fire('Success','Facture ajouter pour la voiture','success');
+      this.auth.reload('atelier/listing');
+    } else {
+      Swal.fire('erreur',val.detailled,'error');
+    }}));
     }
   }
 }
