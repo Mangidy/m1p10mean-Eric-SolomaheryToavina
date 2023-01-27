@@ -30,7 +30,7 @@ import { ClientHomeComponent } from './components/client/client-home/client-home
 import { HttpClientModule } from '@angular/common/http';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 import { HomepageComponent } from './components/client/homepage/homepage.component';
-import { SpinnerComponent } from './components/spinner/spinner.component';
+
 
 @NgModule({
   declarations: [
@@ -60,7 +60,6 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     ClientHomeComponent,
     AdminLoginComponent,
     HomepageComponent,
-    SpinnerComponent
   ],
   imports: [
     BrowserModule,

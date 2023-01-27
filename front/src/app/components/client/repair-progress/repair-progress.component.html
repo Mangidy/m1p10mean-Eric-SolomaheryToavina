@@ -20,7 +20,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let news of data; let i = index">
-            <tr>
+            <tr *ngIF="news.sortie==false">
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ news.numero }}</td>
               <td>{{ news.marque }}</td>
@@ -29,8 +29,8 @@
                 {{ news.receptionne === false ? "EN ATTENTE" : "RECEPTIONNE" }}
               </td>
               <td>{{ news.dateDepot | date : "medium" }}</td>
-              <td>
-                <button class="btn btn-sm btn-danger">Annuler</button>
+              <td *ngIf=" news.receptionne === false  ">  
+                <button class="btn btn-sm btn-danger" (click)="cancel(news._id)">Annuler</button>
               </td>
             </tr>
           </ng-container>
