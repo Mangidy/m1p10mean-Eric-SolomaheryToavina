@@ -156,6 +156,7 @@
           />
           <span class="focus-input100" data-symbol="&#xf190;"></span>
         </div>
+<<<<<<< HEAD
         <div
           *ngIf="(password1?.invalid && password1?.touched) || username?.dirty"
         >
@@ -163,6 +164,12 @@
             >Mot de passe doit être rempli</small
           >
         </div>
+=======
+        <div *ngIf="(password1?.invalid && password1?.touched) || password1?.dirty">
+          <small *ngIf="password1?.errors?.['required']" class="text-danger">Password is required</small>
+          
+          </div>
+>>>>>>> 4207682ca258d89478af95b0b35670c67b3d33dd
 
         <div
           class="wrap-input100 validate-input"
@@ -193,7 +200,7 @@
         </div>
         <div class="text-right p-t-8 p-b-31"></div>
 
-        <div class="container-login100-form-btn">
+        <div class="container-login100-form-btn" >
           <div class="wrap-login100-form-btn">
             <div class="login100-form-bgbtn"></div>
             <button

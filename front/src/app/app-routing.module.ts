@@ -5,7 +5,6 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { AdminGuard } from './guard/admin.guard';
 import { AtelierGuard } from './guard/atelier.guard';
 import { ClientGuard } from './guard/client.guard';
 import {  FinancierGuard } from './guard/financier.guard';
@@ -16,9 +15,6 @@ const routes: Routes = [
   { path:'adminlogin', component: AdminLoginComponent},
   { path:'signup', component: SignUpComponent}, 
    { path:'', redirectTo:'home', pathMatch:'full'},
-   {
-    path:'admin',canActivate: [AdminGuard],loadChildren: ()=>import('./modules/admin/admin.module').then((m)=>m.AdminModule)
-   },
    {
     path:'client',canActivate: [ClientGuard],loadChildren: ()=>import('./modules/client/client.module').then((m)=>m.ClientModule)
    },
