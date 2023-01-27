@@ -1,50 +1,100 @@
 <header>
-    <!-- header inner -->
-    <div class="header">
-       <div class="container-fluid">
-          <div class="row">
-             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col logo_section">
-                <div class="full">
-                   <div class="center-desk">
-                      <div class="logo">
-                         <a (click)="takeHome()"><img src="assets/mical/images/logo.png" alt="#" /></a>
-                      </div>
-                   </div>
-                </div>
-             </div>
-             <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9">
-                <nav class="navigation navbar navbar-expand-md navbar-dark ">
-                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                   <span class="navbar-toggler-icon"></span>
-                   </button>
-                   <div class="collapse navbar-collapse" id="navbarsExample04" >
-                      <ul class="navbar-nav mr-auto">
-                         <li class="nav-item">
-                            <a class="nav-link" routerLink="./deposit" routerLinkActive="active">Car deposit</a>
-                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link"routerLink="./progress" routerLinkActive="active">Repair Progession</a>
-                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link"routerLink="./billing" routerLinkActive="active">Billing</a>
-                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link" routerLink="./recovery" routerLinkActive="active">Car Recovery</a>
-                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link" routerLink="./history" routerLinkActive="active">Repair History</a>
-                         </li>
-                         <li class="nav-item d_none">
-                           <a class="nav-link" (click)="logout()"><i class="fa fa-user-circle padd_right" aria-hidden="true" ></i>Log out</a>
-                         </li>
-                         <li class="nav-item d_none">
-                            <a class="nav-link" href="#"><i class="fa fa-search" aria-hidden="true"></i></a>
-                         </li>
-                      </ul>
-                   </div>
-                </nav>
-             </div>
+  <div class="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col logo_section">
+          <div class="full">
+            <div class="center-desk">
+              <div class="logo">
+                <a (click)="takeHome()"
+                  ><img src="assets/mical/images/logo.png" alt="#"
+                /></a>
+              </div>
+            </div>
           </div>
-       </div>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9">
+          <nav class="navigation navbar navbar-expand-md navbar-dark">
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarsExample04"
+              aria-controls="navbarsExample04"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarsExample04">
+              <ul class="navbar-nav mr-auto">
+                <!-- <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLink="./deposit"
+                    routerLinkActive="active"
+                    >Car deposit</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLink="./progress"
+                    routerLinkActive="active"
+                    >Repair Progession</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLink="./billing"
+                    routerLinkActive="active"
+                    >Billing</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLink="./recovery"
+                    routerLinkActive="active"
+                    >Car Recovery</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLink="./history"
+                    routerLinkActive="active"
+                    >Repair History</a
+                  >
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link" href="/home#offre"
+                    ><i class="fa fa-automobile mr-1" aria-hidden="true"></i>
+                    Services</a
+                  >
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-user mr-1"></i> Mon compte
+                  </a>
+                  <div class="dropdown-menu">
+                    <a
+                      class="nav-link mt-1 mb-1 dropdown-item pt-2 pb-2"
+                      (click)="logout()"
+                      ><i
+                        class="fa fa-power-off padd_right"
+                        aria-hidden="true"
+                      ></i
+                      >Déconnexion</a
+                    >
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
     </div>
- </header>
+  </div>
+</header>
