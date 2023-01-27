@@ -1,15 +1,20 @@
 <div class="limiter">
-	<div class="container-login100" style="background-image: url('assets/login/images/bg-01.jpg');">
+	<div class="container-login100" >
         <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
-            <p>Receiveing cars</p>
-		<table class="table">
+          <h3
+          class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
+        >
+        Reception des voitures 
+          <i class="fa fa-server mr-3"></i>
+        </h3>
+		<table class="table mt-2 mb-2 p-3">
             <thead>
               <tr>
-                <th scope="col">Car id</th>
-                <th scope="col">Car number</th>
-                <th scope="col">Deposit date</th>
-                <th scope="col">Owner</th>
-                <th scope="col">Receive</th>
+                <th scope="col">ID</th>
+                <th scope="col">Numero voiture</th>
+                <th scope="col">Date de depot</th>
+                <th scope="col">Deposeur</th>
+                <th scope="col">Recevoir</th>
               </tr>
             </thead>
             <tbody>
@@ -17,7 +22,7 @@
               <tr *ngIf="news && objectKeys(news).length > 2">
                 <th scope="row">{{i+1}}</th>
                 <td>{{ news.numero }}</td>
-                <td>{{ news.dateDepot }}</td>
+                <td>{{ news.dateDepot| date:'medium' }}</td>
                 <td>{{ news.client.nom }}</td>
                 <td>
                     <button type="button" class="btn btn-primary" (click)="addRepair(news.numero)"> Receive</button>

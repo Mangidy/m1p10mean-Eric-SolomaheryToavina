@@ -10,7 +10,7 @@ const routes: Routes = [
   {path:'home',component: FinancierHomeComponent},
   {path:'paying',component: FinancierPayementComponent},
   {path: 'statistics', component : FinancierStatistiqueComponent},
-  {path:'',redirectTo:'financier',pathMatch:'full'}
+  {path:'',redirectTo:'/financier/paying',pathMatch:'full'}
   ]
   }
 ];

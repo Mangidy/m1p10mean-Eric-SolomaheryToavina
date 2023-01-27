@@ -1,15 +1,20 @@
 <div class="limiter">
-	<div class="container-login100" style="background-image: url('assets/login/images/bg-01.jpg');">
+	<div class="container-login100" >
         <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
-            <p>Validate payment</p>
+          <h3
+          class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
+        >
+        Validation des payments
+          <i class="fa fa-server mr-3"></i>
+        </h3>
 		<table class="table">
             <thead>
               <tr>
-                <th scope="col">Car id</th>
-                <th scope="col">Car number</th>
-                <th scope="col">Cost</th>
-                <th scope="col">Currency</th>
-                <th scope="col">Pay</th>
+                <th scope="col">ID</th>
+                <th scope="col">Numero voiture</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Devise</th>
+                <th scope="col">Valider le payement</th>
               </tr>
             </thead>
             <tbody>
@@ -20,7 +25,7 @@
                 <td>{{ news.facture.Total }}</td>
                 <td>{{ news.facture.Prix }}</td>
                 <td>
-                    <button type="button" class="btn btn-primary" (click)="validate(news.id)"> Validate</button>
+                    <button type="button" class="btn btn-primary" (click)="validate(news.id)"> Valider</button>
                 </td>
               </tr>
             </ng-container>
