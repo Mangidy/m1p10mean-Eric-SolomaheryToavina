@@ -196,6 +196,34 @@ async function carList(req, res) {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
+async function tempsReparation(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.tempsReparationController(clientCo, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+async function Benefice(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.BeneficeController(clientCo, req, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
 async function carReceptionList(req, res) {
     if (req.session.usernameAdmin) {
         try {
@@ -301,8 +329,10 @@ exports.carreparation = carreparation
 exports.client = client
 exports.ChiffreAffaireJournalier = ChiffreAffaireJournalier
 exports.ChiffreAffaireMensuel = ChiffreAffaireMensuel
+exports.tempsReparation = tempsReparation
 exports.facture = facture
 exports.factureTF = factureTF
+exports.Benefice = Benefice
 exports.carSearchAdmin = carSearchAdmin
 exports.carOut = carOut
 exports.carOutList = carOutList

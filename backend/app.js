@@ -6,8 +6,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express()
 
 async function start(port, routeAdmin, routeClient) {
-   // const uriBd = "mongodb://localhost:27017";
-       const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
+    const uriBd = "mongodb://localhost:27017";
+    // const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uriBd, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     routeAdmin.sendDb(client)
@@ -88,6 +88,12 @@ async function start(port, routeAdmin, routeClient) {
     // --------------------------------------------------------------------------------
 
     // GET REQUEST
+    // API ADMIN GET TIME REPARATION LIST
+    // REQUIRED INFORMATION : NOTHING
+    app.get("/admin/stat/reparationCar", routeAdmin.tempsReparation)
+    // --------------------------------------------------------------------------------
+
+    // GET REQUEST
     // API ADMIN GET ALL INVOICE STATUT CLIENT 
     // SHOW IF CLIENT HAS OR DOES NOT HAVE AN INVOICE
     // REQUIRED INFORMATION : NOTHING
@@ -100,6 +106,13 @@ async function start(port, routeAdmin, routeClient) {
     // FALSE : NOT ALREADY VALIDATE THE INVOICE 
     // REQUIRED INFORMATION : CONDITION VALUE
     app.get("/admin/facture/:valeur", routeAdmin.factureTF)
+    // --------------------------------------------------------------------------------
+
+    // POST REQUEST
+    // API ADMIN FOR GAIN ON MONTH
+    // FOR ADMIN WHO HAS THE ROLE : 'FINANCIER'
+    // REQUIRED INFORMATION : salaire OR loyer OR achatPiece OR autreDepense
+    app.post("/admin/stat/benefice", routeAdmin.Benefice)
     // --------------------------------------------------------------------------------
 
     // POST REQUEST

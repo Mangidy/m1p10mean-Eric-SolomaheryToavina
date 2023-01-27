@@ -255,6 +255,85 @@ async function getAllFacture(clientConnex, res) {
             res.send({ message: "REQUEST ERROR" })
         })
 }
+async function tempsReparationController(clientConnex, res) {
+    await clientConnex.db("Garage").collection('Voiture').find({ sortie: true }).toArray()
+        .then(resFacture => {
+            if (resFacture) {
+                res.send(resFacture.map(resF => {
+                    return {
+                        marque: resF.marque,
+                        modele: resF.modele,
+                        annee: resF.annee,
+                        TempsReparation: resF.TempsReparation
+                    }
+                }))
+            } else {
+                res.send({ message: "DATA EMPTY" })
+            }
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
+async function BeneficeController(clientConnex, req, res) {
+    if (req.body.salaire !== undefined) {
+        try {
+            res.send({
+                benefice: "SALAIRE",
+                mois: new Date().getMonth() + 1,
+                Priw: "Ariary",
+                Valeur: parseInt(req.body.salaire) * 0.30,
+            })
+        } catch (error) {
+            res.send({
+                message: "REQUEST ERROR"
+            })
+        }
+    } else if (req.body.loyer !== undefined) {
+        try {
+            res.send({
+                benefice: "LOYER",
+                mois: new Date().getMonth() + 1,
+                Priw: "Ariary",
+                Valeur: parseInt(req.body.loyer) * 0.30,
+            })
+        } catch (error) {
+            res.send({
+                message: "REQUEST ERROR"
+            })
+        }
+    } else if (req.body.achatPiece !== undefined) {
+        try {
+            res.send({
+                benefice: "ACHAT DE PIECE",
+                mois: new Date().getMonth() + 1,
+                Priw: "Ariary",
+                Valeur: parseInt(req.body.achatPiece) * 0.20,
+            })
+        } catch (error) {
+            res.send({
+                message: "REQUEST ERROR"
+            })
+        }
+    } else if (req.body.autreDepense !== undefined) {
+        try {
+            res.send({
+                benefice: "AUTRE DEPENSE",
+                mois: new Date().getMonth() + 1,
+                Priw: "Ariary",
+                Valeur: parseInt(req.body.autreDepense) * 0.10,
+            })
+        } catch (error) {
+            res.send({
+                message: "REQUEST ERROR"
+            })
+        }
+    } else {
+        res.send({
+            message: "REQUEST ERROR"
+        })
+    }
+}
 
 async function getAllFactureTr(clientConnex, res, req) {
     if (req.params.valeur && req.params.valeur == "false" || req.params.valeur == "true") {
@@ -767,7 +846,9 @@ exports.getAllClient = getAllClient
 exports.ChiffreAffaireControllerJounalier = ChiffreAffaireControllerJounalier
 exports.ChiffreAffaireControllerMensuel = ChiffreAffaireControllerMensuel
 exports.getAllFacture = getAllFacture
+exports.BeneficeController = BeneficeController
 exports.getAllFactureTr = getAllFactureTr
+exports.tempsReparationController = tempsReparationController
 exports.AddCarReparation = AddCarReparation
 exports.ValidFacture = ValidFacture
 exports.CarClientOut = CarClientOut
