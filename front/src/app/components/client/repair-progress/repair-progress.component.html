@@ -28,7 +28,7 @@
               <td>
                 {{ news.receptionne === false ? "EN ATTENTE" : "RECEPTIONNE" }}
               </td>
-              <td>{{ news.dateDepot }}</td>
+              <td>{{ news.dateDepot | date : "medium" }}</td>
               <td>
                 <button class="btn btn-sm btn-danger">Annuler</button>
               </td>
