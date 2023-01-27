@@ -12,7 +12,7 @@ const routes: Routes = [
     { path:'reception', component: AtelierReceptionComponent},
     { path:'listing', component: AtelierRepairComponent},
     { path:'ticketing', component: AtelierLeaveComponent},
-    {path:'',redirectTo:'/atelier',pathMatch:'full'}
+    {path:'',redirectTo:'/atelier/reception',pathMatch:'full'}
 
   ]}
 ];
