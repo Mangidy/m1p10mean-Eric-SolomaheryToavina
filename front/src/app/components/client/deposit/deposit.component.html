@@ -1,66 +1,99 @@
-<div class="limiter">
-	<div class="container-login100" style="background-image: url('assets/login/images/bg-01.jpg');">
-		<div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
-				<form class="login100-form validate-form" [formGroup]="depositForm" (ngSubmit)="onSubmit()">
-					<span class="login100-form-title p-b-26">
-						Deposit your car 
-					</span>
-					
-					<div class="wrap-input100 validate-input m-b-23" [class.is-invalid]="numero?.invalid && numero?.touched">
-						<span class="label-input100">Number</span>
-						<input class="input100" type="text" placeholder="Number of your car" formControlName="numero">
-						
-					</div>
-					<div *ngIf="(numero?.invalid && numero?.touched) || numero?.dirty">
-						<small *ngIf="numero?.errors?.['required']" class="text-danger">Number is required</small>
-						
-					  </div>
-					<div class="wrap-input100 validate-input m-b-23" [class.is-invalid]="marque?.invalid && marque?.touched" >
-						<span class="label-input100">Brand</span>
-						<input class="input100" type="text" placeholder="Brand of your car"  name="email" formControlName="marque">
-					
-					</div>
-					<div *ngIf="(marque?.invalid && marque?.touched) || marque?.dirty">
-						<small *ngIf="marque?.errors?.['required']" class="text-danger">Brand is required</small>
-						
-					  </div>
+<div class="row w-100">
+  <div class="col-md-10 mx-auto">
+    <form
+      class="bg-white p-3 m-3"
+      [formGroup]="depositForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <h3
+        class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
+      >
+        Déposé votre voiture
+        <i class="fa fa-space-shuttle mr-3"></i>
+      </h3>
+      <hr />
+      <div
+        class="wrap-input100 validate-input"
+        [class.is-invalid]="numero?.invalid && numero?.touched"
+      >
+        <span class="label-input100">Numéro de votre voiture</span>
+        <input
+          class="input100"
+          type="text"
+          placeholder="Entrer le numéro de voiture"
+          formControlName="numero"
+        />
+      </div>
+      <div *ngIf="(numero?.invalid && numero?.touched) || numero?.dirty">
+        <small *ngIf="numero?.errors?.['required']" class="text-danger"
+          >Numero de voiture doit être remplie</small
+        >
+      </div>
+      <div
+        class="wrap-input100 validate-input"
+        [class.is-invalid]="marque?.invalid && marque?.touched"
+      >
+        <span class="label-input100">Marque de la voiture</span>
+        <input
+          class="input100"
+          type="text"
+          placeholder="Entrer la marque de votre voiture"
+          name="email"
+          formControlName="marque"
+        />
+      </div>
+      <div *ngIf="(marque?.invalid && marque?.touched) || marque?.dirty">
+        <small *ngIf="marque?.errors?.['required']" class="text-danger"
+          >Marque doit être remplie</small
+        >
+      </div>
 
+      <div
+        class="wrap-input100 validate-input"
+        [class.is-invalid]="modele?.invalid && modele?.touched"
+      >
+        <span class="label-input100">Modèle de votre voiture</span>
+        <input
+          class="input100"
+          type="text"
+          placeholder="Entrer le modèle de votre voiture"
+          name="pass"
+          formControlName="modele"
+        />
+      </div>
+      <div *ngIf="(modele?.invalid && modele?.touched) || modele?.dirty">
+        <small *ngIf="modele?.errors?.['required']" class="text-danger"
+          >Modèle doit être remplie</small
+        >
+      </div>
 
-						<div class="wrap-input100 validate-input"[class.is-invalid]="modele?.invalid && modele?.touched" >
-						<span class="label-input100">Model</span>
-						<input class="input100" type="text" placeholder="Model of your car" name="pass" formControlName="modele">
-					
-					</div>
-					<div *ngIf="(modele?.invalid && modele?.touched) || modele?.dirty">
-						<small *ngIf="modele?.errors?.['required']" class="text-danger">Model is required</small>
-						
-					  </div>
-					
-                    <div class="wrap-input100 validate-input" [class.is-invalid]="annee?.invalid && annee?.touched">
-					
-						<span class="label-input100">Year</span>
-						<input class="input100" type="text" placeholder="Year of your car" name="pass"formControlName="annee" >
-					
-					</div>
-					<div *ngIf="(annee?.invalid && annee?.touched) || annee?.dirty">
-						<small *ngIf="annee?.errors?.['required']" class="text-danger">Year is required</small>
-						
-					  </div>
-					<div class="text-right p-t-8 p-b-31">
-						
-					</div>
-					
-                 
-					<div class="container-login100-form-btn">
-						<div class="wrap-back-form-btn">
-							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn" ng-model="button" ng-disabled="checked">
-								Submit
-							</button>
-						</div>
-					</div>
+      <div
+        class="wrap-input100 validate-input"
+        [class.is-invalid]="annee?.invalid && annee?.touched"
+      >
+        <span class="label-input100">Année de la voiture</span>
+        <input
+          class="input100"
+          type="text"
+          placeholder="Entrer l'année de votre voiture"
+          name="pass"
+          formControlName="annee"
+        />
+      </div>
+      <div *ngIf="(annee?.invalid && annee?.touched) || annee?.dirty">
+        <small *ngIf="annee?.errors?.['required']" class="text-danger"
+          >Année doit être remplie</small
+        >
+      </div>
+      <div class="text-right p-t-8 p-b-31"></div>
 
-				</form>
-			</div>
-		</div>
-	</div>
+      <button
+        class="btn btn-success btn-block"
+        ng-model="button"
+        ng-disabled="checked"
+      >
+        Ajouter
+      </button>
+    </form>
+  </div>
+</div>

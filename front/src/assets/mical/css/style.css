@@ -568,7 +568,7 @@ ul.btn li:last-child {
 }
 .progress-animation .color-animation {
   position: absolute;
-  background-color: #1559b7;
+  background-color: #767676;
   width: 25%;
   height: 10px;
   /* animation: progres 10s infinite linear; */
