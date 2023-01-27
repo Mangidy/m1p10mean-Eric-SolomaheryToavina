@@ -132,6 +132,7 @@ export class AuthService {
     return this.http.get<any>('/api/client/facture');
   }
 
+
      //--------------not tested yet---------------
  factureOneClient(id: any): Observable<any> {
     return this.http.get<any>('/api/client/facture/'+id);
@@ -146,7 +147,10 @@ export class AuthService {
    clientCarSearch( cleSearch : any): Observable<any> {
     return this.http.post<any>('/api/client/car/search',  cleSearch);
   }
-
+  cancelCarClient(id:any): Observable<any> {
+    console.log(id);
+    return this.http.post<any>('/api/client/car/cancel',{carId:id},{});
+  }
   addCarClient({ numero, marque, modele, annee }: any): Observable<any> {
     return this.http.post<any>('/api/client/car', {
       numero,

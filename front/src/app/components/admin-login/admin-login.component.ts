@@ -26,7 +26,7 @@ export class AdminLoginComponent {
       this.auth.logAdmin({username:this.loginForm.value.username,password:this.loginForm.value.password}).subscribe(val => { console.log(val.message)
         if(val.message=='LOGIN SUCCESSFULLY'){
         this.auth.getAdmin().subscribe( val => {this.auth.setTokenAdmin('abcdefghijklmnopqrstuvwxyz',val.admin.roleAdmin.toString().toLowerCase() );
-        this.router.navigate([val.admin.roleAdmin.toString().toLowerCase() ]);+'/'});
+        this.router.navigate([val.admin.roleAdmin.toString().toLowerCase() ]);});
           
         }
        

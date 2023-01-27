@@ -13,4 +13,9 @@ export class RepairProgressComponent {
     
   this.auth.carClient().subscribe((val) =>{ this.data=val; console.log('JSON Response = ', JSON.stringify(val));});
   }
+  public cancel(_id:any){
+ 
+   console.log(_id);
+    this.auth.cancelCarClient(_id).subscribe((val => console.log(val)));
+    }
 }
