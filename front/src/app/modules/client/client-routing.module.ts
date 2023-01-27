@@ -4,19 +4,20 @@ import { BillingComponent } from 'src/app/components/client/billing/billing.comp
 import { CarRecoveryComponent } from 'src/app/components/client/car-recovery/car-recovery.component';
 import { ClientHomeComponent } from 'src/app/components/client/client-home/client-home.component';
 import { DepositComponent } from 'src/app/components/client/deposit/deposit.component';
+import { HomepageComponent } from 'src/app/components/client/homepage/homepage.component';
 import { RepairHistoryComponent } from 'src/app/components/client/repair-history/repair-history.component';
 import { RepairProgressComponent } from 'src/app/components/client/repair-progress/repair-progress.component';
 
 const routes: Routes = [
   { path:'',component:ClientHomeComponent,children:
 [
-  {path:'home',component: ClientHomeComponent},
+  {path:'home',component: HomepageComponent},
   { path:'deposit', component: DepositComponent}, 
   { path:'progress', component: RepairProgressComponent}, 
   { path:'billing', component: BillingComponent}, 
   { path:'recovery', component: CarRecoveryComponent}, 
   { path:'history', component: RepairHistoryComponent}, 
-  {path:'',redirectTo:'client',pathMatch:'full'}
+  {path:'',redirectTo:'client/home',pathMatch:'full'}
 ]}
 ];
 

@@ -29,6 +29,7 @@ import { FinancierStatistiqueComponent } from './components/financier/financier-
 import { ClientHomeComponent } from './components/client/client-home/client-home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
+import { HomepageComponent } from './components/client/homepage/homepage.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { AdminLoginComponent } from './components/admin-login/admin-login.compon
     FinancierPayementComponent,
     FinancierStatistiqueComponent,
     ClientHomeComponent,
-    AdminLoginComponent
+    AdminLoginComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,

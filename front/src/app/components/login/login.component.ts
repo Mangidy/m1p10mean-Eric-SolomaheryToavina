@@ -34,7 +34,7 @@ export class LoginComponent {
       //console.log(this.auth.getAllCar().subscribe((val => console.log(val))));
       this.auth.removeAllToken();
       this.auth.logClient({email:this.loginForm.value.email,password:this.loginForm.value.password}).subscribe(val => { if(val.message=='LOGIN SUCCESSFULLY'){
-        this.router.navigate(['/client']);
+        this.router.navigate(['/client/home']);
         }
         else{
           alert('Incorrect email or password ');

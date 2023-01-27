@@ -30,7 +30,7 @@ if(localStorage.getItem('tokenClient')!=null)
 }
 takeHomeClient():void{
   if(this.auth.getClient().subscribe(val=>val!='USER NOT CONNECTED')){
-    this.router.navigate(['client']);
+    this.router.navigate(['client/home']);
   }
 }
 takeHomeAdmin():void{
