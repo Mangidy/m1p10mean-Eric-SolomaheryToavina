@@ -1,33 +1,95 @@
 
-<div class="limiter">
-	<div class="container-login100" style="background-image: url('assets/login/images/bg-01.jpg');">
-        <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
-            <p>Bills list</p>
-		<table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Car id</th>
-                <th scope="col">Car number</th>
-                <th scope="col">Cost</th>
-                <th scope="col">Currency</th>
-                <th scope="col">Pay</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor = "let news of data; let i = index;">
-              <tr *ngIf="news && objectKeys(news).length > 1&&news.validationClient==false">
-                <th scope="row">{{i+1}}</th>
-                <td>{{ news.voiture.numero }}</td>
-                <td>{{ news.facture.Total }}</td>
-                <td>{{ news.facture.Prix }}</td>
-                <td>
-                    <button type="button" class="btn btn-primary" (click)="payUp(news.id)"> Pay</button>
-                </td>
-              </tr>
-            </ng-container>
-              <tr>
-    
-            </tbody>
-        </table>
-	</div>
+<div class="row w-100">
+  <div class="col-md-10 mx-auto">
+    <div class="mt-3 p-3 bg-white">
+      <h3
+        class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
+      >
+        Liste de facture
+        <i class="fa fa-file mr-3"></i>
+      </h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+                <th scope="col">Numero voiture</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Devise</th>
+                <th scope="col">Payer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor = "let news of data; let i = index;">
+            <tr *ngIf="news && objectKeys(news).length > 1&&news.validationClient==false">
+              <th scope="row">{{i+1}}</th>
+              <td>{{ news.voiture.numero }}</td>
+              <td>{{ news.facture.Total }}</td>
+              <td>{{ news.facture.Prix }}</td>
+              <td>
+                  <button type="button" class="btn btn-primary" (click)="payUp(news.id)"> Pay</button>
+              </td>
+            </tr>
+          </ng-container>
+            <tr>
+  
+        </tbody>
+      </table>
+
+      <hr />
+      <div class="">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div
+                id="myCarousel"
+                class="carousel slide testimonial_Carousel"
+                data-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="container">
+                      <div class="carousel-caption">
+                        <div class="row">
+                          <div class="col-md-6 margin_boot">
+                            <div class="test_box">
+                              <i class="mb-3"
+                                ><img src="assets/mical/images/za.jpg" alt="#"
+                              /></i>
+                              <p>
+                                Premier et dixième depôt dans notre garage<br />
+                                Analyse & Devis seulement
+                                <strong>20 000Ar</strong>
+                                <br />
+                                Déposé votre voiture maintenant.
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-6 margin_boot">
+                            <div class="test_box">
+                              <i class="mb-4"
+                                ><img
+                                  src="assets/mical/images/garage.jpg"
+                                  alt="#"
+                              /></i>
+                              <p>
+                                Réparation de votre voiture<br />
+                                Selon les états de réparation et les pièces à
+                                réparer
+                                <br />
+                                Avec du prix plus bas et de qualité haute.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
