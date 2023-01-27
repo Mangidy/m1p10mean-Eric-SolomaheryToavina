@@ -20,7 +20,9 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let news of data; let i = index">
-            <tr >
+            <tr
+            *ngIf="news && objectKeys(news).length <10 "
+          >
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ news.numero }}</td>
               <td>{{ news.marque }}</td>
@@ -33,6 +35,7 @@
                 <button class="btn btn-sm btn-danger" (click)="cancel(news._id)">Annuler</button>
               </td>
             </tr>
+            
           </ng-container>
           <tr>
             <th></th>
