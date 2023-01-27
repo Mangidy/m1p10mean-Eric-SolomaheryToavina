@@ -13,6 +13,16 @@ export class RepairProgressComponent {
     
   this.auth.carClient().subscribe((val) =>{ this.data=val; console.log(val);});
   }
+  objectKeys = Object.keys;
+  checkSortie(value:any) :boolean{
+    if(value==true )
+    {
+      return true;
+    }
+    else{
+     return false;
+    }
+  }
   public cancel(_id:any){
  
    console.log(_id);
