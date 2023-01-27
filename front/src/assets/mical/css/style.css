@@ -814,6 +814,16 @@ ul.btn li:last-child {
   background: #0556c4;
 }
 
+.bg-mical-theme {
+  background: -webkit-linear-gradient(
+    right,
+    #4c4b4b,
+    #8b9191,
+    #8b9191,
+    #727272
+  );
+}
+
 .testimonial_Carousel .carousel-indicators li.active {
   background: #51fe44;
 }
