@@ -200,6 +200,12 @@ async function start(port, routeAdmin, routeClient) {
     // --------------------------------------------------------------------------------
 
     // POST REQUEST
+    // API CLIENT CANCEL CAR CLIENT
+    // REQUIRED INFORMATION : carId ON POST REQUEST
+    app.post("/client/car/cancel", routeClient.carCanceled)
+    // --------------------------------------------------------------------------------
+
+    // POST REQUEST
     // API CLIENT SEARCH CAR CLIENT
     // REQUIRED INFORMATION : cleSearch ON POST REQUEST
     app.post("/client/car/search", routeClient.carSearch)
