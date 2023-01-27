@@ -116,6 +116,18 @@ async function carSearch(req, res) {
 }
 
 
+async function carCanceled(req, res) {
+    try {
+        await clientCo.connect();
+        await controllerClient.carCancelControlle(clientCo, req, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
+    }
+}
+
+
 async function login(req, res) {
     try {
         await clientCo.connect();
@@ -150,6 +162,7 @@ exports.factureId = factureId
 exports.carClient = carClient
 exports.carOne = carOne
 exports.carSearch = carSearch
+exports.carCanceled = carCanceled
 exports.carClientReception = carClientReception
 exports.validateCarFacture = validateCarFacture
 

@@ -357,6 +357,56 @@ async function ValidateCar(clientConnex, req, res) {
     }
 }
 
+async function carCancelControlle(clientConnex, req, res) {
+    if (req.session.clientId) {
+        if (req.body.carId !== undefined) {
+            var continueVar = false
+            var continueVar1 = false
+            var resClientN = {}
+            var resCar = {}
+            await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+                .then(resClient => {
+                    resClientN = resClient
+                    if (resClient) {
+                        continueVar = true
+                    } else {
+                        res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+                    }
+                })
+                .catch(err => {
+                    res.send({ message: "REQUEST ERROR" })
+                })
+
+            if (continueVar) {
+                delete resClientN._id
+                delete resClientN.password
+                delete resClientN.username
+                delete resClientN.dateSubscribe
+                await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ _id: new ObjectID(req.body.carId) }, { client: resClientN }] })
+                    .then(resTwo => {
+                        resCar = resTwo
+                        continueVar1 = true
+                    }).catch(err => {
+                        res.send({ message: "REQUEST ERROR VOITURE" })
+                    })
+
+                if (continueVar1) {
+                    await clientConnex.db("Garage").collection('Voiture').deleteOne({ _id: new ObjectID(req.body.carId) })
+                        .then(resFinal => {
+                            res.send({ message: "DELETE SUCCESSFULLY" })
+                        }).catch(err => {
+                            res.send({ message: "REQUEST ERROR VOITURE" })
+                        })
+                }
+            }
+
+        } else {
+            res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
+        }
+    } else {
+        res.send({ message: "USER NOT CONNECTED" })
+    }
+}
 async function AddCarClient(clientConnex, req, res) {
     if (req.session.clientId) {
         if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
@@ -564,6 +614,7 @@ exports.GetFactureIdClient = GetFactureIdClient
 exports.GetCarClientReception = GetCarClientReception
 exports.AddCarClient = AddCarClient
 exports.ValidateCar = ValidateCar
+exports.carCancelControlle = carCancelControlle
 
 exports.SubScribeClient = SubScribeClient
 exports.LoginClient = LoginClient
