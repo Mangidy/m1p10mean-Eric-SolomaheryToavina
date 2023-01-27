@@ -76,6 +76,18 @@ async function start(port, routeAdmin, routeClient) {
     // --------------------------------------------------------------------------------
 
     // GET REQUEST
+    // API ADMIN GET TODAY TURNOVER 
+    // REQUIRED INFORMATION : NOTHING
+    app.get("/admin/stat/affaire/jour", routeAdmin.ChiffreAffaireJournalier)
+    // --------------------------------------------------------------------------------
+
+    // GET REQUEST
+    // API ADMIN GET MONTH TURNOVER 
+    // REQUIRED INFORMATION : NOTHING
+    app.get("/admin/stat/affaire/month", routeAdmin.ChiffreAffaireMensuel)
+    // --------------------------------------------------------------------------------
+
+    // GET REQUEST
     // API ADMIN GET ALL INVOICE STATUT CLIENT 
     // SHOW IF CLIENT HAS OR DOES NOT HAVE AN INVOICE
     // REQUIRED INFORMATION : NOTHING

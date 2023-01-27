@@ -1,6 +1,7 @@
 const { ObjectID } = require("bson")
 const crypto = require('crypto')
 const outil = require('../../modele/outil')
+const { facture } = require("../../route/routeAdmin")
 
 async function HomeAdmin(clientConnex, req, res) {
     await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
@@ -166,6 +167,79 @@ async function clientSearchControlleAdmin(clientCo, req, res) {
         res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
     }
 }
+
+async function ChiffreAffaireControllerMensuel(clientConnex, res) {
+    var affiche = {}
+    var resAffiche = {}
+    await clientConnex.db("Garage").collection('Voiture').find({ receptionne: true }).toArray()
+        .then(resFacture => {
+            if (resFacture) {
+                resAffiche = outil.TriageDataFactureAdmin(resFacture)
+                var somme = 0
+                var datt = new Date()
+                var today = datt.getDate() + "-" + (datt.getMonth() + 1) + "-" + datt.getFullYear()
+                resAffiche.map(resMap => {
+                    valBd = new Date(resMap.dateDepot)
+                    if ((valBd.getMonth() + 1) === (datt.getMonth() + 1)) {
+                        somme += resMap.facture.Total
+                        return {
+                            Total: resMap.facture.Total,
+                            today: today,
+                            bdDate: valBd.getDate() + "-" + (valBd.getMonth() + 1) + "-" + valBd.getFullYear()
+                        }
+                    }
+                })
+                res.send({
+                    Mois: (datt.getMonth() + 1),
+                    Annee: datt.getFullYear(),
+                    Prix: "Ariary",
+                    CA: somme
+                })
+            } else {
+                res.send({ message: "DATA EMPTY" })
+            }
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
+
+
+async function ChiffreAffaireControllerJounalier(clientConnex, res) {
+    var affiche = {}
+    var resAffiche = {}
+    await clientConnex.db("Garage").collection('Voiture').find({ receptionne: true }).toArray()
+        .then(resFacture => {
+            if (resFacture) {
+                resAffiche = outil.TriageDataFactureAdmin(resFacture)
+                var somme = 0
+                var datt = new Date()
+                var today = datt.getDate() + "-" + (datt.getMonth() + 1) + "-" + datt.getFullYear()
+                resAffiche.map(resMap => {
+                    valBd = new Date(resMap.dateDepot)
+                    if (valBd.getDate() === datt.getDate() && (valBd.getMonth() + 1) === (datt.getMonth() + 1)) {
+                        somme += resMap.facture.Total
+                        return {
+                            Total: resMap.facture.Total,
+                            today: today,
+                            bdDate: valBd.getDate() + "-" + (valBd.getMonth() + 1) + "-" + valBd.getFullYear()
+                        }
+                    }
+                })
+                res.send({
+                    DateCA: today,
+                    Prix: "Ariary",
+                    CA: somme
+                })
+            } else {
+                res.send({ message: "DATA EMPTY" })
+            }
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
+
 
 async function getAllFacture(clientConnex, res) {
     await clientConnex.db("Garage").collection('Voiture').find({ receptionne: true }).toArray()
@@ -690,6 +764,8 @@ function LogoutAdmin(res, req) {
 }
 
 exports.getAllClient = getAllClient
+exports.ChiffreAffaireControllerJounalier = ChiffreAffaireControllerJounalier
+exports.ChiffreAffaireControllerMensuel = ChiffreAffaireControllerMensuel
 exports.getAllFacture = getAllFacture
 exports.getAllFactureTr = getAllFactureTr
 exports.AddCarReparation = AddCarReparation
@@ -700,11 +776,11 @@ exports.clientSearchControlleAdmin = clientSearchControlleAdmin
 exports.HomeAdmin = HomeAdmin
 exports.getOneClient = getOneClient
 exports.getAllCar = getAllCar
-exports.getAllCarReception=getAllCarReception
+exports.getAllCarReception = getAllCarReception
 exports.getOneCar = getOneCar
 exports.receptionneCarFacture = receptionneCarFacture
 exports.carSearchControlleAdmin = carSearchControlleAdmin
 exports.AddAdmin = AddAdmin
 exports.LoginAdmin = LoginAdmin
 exports.LogoutAdmin = LogoutAdmin
-exports.getAllCarReceptionNotriage=getAllCarReceptionNotriage
+exports.getAllCarReceptionNotriage = getAllCarReceptionNotriage

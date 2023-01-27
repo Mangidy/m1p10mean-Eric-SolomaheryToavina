@@ -34,6 +34,34 @@ async function facture(req, res) {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
+async function ChiffreAffaireJournalier(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.ChiffreAffaireControllerJounalier(clientCo, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
+async function ChiffreAffaireMensuel(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.ChiffreAffaireControllerMensuel(clientCo, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
 
 async function factureTF(req, res) {
     if (req.session.usernameAdmin) {
@@ -271,6 +299,8 @@ function logout(req, res) {
 exports.home = home
 exports.carreparation = carreparation
 exports.client = client
+exports.ChiffreAffaireJournalier = ChiffreAffaireJournalier
+exports.ChiffreAffaireMensuel = ChiffreAffaireMensuel
 exports.facture = facture
 exports.factureTF = factureTF
 exports.carSearchAdmin = carSearchAdmin
@@ -279,7 +309,7 @@ exports.carOutList = carOutList
 exports.factureValidate = factureValidate
 exports.clientOne = clientOne
 exports.carList = carList
-exports.carReceptionList= carReceptionList
+exports.carReceptionList = carReceptionList
 exports.carOne = carOne
 exports.carReceptionneFacture = carReceptionneFacture
 exports.clientSearchAdmin = clientSearchAdmin
@@ -287,4 +317,4 @@ exports.add = add
 exports.login = login
 exports.logout = logout
 exports.sendDb = sendDb
-exports.carReceptionListAll=carReceptionListAll
+exports.carReceptionListAll = carReceptionListAll
