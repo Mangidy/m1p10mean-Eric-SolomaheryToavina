@@ -9,30 +9,58 @@ import Swal from 'sweetalert2';
   styleUrls: ['./atelier-repair.component.css']
 })
 export class AtelierRepairComponent {
-  get value(){
-    return this.repairForm.get('value');
-    }
   repairForm = new FormGroup({
-    value: new FormControl(1,[
-      Validators.required]),
+    numero:new FormControl(''),
+    params: new FormControl('', [Validators.required]),
+    value: new FormControl('', [Validators.required])
   });
+  get  params() {
+    return this.repairForm.get('params');
+  }
+  get value() {
+    return this.repairForm.get('value');
+  }
   data:any;
+ 
   constructor(private auth:AuthService){}
   ngOnInit() {
     
   this.auth.getAllCarReception().subscribe((val) =>{ this.data=val; console.log(val);});
 
   }
-  objectKeys = Object.keys;
-  public addFacture(_id:any){
-    console.log(_id);
-    if(this.repairForm.valid){
-    this.auth.addCarFacture(_id,Number(this.repairForm.value.value)).subscribe((val => {if(val.message=="FACTURE FOR CAR ADDED") {
-      Swal.fire('Success','Facture ajouter pour la voiture','success');
-      this.auth.reload('atelier/listing');
+  onSubmit(): void {
+    if (this.repairForm.valid) {
+      console.log(this.repairForm.value.params);
+      console.log(this.repairForm.value.value); 
+     
+var newKey = this.repairForm?.value?.params?.toString();
+var info = {
+
+
+  [newKey as string]: this.repairForm.value.value?.toString(),
+
+};
+
+      
+      
+       console.log(
+        this.auth.addCarFacture(this.repairForm.value.numero,this.repairForm.value.params,this.repairForm.value.value).subscribe((val) => {
+          console.log(val);
+          console.log(info);
+            if (val.message=="FACTURE FOR CAR ADDED") {
+              this.repairForm.reset();
+              
+     
+              Swal.fire('Success','Facture ajouter pour la voiture','success');
+
+              } else {
+                Swal.fire('erreur',val.detailled,'error');
+              }
+          })
+      );
     } else {
-      Swal.fire('erreur',val.detailled,'error');
-    }}));
+      Swal.fire('erreur','Detaille manquante','error');
     }
   }
+ 
 }

@@ -100,9 +100,9 @@ export class AuthService {
 
 
 
-  addCarFacture(idVoiture : any,value:number): Observable<any> {
+  addCarFacture(idVoiture : any,param:any,valeur:any): Observable<any> {
     console.log(idVoiture);
-    return this.http.post<any>('/api/admin/car/facture/'+idVoiture,{body:value},{});
+    return this.http.post<any>('/api/admin/car/facture/'+idVoiture,{cleFacture:param,valeurFacture:valeur},{});
   }
 
 
