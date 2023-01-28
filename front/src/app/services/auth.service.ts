@@ -175,7 +175,7 @@ export class AuthService {
 
   //--------------not used yet---------------
    clientCarSearch( cleSearch : any): Observable<any> {
-    return this.http.post<any>('/api/client/car/search',  cleSearch);
+    return this.http.post<any>('/api/client/car/search',  {cleSearch:cleSearch},{});
   }
   cancelCarClient(id:any): Observable<any> {
     console.log(id);

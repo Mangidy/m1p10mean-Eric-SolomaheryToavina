@@ -7,6 +7,7 @@ import { DepositComponent } from 'src/app/components/client/deposit/deposit.comp
 import { HomepageComponent } from 'src/app/components/client/homepage/homepage.component';
 import { RepairHistoryComponent } from 'src/app/components/client/repair-history/repair-history.component';
 import { RepairProgressComponent } from 'src/app/components/client/repair-progress/repair-progress.component';
+import { SearchComponent } from 'src/app/components/client/search/search.component';
 
 const routes: Routes = [
   { path:'',component:ClientHomeComponent,children:
@@ -17,6 +18,8 @@ const routes: Routes = [
   { path:'billing', component: BillingComponent}, 
   { path:'recovery', component: CarRecoveryComponent}, 
   { path:'history', component: RepairHistoryComponent}, 
+  { path:'search', component: SearchComponent}, 
+  { path:'search/:msg', component: SearchComponent},
   {path:'',redirectTo:'client/home',pathMatch:'full'}
 ]}
 ];

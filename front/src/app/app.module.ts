@@ -30,6 +30,7 @@ import { ClientHomeComponent } from './components/client/client-home/client-home
 import { HttpClientModule } from '@angular/common/http';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 import { HomepageComponent } from './components/client/homepage/homepage.component';
+import { SearchComponent } from './components/client/search/search.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { HomepageComponent } from './components/client/homepage/homepage.compone
     ClientHomeComponent,
     AdminLoginComponent,
     HomepageComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,
