@@ -31,6 +31,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 import { HomepageComponent } from './components/client/homepage/homepage.component';
 import { SearchComponent } from './components/client/search/search.component';
+import { ClientNotificationComponent } from './components/client/client-notification/client-notification.component';
+import { AtelierNotificationComponent } from './components/atelier/atelier-notification/atelier-notification.component';
+import { FinancierNotificationComponent } from './components/financier/financier-notification/financier-notification.component';
+import { DescriptionComponent } from './components/client/description/description.component';
 
 
 @NgModule({
@@ -62,6 +66,10 @@ import { SearchComponent } from './components/client/search/search.component';
     AdminLoginComponent,
     HomepageComponent,
     SearchComponent,
+    ClientNotificationComponent,
+    AtelierNotificationComponent,
+    FinancierNotificationComponent,
+    DescriptionComponent,
   ],
   imports: [
     BrowserModule,

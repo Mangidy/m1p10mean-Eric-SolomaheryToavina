@@ -143,7 +143,7 @@ export class AuthService {
     return this.http.get<any>('/api/client/');
   }
 
-    //--------------not used yet---------------
+  
   notificationClient(): Observable<any> {
     return this.http.get<any>('/api/client/notification');
   }
