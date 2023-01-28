@@ -16,7 +16,7 @@ export class SearchComponent {
   constructor(private auth:AuthService,private route: ActivatedRoute){}
   ngOnInit() {
     console.log(this.route.snapshot.params['msg']);
-  this.auth.clientCarSearch(this.route.snapshot.params['msg']).subscribe((val) =>{ this.data=val; console.log(val);});
+  this.auth.clientCarSearch(this.route.snapshot.params['msg']).subscribe(val =>{ this.data=val; console.log(val);});
   }
   objectKeys = Object.keys;
   checkSortie(value:any) :boolean{
