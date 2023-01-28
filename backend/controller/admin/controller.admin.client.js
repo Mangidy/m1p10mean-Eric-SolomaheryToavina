@@ -754,13 +754,14 @@ async function AddCarReparation(clientConnex, req, res) {
         var updateDoc = {}
         var options = {}
         var newValeurReparation = {}
-        await clientConnex.db("Garage").collection('Voiture').findOne({ $and: [{ numero: req.params.numero }, { reparation: {} }] })
+        await clientConnex.db("Garage").collection('Voiture').findOne({ numero: req.params.numero })
             .then(resCar => {
                 if (resCar) {
-                    resCar.reparation = req.body
+                    valCle = "" + req.body.cleRepration
+                    resCar.reparation[valCle] = req.body.valeurReparation
                     newValeurReparation = resCar
                     updateDoc = {
-                        $set: { reparation: req.body, admin: resAdminR, receptionne: true }
+                        $set: { reparation: resCar.reparation, admin: resAdminR, receptionne: true }
                     };
                     options = { upsert: true };
                     continueVar1 = true

@@ -7,7 +7,7 @@ const app = express()
 
 async function start(port, routeAdmin, routeClient) {
     //const uriBd = "mongodb://localhost:27017";
-     const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
+    const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uriBd, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     routeAdmin.sendDb(client)
@@ -124,7 +124,7 @@ async function start(port, routeAdmin, routeClient) {
     // POST REQUEST
     // API ADMIN ADD REPAIR LIST CAR -- CAR NUMBER
     // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
-    // REQUIRED INFORMATION : ALL REPAIR LIST INFORMATION ON POST REQUEST AND CAR NUMBER
+    // REQUIRED INFORMATION : cleRepration, valeurReparation
     app.post("/admin/car/reparation/:numero", routeAdmin.carreparation)
     // --------------------------------------------------------------------------------
 
