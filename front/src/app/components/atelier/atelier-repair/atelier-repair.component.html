@@ -21,7 +21,7 @@
           <ng-container *ngFor="let news of data; let i = index">
             <tr
               *ngIf="
-                news && objectKeys(news).length > 2 && news.facture == null
+                news && objectKeys(news).length > 2 
               "
             >
               <th scope="row">{{ i + 1 }}</th>

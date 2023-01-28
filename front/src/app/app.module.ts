@@ -35,6 +35,7 @@ import { ClientNotificationComponent } from './components/client/client-notifica
 import { AtelierNotificationComponent } from './components/atelier/atelier-notification/atelier-notification.component';
 import { FinancierNotificationComponent } from './components/financier/financier-notification/financier-notification.component';
 import { DescriptionComponent } from './components/client/description/description.component';
+import { AtelierAddreparationComponent } from './components/atelier/atelier-addreparation/atelier-addreparation.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { DescriptionComponent } from './components/client/description/descriptio
     AtelierNotificationComponent,
     FinancierNotificationComponent,
     DescriptionComponent,
+    AtelierAddreparationComponent,
   ],
   imports: [
     BrowserModule,

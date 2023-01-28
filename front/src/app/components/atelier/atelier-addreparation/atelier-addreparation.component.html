@@ -1,0 +1,51 @@
+<div class="row w-100">
+    <div class="col-md-10 mx-auto">
+        <form class="bg-white p-3 m-3" [formGroup]="repairForm"
+        (ngSubmit)="onSubmit()">
+            <div class="form-row align-items-center">
+              <div class="col-auto my-1">
+                
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" formControlName="numero">
+                    <ng-container *ngFor="let news of data; let i = index">
+                  <option value={{news.numero}} >{{news.numero}}</option>
+                </ng-container>
+                </select>
+          
+              </div>
+              <div class="col-sm-3 my-1"  [class.is-invalid]="params?.invalid && params?.touched">
+                <label class="sr-only" for="inlineFormInputGroupUsername">Reparation </label>
+                <div class="input-group"  >
+                  
+                  <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Reparation " formControlName="params">
+                  
+                </div>
+                <div *ngIf="(params?.invalid && params?.touched) || params?.dirty">
+                    <small *ngIf="params?.errors?.['required']" class="text-danger"
+                      >Nom de la reparation requise</small
+                    >
+                
+                  </div>
+              </div>
+              <div class="col-sm-3 my-1"  [class.is-invalid]="value?.invalid && value?.touched">
+                <label class="sr-only" for="inlineFormInputGroupUsername">Valeur</label>
+                <div class="input-group"  >
+                  
+                  <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="valeur" formControlName="value">
+                  
+                </div>
+                <div *ngIf="(value?.invalid && value?.touched) || value?.dirty">
+                    <small *ngIf="value?.errors?.['required']" class="text-danger"
+                      >Valeur requis!</small
+                    >
+                
+                  </div>
+              </div>
+            
+              <div class="col-auto my-1">
+                <button type="submit" class="btn btn-primary" >Ajouter</button>
+              </div>
+            </div>
+          </form>
+    </div>
+  </div>
+  

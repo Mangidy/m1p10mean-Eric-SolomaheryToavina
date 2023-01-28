@@ -19,7 +19,7 @@ export class AtelierReceptionComponent {
   objectKeys = Object.keys;
   public addRepair(numero:any){
     console.log(numero);
-    this.auth.addCarReparation(numero).subscribe((val => {if(val.message=="CAR REPARATION ADDED") {
+    this.auth.addCarReception(numero).subscribe((val => {if(val.message=="CAR RECEPTIONNED") {
       Swal.fire('Success','Voiture bien recu','success');
       this.auth.reload('atelier/reception');
     } else {

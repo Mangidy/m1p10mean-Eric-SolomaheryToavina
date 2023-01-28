@@ -87,10 +87,15 @@ export class AuthService {
   }
 
  
-   addCarReparation(numero : any): Observable<any> {
+   addCarReparation(numero : any,param:any,valeur:any): Observable<any> {
+    console.log(numero);
+    console.log(valeur);
+    return this.http.post<any>('/api/admin/car/reparation/'+numero,{cleRepration:param,valeurReparation:valeur},{} );
+  }
+  addCarReception(numero : any): Observable<any> {
     console.log(numero);
     
-    return this.http.post<any>('/api/admin/car/reparation/'+numero,{},{} );
+    return this.http.post<any>('/api/admin/car/recpetionne/'+numero,{},{} );
   }
 
 
