@@ -168,6 +168,20 @@ async function clientSearchControlleAdmin(clientCo, req, res) {
     }
 }
 
+async function NotificationAdminC(clientCo, req, res) {
+    await clientCo.db("Garage").collection('NotificationClient').find().toArray()
+        .then(resNotif => {
+            if (resNotif) {
+                res.send(resNotif)
+            } else {
+                res.send({ message: "Aucune notification pour le moment" })
+            }
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+}
+
 async function ChiffreAffaireControllerMensuel(clientConnex, res) {
     var affiche = {}
     var resAffiche = {}
@@ -860,6 +874,7 @@ exports.tempsReparationController = tempsReparationController
 exports.AddCarReparation = AddCarReparation
 exports.ValidFacture = ValidFacture
 exports.CarClientOut = CarClientOut
+exports.NotificationAdminC = NotificationAdminC
 exports.ListCarClientOut = ListCarClientOut
 exports.clientSearchControlleAdmin = clientSearchControlleAdmin
 exports.HomeAdmin = HomeAdmin

@@ -6,8 +6,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express()
 
 async function start(port, routeAdmin, routeClient) {
-   // const uriBd = "mongodb://localhost:27017";
-      const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
+    const uriBd = "mongodb://localhost:27017";
+    //   const uriBd = "mongodb+srv://RicMongo:tNhwIIgEIAksjl4H@cluster0.pexx4dr.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uriBd, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     routeAdmin.sendDb(client)
@@ -106,6 +106,12 @@ async function start(port, routeAdmin, routeClient) {
     // FALSE : NOT ALREADY VALIDATE THE INVOICE 
     // REQUIRED INFORMATION : CONDITION VALUE
     app.get("/admin/facture/:valeur", routeAdmin.factureTF)
+    // --------------------------------------------------------------------------------
+
+    // GET REQUEST
+    // API SHOW ADMIN NOTIFICATION & ACTIVITE FROM THE GARAGE
+    // REQUIRED INFORMATION : NOTHING
+    app.get("/admin/notification", routeAdmin.notificationAdmin)
     // --------------------------------------------------------------------------------
 
     // POST REQUEST
