@@ -3,9 +3,11 @@
     <div class="row">
       <div class="col-md-6 mx-auto">
         <div class="mt-5 text-bg text-center">
+          <ng-container *ngFor="let news of data; let i = index">
           <h1 class="pb-0 responsive-hide text-left">
-            <i class="fa fa-user"></i> Bonjour userName
+            <i class="fa fa-user"></i> Bonjour {{news.user.username}}
           </h1>
+        </ng-container>
           <div class="progress-animation">
             <div class="color-animation"></div>
           </div>
