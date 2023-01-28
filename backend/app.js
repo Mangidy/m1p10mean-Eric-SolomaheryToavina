@@ -124,6 +124,13 @@ async function start(port, routeAdmin, routeClient) {
     // POST REQUEST
     // API ADMIN ADD REPAIR LIST CAR -- CAR NUMBER
     // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
+    // REQUIRED INFORMATION : NOTHING
+    app.post("/admin/car/recpetionne/:numero", routeAdmin.carReception)
+    // --------------------------------------------------------------------------------
+
+    // POST REQUEST
+    // API ADMIN ADD REPAIR LIST CAR -- CAR NUMBER
+    // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
     // REQUIRED INFORMATION : cleRepration, valeurReparation
     app.post("/admin/car/reparation/:numero", routeAdmin.carreparation)
     // --------------------------------------------------------------------------------

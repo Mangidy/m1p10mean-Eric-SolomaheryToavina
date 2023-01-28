@@ -293,6 +293,20 @@ async function carreparation(req, res) {
         res.send({ message: "ADMIN NOT CONNECTED" })
     }
 }
+async function carReception(req, res) {
+    if (req.session.usernameAdmin) {
+        try {
+            await clientCo.connect();
+            await controllerAdminClient.AddCarReception(clientCo, req, res)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await clientCo.close();
+        }
+    } else {
+        res.send({ message: "ADMIN NOT CONNECTED" })
+    }
+}
 
 async function carReceptionneFacture(req, res) {
     if (req.session.usernameAdmin) {
@@ -337,6 +351,7 @@ function logout(req, res) {
 
 exports.home = home
 exports.carreparation = carreparation
+exports.carReception = carReception
 exports.client = client
 exports.ChiffreAffaireJournalier = ChiffreAffaireJournalier
 exports.ChiffreAffaireMensuel = ChiffreAffaireMensuel

@@ -733,6 +733,7 @@ async function receptionneCarFacture(clientConnex, res, req) {
     }
 }
 
+
 async function AddCarReparation(clientConnex, req, res) {
     var continueVar = false
     var continueVar1 = false
@@ -768,7 +769,7 @@ async function AddCarReparation(clientConnex, req, res) {
                     resCar.reparation[valCle] = req.body.valeurReparation
                     newValeurReparation = resCar
                     updateDoc = {
-                        $set: { reparation: resCar.reparation, admin: resAdminR, receptionne: true }
+                        $set: { reparation: resCar.reparation, admin: resAdminR }
                     };
                     options = { upsert: true };
                     continueVar1 = true
@@ -802,6 +803,81 @@ async function AddCarReparation(clientConnex, req, res) {
                     await clientConnex.db("Garage").collection('NotificationClient').insertOne(dataActivite)
                         .then(resNotif => {
                             res.send({ message: "CAR REPARATION ADDED" })
+                        })
+                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                    dataH = "<header><h1>BONJOUR " + dataActivite.client.nom.toUpperCase() + " " + dataActivite.client.prenom.toUpperCase() + "</h1><h2>" + dataActivite.activite + "</h2></header><section class='flex'><h3>Connectez-vous pour voir les détailles</h3></section><footer><p>Mical 2023</p></footer>"
+                    outil.SendMail(dataActivite.client.email, dataActivite.activite, "", dataH)
+                }
+            } catch (error) {
+                res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" })
+            }
+        }
+    }
+}
+
+
+async function AddCarReception(clientConnex, req, res) {
+    var continueVar = false
+    var continueVar1 = false
+    var continueVar2 = false
+    var resAdminR = {}
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+        .then(resAdmin => {
+            if (req.params.numero !== undefined) {
+                if (resAdmin.roleAdmin === "ATELIER") {
+                    delete resAdmin._id
+                    delete resAdmin.passwordAdmin
+                    delete resAdmin.dateSubscribe
+                    resAdminR = resAdmin
+                    continueVar = true
+                } else {
+                    res.send({ message: "REQUEST ERROR", detailled: "ADMIN NOT ALLOWED FOR THIS POST" })
+                }
+            } else {
+                res.send({ message: "REQUEST ERROR", detailled: "NUMBER CAR INVALID" })
+            }
+        })
+        .catch(err => {
+            res.send({ message: "REQUEST ERROR" })
+        })
+    if (continueVar) {
+        var updateDoc = {}
+        var options = {}
+        var newValeurReparation = {}
+        await clientConnex.db("Garage").collection('Voiture').findOne({ numero: req.params.numero })
+            .then(resCar => {
+                newValeurReparation = resCar
+                updateDoc = {
+                    $set: { receptionne: true, admin: resAdminR }
+                };
+                options = { upsert: true };
+                continueVar1 = true
+            })
+            .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION", err: err }))
+        if (continueVar1) {
+            var dataActivite = {}
+            try {
+                await clientConnex.db("Garage").collection('Voiture').updateOne({ _id: newValeurReparation._id }, updateDoc, options)
+                    .then(resF => {
+                        dataActivite = {
+                            activite: "RECEPTION VOITURE",
+                            admin: resAdminR,
+                            voiture: newValeurReparation,
+                            client: newValeurReparation.client,
+                            dateDepot: new Date()
+                        }
+                        continueVar2 = true
+                    })
+                    .catch(errF => res.send({ message: "REQUEST ERROR", detailled: "UPDATE FAILED" }))
+                if (continueVar2) {
+                    await clientConnex.db("Garage").collection('Activite').insertOne(dataActivite)
+                        .then(resActivite => {
+                            console.log("Continue...");
+                        })
+                        .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
+                    await clientConnex.db("Garage").collection('NotificationClient').insertOne(dataActivite)
+                        .then(resNotif => {
+                            res.send({ message: "CAR RECEPTIONNED" })
                         })
                         .catch(errActivte => res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }))
                     dataH = "<header><h1>BONJOUR " + dataActivite.client.nom.toUpperCase() + " " + dataActivite.client.prenom.toUpperCase() + "</h1><h2>" + dataActivite.activite + "</h2></header><section class='flex'><h3>Connectez-vous pour voir les détailles</h3></section><footer><p>Mical 2023</p></footer>"
@@ -880,6 +956,7 @@ exports.BeneficeController = BeneficeController
 exports.getAllFactureTr = getAllFactureTr
 exports.tempsReparationController = tempsReparationController
 exports.AddCarReparation = AddCarReparation
+exports.AddCarReception = AddCarReception
 exports.ValidFacture = ValidFacture
 exports.CarClientOut = CarClientOut
 exports.NotificationAdminC = NotificationAdminC
