@@ -54,6 +54,33 @@ export class AuthService {
   getAllClient(): Observable<any> {
     return this.http.get<any>('/api/admin/client');
   }
+  getStatJour(): Observable<any> {
+    return this.http.get<any>('/api/admin/stat/affaire/jour');
+  }
+  getStatMonth(): Observable<any> {
+    return this.http.get<any>('/api/admin/stat/affaire/month');
+  }
+
+  getStatReparation(): Observable<any> {
+    return this.http.get<any>('/api/admin/stat/reparationCar');
+  }
+  getStatBenefice(parametre1 : any,value:any): Observable<any> {
+    if(parametre1=='salaire'){
+    return this.http.post<any>('/api/admin/stat/benefice',{'salaire':value},{});
+    }
+    else if(parametre1=='loyer'){
+      return this.http.post<any>('/api/admin/stat/benefice',{'loyer':value},{});
+      }
+      else if(parametre1=='achatPiece'){
+        return this.http.post<any>('/api/admin/stat/benefice',{'achatPiece':value},{});
+        }
+        else if(parametre1=='autreDepense'){
+          return this.http.post<any>('/api/admin/stat/benefice',{'autreDepense':value},{});
+          }
+      else{
+        return this.http.post<any>('/api/admin/stat/benefice',{},{});
+      }
+  }
 
   getOneClient(_id: any): Observable<any> {
     return this.http.get<any>('/api/admin/client/'+ _id);
@@ -74,13 +101,13 @@ export class AuthService {
   }
 
 
-  //--------------not tested yet---------------
+  //--------------not used yet---------------
   adminCarSearch( cleSearch : any): Observable<any> {
     return this.http.post<any>('/api/admin/car/search',  cleSearch);
   }
   //--------------------------------------------
   
-  //--------------not tested yet---------------
+  //--------------not used yet---------------
   adminClientSearch( cleSearch : any): Observable<any> {
    return this.http.post<any>('/api/admin/client/search',  cleSearch);
   }
@@ -93,13 +120,12 @@ export class AuthService {
    
 
       
-    //--------------not tested yet---------------
+  
   carOut( id : any): Observable<any> {
     console.log(id);
     return this.http.post<any>('/api/admin/car/sortie/'+  id,{},{});
    }
 
-   //--------------------------------------------
 
   addAdmin({ usernameAdmin, passwordAdmin, roleAdmin }: any): Observable<any> {
     return this.http.post<any>('/api/admin/add', {
@@ -117,7 +143,7 @@ export class AuthService {
     return this.http.get<any>('/api/client/');
   }
 
-    //--------------not tested yet---------------
+    //--------------not used yet---------------
   notificationClient(): Observable<any> {
     return this.http.get<any>('/api/client/notification');
   }
@@ -126,7 +152,7 @@ export class AuthService {
     return this.http.get<any>('/api/client/car');
   }
 
-    //--------------not tested yet---------------
+    //--------------not used yet---------------
   carOneClient(id: any): Observable<any> {
     return this.http.get<any>('/api/client/car/'+id);
   }
@@ -137,17 +163,17 @@ export class AuthService {
   }
 
 
-     //--------------not tested yet---------------
+     //--------------not used yet---------------
  factureOneClient(id: any): Observable<any> {
     return this.http.get<any>('/api/client/facture/'+id);
   }
 
-   //--------------not tested yet---------------
+   //--------------not used yet---------------
   carClientReception(valeur: any): Observable<any> {
     return this.http.get<any>('/api/client/car/reception/'+valeur);
   }
 
-  //--------------not tested yet---------------
+  //--------------not used yet---------------
    clientCarSearch( cleSearch : any): Observable<any> {
     return this.http.post<any>('/api/client/car/search',  cleSearch);
   }
