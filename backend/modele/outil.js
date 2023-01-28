@@ -234,16 +234,18 @@ const TriageDataCarOne = (resultat) => {
             dateDepot: resultat.dateDepot,
         }]
     } else {
-        return {
-            _id: resultat._id,
-            numero: resultat.numero,
-            marque: resultat.marque,
-            modele: resultat.modele,
-            annee: resultat.annee,
-            receptionne: resultat.receptionne,
-            reparation: resultat.reparation,
-            dateDepot: resultat.dateDepot,
-        }
+        return [
+            {
+                _id: resultat._id,
+                numero: resultat.numero,
+                marque: resultat.marque,
+                modele: resultat.modele,
+                annee: resultat.annee,
+                receptionne: resultat.receptionne,
+                reparation: resultat.reparation,
+                dateDepot: resultat.dateDepot,
+            }
+        ]
     }
 }
 
