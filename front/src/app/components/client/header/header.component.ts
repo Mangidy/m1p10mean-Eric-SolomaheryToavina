@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -8,6 +9,15 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  get search(){
+    return this.searchForm.get('search');
+    }
+  searchForm = new FormGroup({
+    search:new FormControl('')
+  });
+  goSearch(){
+    this.router.navigate(['/client/search/'+this.searchForm.value.search])
+  }
   constructor(private auth:AuthService,private router:Router){}
   logout(){
     this.auth.logoutTokenClient();
