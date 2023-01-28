@@ -28,7 +28,7 @@
               <td>{{ news.voiture.marque }}</td>
               <td>{{ news.voiture.modele }}</td>
               <td>{{ news.facture.Total }}</td>
-              <td>{{ news.dateDepot }}</td>
+              <td>{{ news.dateDepot | date : "medium" }}</td>
             </tr>
           </ng-container>
           <tr></tr>
