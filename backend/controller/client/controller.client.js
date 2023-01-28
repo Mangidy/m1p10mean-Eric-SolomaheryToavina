@@ -517,23 +517,27 @@ async function carSearchControlle(clientConnex, req, res) {
                     res.send({ message: "REQUEST ERROR" })
                 })
             if (continueVar) {
-                await clientConnex.db("Garage").collection("Client").findOne({ _id: new ObjectID(req.session.clientId) })
-                    .then(resClient => {
-                        if (resClient) {
-                            if (resClient.nom === valRecherche.client.nom) {
-                                if (valRecherche) {
-                                    valeurAffiche = outil.TriageDataCarOne(valRecherche)
-                                    res.send(valeurAffiche)
+                if (valRecherche) {
+                    await clientConnex.db("Garage").collection("Client").findOne({ _id: new ObjectID(req.session.clientId) })
+                        .then(resClient => {
+                            if (resClient) {
+                                if (resClient.nom === valRecherche.client.nom) {
+                                    if (valRecherche) {
+                                        valeurAffiche = outil.TriageDataCarOne(valRecherche)
+                                        res.send(valeurAffiche)
+                                    } else {
+                                        res.send({ message: "DATA EMPTY" })
+                                    }
                                 } else {
                                     res.send({ message: "DATA EMPTY" })
                                 }
                             } else {
-                                res.send({ message: "DATA EMPTY" })
+                                res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
                             }
-                        } else {
-                            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
-                        }
-                    })
+                        })
+                } else {
+                    res.send({ message: "DATA NOT FOUND", cleSearch: req.body.cleSearch })
+                }
             }
         } else {
             res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })

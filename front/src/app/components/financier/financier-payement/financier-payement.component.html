@@ -1,37 +1,47 @@
 <div class="limiter">
-	<div class="container-login100" >
-        <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
-          <h3
-          class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
-        >
+  <div class="container-login100">
+    <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
+      <h3
+        class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
+      >
         Validation des payments
-          <i class="fa fa-server mr-3"></i>
-        </h3>
-		<table class="table">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Numero voiture</th>
-                <th scope="col">Prix</th>
-                <th scope="col">Devise</th>
-                <th scope="col">Valider le payement</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor = "let news of data; let i = index;">
-              <tr *ngIf="news && objectKeys(news).length > 1&&news.paiement==false">
-                <th scope="row">{{i+1}}</th>
-                <td>{{ news.voiture.numero }}</td>
-                <td>{{ news.facture.Total }}</td>
-                <td>{{ news.facture.Prix }}</td>
-                <td>
-                    <button type="button" class="btn btn-primary" (click)="validate(news.id)"> Valider</button>
-                </td>
-              </tr>
-            </ng-container>
-              <tr>
-    
-            </tbody>
-        </table>
-	</div>
+        <i class="fa fa-money mr-3"></i>
+      </h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Numero voiture</th>
+            <th scope="col">Prix</th>
+            <th scope="col">Devise</th>
+            <th scope="col">Valider le payement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let news of data; let i = index">
+            <tr
+              *ngIf="
+                news && objectKeys(news).length > 1 && news.paiement == false
+              "
+            >
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ news.voiture.numero }}</td>
+              <td>{{ news.facture.Total }}</td>
+              <td>{{ news.facture.Prix }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="validate(news.id)"
+                >
+                  Valider
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
