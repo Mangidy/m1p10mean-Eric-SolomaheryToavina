@@ -1,38 +1,42 @@
 <div class="limiter">
-	<div class="container-login100" >
-        <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
-          <h3
-          class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
-        >
-        Reception des voitures 
-          <i class="fa fa-server mr-3"></i>
-        </h3>
-		<table class="table mt-2 mb-2 p-3">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Numero voiture</th>
-                <th scope="col">Date de depot</th>
-                <th scope="col">Deposeur</th>
-                <th scope="col">Recevoir</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor = "let news of data; let i = index;">
-              <tr *ngIf="news && objectKeys(news).length > 2">
-                <th scope="row">{{i+1}}</th>
-                <td>{{ news.numero }}</td>
-                <td>{{ news.dateDepot| date:'medium' }}</td>
-                <td>{{ news.client.nom }}</td>
-                <td>
-                    <button type="button" class="btn btn-primary" (click)="addRepair(news.numero)"> Receive</button>
-                </td>
-              </tr>
-            </ng-container>
-              <tr>
-    
-             
-            </tbody>
-        </table>
-	</div>
+  <div class="container-login100">
+    <div class="wrap-back container wrap-back p-3">
+      <h3
+        class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
+      >
+        Reception des voitures
+      </h3>
+      <table class="table mt-2 mb-2 p-3">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Numero voiture</th>
+            <th scope="col">Date de depot</th>
+            <th scope="col">Deposeur</th>
+            <th scope="col">Recevoir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let news of data; let i = index">
+            <tr *ngIf="news && objectKeys(news).length > 2">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ news.numero }}</td>
+              <td>{{ news.dateDepot | date : "medium" }}</td>
+              <td>{{ news.client.nom }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="addRepair(news.numero)"
+                >
+                  Receive
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

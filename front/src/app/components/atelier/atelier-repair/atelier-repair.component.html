@@ -1,53 +1,69 @@
 <div class="limiter">
-	<div class="container-login100" >
-        <div class="wrap-back p-l-55 p-r-55 p-t-65 p-b-54">
-          <h3
-          class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
-        >
-        Progression des reparations 
-          <i class="fa fa-server mr-3"></i>
-        </h3>
-		<table class="table">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Numero de la voiture</th>
-                <th scope="col">Date de depot</th>
-                <th scope="col">Deposeur</th>
-                <th scope="col">Cout</th>
-                <th scope="col">Facturer</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor = "let news of data; let i = index;">
-               
-                <tr *ngIf="news && objectKeys(news).length > 2&&news.facture==null">
-                  <th scope="row">{{i+1}}</th>
-                  <td>{{ news.numero }}</td>
-                  <td>{{ news.dateDepot| date:'medium' }}</td>
-                  <td>{{ news.client.nom }}</td>
-                  <td>
-                     <form  [formGroup]="repairForm"  >
-                    <div  class="form-group col-md-6" data-validate="Password is required" [class.is-invalid]="value?.invalid && value?.touched">
-                      <input class="form-control" id="inputCity" placeholder="Type the cost" name="pass" formControlName="value">
-                    
-                    </div>
-                  </form>
-                    <div *ngIf="(value?.invalid && value?.touched) || value?.dirty">
-                      <small *ngIf="value?.errors?.['required']" class="text-danger">Cost is required</small>
-                      
-                      </div>
-                  </td>
-                  <td >
-                    
-                    <button type="button" class="btn btn-primary" (click)="addFacture(news._id)"> Facturer</button>
-                  </td>
-                </tr>
-            
-              </ng-container>
-              <tr>
-    
-            </tbody>
-        </table>
-	</div>
+  <div class="container-login100">
+    <div class="wrap-back container wrap-back p-3">
+      <h3
+        class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
+      >
+        Progression des reparations
+      </h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Numero de la voiture</th>
+            <th scope="col">Date de depot</th>
+            <th scope="col">Deposeur</th>
+            <th scope="col">Cout</th>
+            <th scope="col">Facturer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let news of data; let i = index">
+            <tr
+              *ngIf="
+                news && objectKeys(news).length > 2 && news.facture == null
+              "
+            >
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ news.numero }}</td>
+              <td>{{ news.dateDepot | date : "medium" }}</td>
+              <td>{{ news.client.nom }}</td>
+              <td>
+                <form [formGroup]="repairForm">
+                  <div
+                    class="form-group col-md-6"
+                    data-validate="Password is required"
+                    [class.is-invalid]="value?.invalid && value?.touched"
+                  >
+                    <input
+                      class="form-control"
+                      id="inputCity"
+                      placeholder="Type the cost"
+                      name="pass"
+                      formControlName="value"
+                    />
+                  </div>
+                </form>
+                <div *ngIf="(value?.invalid && value?.touched) || value?.dirty">
+                  <small *ngIf="value?.errors?.['required']" class="text-danger"
+                    >Cost is required</small
+                  >
+                </div>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="addFacture(news._id)"
+                >
+                  Facturer
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
