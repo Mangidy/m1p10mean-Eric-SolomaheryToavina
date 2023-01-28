@@ -113,7 +113,9 @@ export class AuthService {
   }
   //--------------------------------------------
 
-  
+  adminNotificationClient(): Observable<any> {
+    return this.http.get<any>('/api/admin/notification');
+  }
   validateFacture( id : any): Observable<any> {
     return this.http.post<any>('/api/admin/facture/validate/'+  id,{},{});
    }
@@ -142,7 +144,7 @@ export class AuthService {
   getClient(): Observable<any> {
     return this.http.get<any>('/api/client/');
   }
-
+ 
   
   notificationClient(): Observable<any> {
     return this.http.get<any>('/api/client/notification');

@@ -11,7 +11,7 @@ export class FinancierNotificationComponent {
   constructor(private auth:AuthService){}
   ngOnInit() {
     
-  this.auth.notificationClient().subscribe((val) =>{ this.data=val; console.log( val);});
+  this.auth.adminNotificationClient().subscribe((val) =>{ this.data=val; console.log( val);});
 
   }
   objectKeys = Object.keys;
