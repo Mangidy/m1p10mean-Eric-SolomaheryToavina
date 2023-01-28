@@ -448,6 +448,7 @@ async function AddCarClient(clientConnex, req, res) {
                                 admin: {},
                                 client: req.body.user,
                                 reparation: {},
+                                facture: {},
                                 dateDepot: new Date()
                             }
                             continueVar1 = true

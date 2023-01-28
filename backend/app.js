@@ -131,7 +131,7 @@ async function start(port, routeAdmin, routeClient) {
     // POST REQUEST
     // API ADMIN ADD CAR INVOICE AFTER ADDING REPAIR LIST -- CAR ID
     // FOR ADMIN WHO HAS THE ROLE : 'ATELIER'
-    // REQUIRED INFORMATION : ALL INVOICE INFORMATION ON POST REQUEST
+    // REQUIRED INFORMATION : cleFacture, valeurFacture
     app.post("/admin/car/facture/:idVoiture", routeAdmin.carReceptionneFacture)
     // --------------------------------------------------------------------------------
 

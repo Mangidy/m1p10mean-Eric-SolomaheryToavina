@@ -614,7 +614,7 @@ async function getOneCar(clientConnex, res, req) {
 }
 
 async function receptionneCarFacture(clientConnex, res, req) {
-    if (req.params.idVoiture !== undefined) {
+    if (req.params.idVoiture !== undefined && req.body.cleFacture && req.body.valeurFacture) {
         var continueVar = false
         var continueVar1 = false
         var continueVar2 = false
@@ -636,6 +636,7 @@ async function receptionneCarFacture(clientConnex, res, req) {
             if (continueVar) {
                 var updateDoc = {}
                 var options = {}
+                var ValeurFact = {}
                 await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
                     .then(resAdmin => {
                         resAdminR = resAdmin
@@ -643,17 +644,23 @@ async function receptionneCarFacture(clientConnex, res, req) {
                             if (resAdmin.roleAdmin === "ATELIER") {
                                 delete resAdmin.passwordAdmin
                                 delete resAdmin._id
-                                req.body.Total = outil.CalculTotal(req.body)
-                                if (req.body.Total !== 0) {
-                                    req.body.Avance = outil.CalculHalf(req.body.Total)
-                                    req.body.Reste = outil.CalculHalf(req.body.Total)
-                                    req.body.Prix = "Ariary"
+                                ValeurFact = dataUpdate.facture
+                                delete ValeurFact.Total
+                                delete ValeurFact.Avance
+                                delete ValeurFact.Reste
+                                delete ValeurFact.Prix
+                                ValeurFact[req.body.cleFacture] = req.body.valeurFacture
+                                ValeurFact.Total = outil.CalculTotal(ValeurFact)
+                                if (ValeurFact.Total !== 0) {
+                                    ValeurFact.Avance = outil.CalculHalf(ValeurFact.Total)
+                                    ValeurFact.Reste = outil.CalculHalf(ValeurFact.Total)
+                                    ValeurFact.Prix = "Ariary"
                                     updateDoc = {
                                         $set: {
                                             sortie: false,
                                             paiement: false,
                                             validationClient: false,
-                                            facture: req.body
+                                            facture: ValeurFact
                                         }
                                     };
                                     options = { upsert: true };
@@ -756,7 +763,7 @@ async function AddCarReparation(clientConnex, req, res) {
         var newValeurReparation = {}
         await clientConnex.db("Garage").collection('Voiture').findOne({ numero: req.params.numero })
             .then(resCar => {
-                if (resCar) {
+                if (resCar && req.body.cleRepration && req.body.valeurReparation) {
                     valCle = "" + req.body.cleRepration
                     resCar.reparation[valCle] = req.body.valeurReparation
                     newValeurReparation = resCar
@@ -766,7 +773,7 @@ async function AddCarReparation(clientConnex, req, res) {
                     options = { upsert: true };
                     continueVar1 = true
                 } else {
-                    res.send({ message: "REQUEST ERROR", detailled: "CAR ALREADY RECEIVED BY AN ADMIN" })
+                    res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
                 }
             })
             .catch(err => res.send({ message: "REQUEST ERROR", detailled: "INVALID CAR REPARATION", err: err }))
