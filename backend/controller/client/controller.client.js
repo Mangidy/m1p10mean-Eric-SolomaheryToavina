@@ -7,13 +7,13 @@ async function HomeClient(clientConnex, req, res) {
     if (req.session.clientId) {
         await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
             .then(resultat => {
-                res.send({ message: "USER CONNECTED", user: resultat })
+                res.send([{ message: "USER CONNECTED", user: resultat }])
             })
             .catch(err => {
-                res.send({ message: "REQUEST ERROR" })
+                res.send([{ message: "REQUEST ERROR" }])
             })
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -53,7 +53,7 @@ async function NotificationClient(clientConnex, req, res) {
                 })
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -90,7 +90,7 @@ async function GetCarClient(clientConnex, req, res) {
                 })
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -132,7 +132,7 @@ async function GetCarOne(clientConnex, req, res) {
         }
 
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -169,7 +169,7 @@ async function GetFactureClient(clientConnex, req, res) {
                 })
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -217,7 +217,7 @@ async function GetFactureIdClient(clientConnex, req, res) {
             res.send({ message: "REQUEST ERROR", detailled: "FACTURE NOT FOUND" })
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -262,7 +262,7 @@ async function GetCarClientReception(clientConnex, req, res) {
             res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -353,7 +353,7 @@ async function ValidateCar(clientConnex, req, res) {
             }
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -404,7 +404,7 @@ async function carCancelControlle(clientConnex, req, res) {
             res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 async function AddCarClient(clientConnex, req, res) {
@@ -492,7 +492,7 @@ async function AddCarClient(clientConnex, req, res) {
             res.send({ message: "REQUEST ERROR", detailled: "INVALID SESSION USER" })
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
@@ -543,7 +543,7 @@ async function carSearchControlle(clientConnex, req, res) {
             res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
         }
     } else {
-        res.send({ message: "USER NOT CONNECTED" })
+        res.send([{ message: "USER NOT CONNECTED" }])
     }
 }
 
