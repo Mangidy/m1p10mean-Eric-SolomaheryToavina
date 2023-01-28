@@ -219,7 +219,7 @@ const TriageDataCar = (data) => {
 
 const TriageDataCarOne = (resultat) => {
     if (resultat.receptionne === true) {
-        return {
+        return [{
             _id: resultat._id,
             numero: resultat.numero,
             marque: resultat.marque,
@@ -232,7 +232,7 @@ const TriageDataCarOne = (resultat) => {
             validation: resultat.validation,
             sortie: resultat.sortie,
             dateDepot: resultat.dateDepot,
-        }
+        }]
     } else {
         return {
             _id: resultat._id,
