@@ -3,14 +3,12 @@ import {
   FormGroup,
   FormControl,
   Validators,
-  AbstractControl,
-  ValidationErrors,
-  ValidatorFn,
   FormBuilder,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sign-up',
@@ -85,16 +83,13 @@ export class SignUpComponent {
     private auth: AuthService,
     private router: Router,
     private fb: FormBuilder
-  ) {
+    ,private titleService: Title) {
     this.loader = false;
+    this.titleService.setTitle("Inscription");
   }
   onSubmit(): void {
     if (this.signupForm.valid) {
       this.loader = true;
-      console.log(this.signupForm.value);
-      //this.auth.logAdmin({username:'admin',password:'admin'}).subscribe((val => console.log(val)));
-      //console.log(this.auth.getAllClient().subscribe((val => console.log(val))));
-      //console.log(this.auth.getAdmin().subscribe((val => console.log(val))));
       if (this.signupForm.value.password1 == this.signupForm.value.password2) {
         this.auth
           .addClient({

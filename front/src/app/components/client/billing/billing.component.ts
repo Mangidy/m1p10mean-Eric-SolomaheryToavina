@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-billing',
@@ -10,21 +11,19 @@ import Swal from 'sweetalert2';
 export class BillingComponent {
   data: any;
   loader: boolean;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
+    this.titleService.setTitle("Facture");
     this.loader = true;
   }
   ngOnInit() {
     this.auth.factureClient().subscribe((val) => {
       this.data = val;
       this.loader = false;
-      console.log('Facture -------------');
-      console.log(this.data);
     });
   }
   objectKeys = Object.keys;
   public payUp(idVoiture: any) {
     this.loader = true;
-    console.log(idVoiture);
     this.auth.validateFactureClient(idVoiture).subscribe((val) => {
       if (val.message == 'VALIDATION FACTURE DONE') {
         Swal.fire('Success', 'Payement effectuer avec success', 'success');

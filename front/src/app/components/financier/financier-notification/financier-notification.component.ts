@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-financier-notification',
@@ -9,7 +10,8 @@ import { AuthService } from 'src/app/services/auth.service';
 export class FinancierNotificationComponent {
   loader: boolean;
   data: any;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
+    this.titleService.setTitle("Notification");
     this.loader = true;
   }
   ngOnInit() {

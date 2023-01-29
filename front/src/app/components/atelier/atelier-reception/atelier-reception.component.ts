@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-atelier-reception',
@@ -10,29 +11,25 @@ import Swal from 'sweetalert2';
 export class AtelierReceptionComponent {
   loader: boolean;
   data: any;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
     this.loader = true;
   }
   ngOnInit() {
     this.auth.getAllCar().subscribe((val) => {
       this.data = val;
       this.loader = false;
-      console.log(val);
     });
   }
   objectKeys = Object.keys;
   public addRepair(numero: any) {
-    console.log(numero);
     this.loader = true;
     this.auth.addCarReception(numero).subscribe((val) => {
       this.loader = false;
       if (val.message == 'CAR RECEPTIONNED') {
-        console.log(val);
         Swal.fire('Success', 'Voiture bien recu', 'success');
         this.auth.reload('atelier/reception');
       } else {
         Swal.fire('erreur', val.detailled, 'error');
-        console.log(val);
       }
     });
   }

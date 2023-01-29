@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -25,16 +26,14 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router,private titleService: Title) {
     this.loader = false;
+    this.titleService.setTitle("Connexion");
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.loader = true;
-      console.log(this.loginForm.value);
-      //this.auth.addAdmin(({ usernameAdmin:'ad', passwordAdmin:'admin',roleAdmin:'ADMIN'})).subscribe((val => console.log(val)));
-      //console.log(this.auth.getAllCar().subscribe((val => console.log(val))));
       this.auth.removeAllToken();
       this.auth
         .logClient({
@@ -50,19 +49,6 @@ export class LoginComponent {
             Swal.fire('Erreur', 'Email ou mot de passe incorrect', 'error');
           }
         });
-      /* this.auth.logClient({email:this.loginForm.value.email,password:this.loginForm.value.password}).subscribe(val => { if(val.message=='LOGIN SUCCESSFULLY'){
-      this.router.navigate(['/client']);
-      }
-      else{
-        alert('Incorrect email or password ');
-      }
-    }); */
-
-      //this.auth.logAdmin({username:'admin',password:'admin'}).subscribe((val => console.log(val)));
-
-      //console.log(this.auth.getAllClient().subscribe((val => console.log(val))));
-      //console.log(this.auth.getAdmin().subscribe((val => console.log(val))));
-      //this.auth.addAdmin(({ usernameAdmin:'admin99', passwordAdmin:'admin',roleAdmin:'1'})).subscribe((val => console.log(val)));
     }
   }
 }

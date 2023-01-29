@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-repair-progress',
@@ -10,14 +11,14 @@ import Swal from 'sweetalert2';
 export class RepairProgressComponent {
   data: any;
   loader: boolean;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
     this.loader = true;
   }
   ngOnInit() {
+    this.titleService.setTitle("Liste des voitures");
     this.auth.carClient().subscribe((val) => {
       this.data = val;
       this.loader = false;
-      console.log(val);
     });
   }
   objectKeys = Object.keys;
@@ -30,7 +31,6 @@ export class RepairProgressComponent {
   }
   public cancel(_id: any) {
     this.loader = true;
-    console.log(_id);
     this.auth.cancelCarClient(_id).subscribe((val) => {
       this.loader = false;
       if ((val.message = 'DELETE SUCCESSFULLY')) {

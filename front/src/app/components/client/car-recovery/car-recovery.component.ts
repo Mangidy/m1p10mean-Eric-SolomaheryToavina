@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-car-recovery',
@@ -9,19 +10,17 @@ import { AuthService } from 'src/app/services/auth.service';
 export class CarRecoveryComponent {
   data: any;
   loader: boolean;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
+    this.titleService.setTitle("Reparation");
     this.loader = true;
   }
   ngOnInit() {
     this.auth.factureClient().subscribe((val) => {
       this.data = val;
       this.loader = false;
-      console.log('----------------------');
-      console.log(val);
     });
   }
   objectKeys = Object.keys;
   public recover(idVoiture: any) {
-    console.log(idVoiture);
   }
 }

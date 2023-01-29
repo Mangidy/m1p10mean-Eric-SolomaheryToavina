@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-financier-statistique',
@@ -22,7 +23,8 @@ export class FinancierStatistiqueComponent {
     param: new FormControl(''),
     value: new FormControl('', [Validators.required]),
   });
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
+    this.titleService.setTitle("Statistique");
     this.loader = true;
   }
   ngOnInit() {
@@ -36,12 +38,9 @@ export class FinancierStatistiqueComponent {
             total += val[i].TempsReparation.jour * 24;
             this.statReparation = total / val.length;
           }
-          this.loader = false;
-          console.log(val);
-        });
-        console.log(val);
+          this.loader = false;  
+        });      
       });
-      console.log(val);
     });
   }
 
@@ -57,7 +56,6 @@ export class FinancierStatistiqueComponent {
         .subscribe((val) => {
           this.loader = false;
           this.statBenef = val;
-          console.log(val);
         });
     }
   }

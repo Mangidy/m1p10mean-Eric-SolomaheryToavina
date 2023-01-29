@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-deposit',
@@ -28,14 +29,13 @@ export class DepositComponent {
   get annee() {
     return this.depositForm.get('annee');
   }
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
+    this.titleService.setTitle("Deposition");
     this.loader = false;
   }
   onSubmit(): void {
     if (this.depositForm.valid) {
       this.loader = true;
-      console.log(this.depositForm.value.numero);
-      console.log(
         this.auth
           .addCarClient({
             numero: this.depositForm.value.numero,
@@ -46,7 +46,6 @@ export class DepositComponent {
           .subscribe((val) => {
             this.loader = false;
             if ((val.message = 'NEW CAR ADDED'&&val.detailled!='CAR ALREADY ADDED')) {
-              console.log(val);
               this.depositForm.reset();
               Swal.fire(
                 'Sucess',
@@ -57,7 +56,7 @@ export class DepositComponent {
               Swal.fire('erreur', 'Voiture deja ajouter', 'error');
             }
           })
-      );
+
     } else {
       Swal.fire('erreur', 'Détaille manquante', 'error');
     }

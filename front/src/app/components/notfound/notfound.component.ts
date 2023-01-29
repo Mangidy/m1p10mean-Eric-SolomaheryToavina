@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-notfound',
@@ -9,11 +10,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NotfoundComponent {
 
-constructor(private router:Router,private auth:AuthService){}
+constructor(private router:Router,private auth:AuthService,private titleService: Title){ this.titleService.setTitle("Page Introuvable");}
 takeHome(){
 if(localStorage.getItem('tokenClient')!=null)
   {
-    console.log(localStorage.getItem('tokenClient'));
     this.takeHomeClient();
   }
  else if(localStorage.getItem('tokenatelier')!=null)

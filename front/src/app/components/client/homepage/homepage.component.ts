@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-homepage',
@@ -8,10 +9,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HomepageComponent {
   data:any;
-  constructor(private auth:AuthService){}
+  constructor(private auth:AuthService,private titleService: Title){ this.titleService.setTitle("Acceuil");}
   ngOnInit() {
     
-  this.auth.getClient().subscribe((val) =>{ this.data=val; console.log( val);});
+  this.auth.getClient().subscribe((val) =>{ this.data=val;});
 
   }
   objectKeys = Object.keys;

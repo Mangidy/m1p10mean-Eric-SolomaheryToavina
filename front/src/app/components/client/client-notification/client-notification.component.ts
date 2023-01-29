@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-client-notification',
@@ -9,14 +10,14 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ClientNotificationComponent {
   data: any;
   loader: boolean;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
+    this.titleService.setTitle("Notification");
     this.loader = true;
   }
   ngOnInit() {
     this.auth.notificationClient().subscribe((val) => {
       this.data = val;
       this.loader = false;
-      console.log(val);
     });
   }
   objectKeys = Object.keys;

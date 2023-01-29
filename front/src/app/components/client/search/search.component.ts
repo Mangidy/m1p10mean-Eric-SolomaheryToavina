@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 
@@ -13,17 +13,16 @@ export class SearchComponent {
   loader: boolean;
   data: any;
 
-  constructor(private auth: AuthService, private route: ActivatedRoute) {
+  constructor(private auth: AuthService, private route: ActivatedRoute,private titleService: Title) {
+    this.titleService.setTitle("Recherche");
     this.loader = true;
   }
   ngOnInit() {
-    console.log(this.route.snapshot.params['msg']);
     this.auth
       .clientCarSearch(this.route.snapshot.params['msg'])
       .subscribe((val) => {
         this.data = val;
         this.loader = false;
-        console.log(val);
       });
   }
   objectKeys = Object.keys;
@@ -35,7 +34,6 @@ export class SearchComponent {
     }
   }
   public cancel(_id: any) {
-    console.log(_id);
     this.auth.cancelCarClient(_id).subscribe((val) => {
       if ((val.message = 'DELETE SUCCESSFULLY')) {
         Swal.fire('Success', 'Voiture retire', 'success');

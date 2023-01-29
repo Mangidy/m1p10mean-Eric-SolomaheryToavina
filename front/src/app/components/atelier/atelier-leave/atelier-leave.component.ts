@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-atelier-leave',
@@ -10,19 +11,18 @@ import Swal from 'sweetalert2';
 export class AtelierLeaveComponent {
   loader: boolean;
   data: any;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
+    this.titleService.setTitle("Remise");
     this.loader = true;
   }
   ngOnInit() {
     this.auth.getAllCarReceptionAll().subscribe((val) => {
       this.data = val;
       this.loader = false;
-      console.log(val);
     });
   }
   objectKeys = Object.keys;
   public dispose(id: any) {
-    console.log(id);
     this.loader = true;
     this.auth.carOut(id).subscribe((val) => {
       this.loader = false;

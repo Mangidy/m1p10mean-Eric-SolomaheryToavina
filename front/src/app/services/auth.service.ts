@@ -88,12 +88,9 @@ export class AuthService {
 
  
    addCarReparation(numero : any,param:any,valeur:any): Observable<any> {
-    console.log(numero);
-    console.log(valeur);
     return this.http.post<any>('/api/admin/car/reparation/'+numero,{cleRepration:param,valeurReparation:valeur},{} );
   }
   addCarReception(numero : any): Observable<any> {
-    console.log(numero);
     
     return this.http.post<any>('/api/admin/car/recpetionne/'+numero,{},{} );
   }
@@ -101,7 +98,6 @@ export class AuthService {
 
 
   addCarFacture(idVoiture : any,param:any,valeur:any): Observable<any> {
-    console.log(idVoiture);
     return this.http.post<any>('/api/admin/car/facture/'+idVoiture,{cleFacture:param,valeurFacture:valeur},{});
   }
 
@@ -129,7 +125,6 @@ export class AuthService {
       
   
   carOut( id : any): Observable<any> {
-    console.log(id);
     return this.http.post<any>('/api/admin/car/sortie/'+  id,{},{});
    }
 
@@ -185,7 +180,6 @@ export class AuthService {
     return this.http.post<any>('/api/client/car/search',  {cleSearch:cleSearch},{});
   }
   cancelCarClient(id:any): Observable<any> {
-    console.log(id);
     return this.http.post<any>('/api/client/car/cancel',{carId:id},{});
   }
   addCarClient({ numero, marque, modele, annee }: any): Observable<any> {
@@ -199,7 +193,6 @@ export class AuthService {
 
    
    validateFactureClient( idVoiture: any): Observable<any> {
-    console.log(idVoiture);
     return this.http.post<any>('/api/client/validate/'+idVoiture,{},{});
    }
 

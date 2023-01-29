@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-financier-payement',
@@ -10,19 +11,18 @@ import Swal from 'sweetalert2';
 export class FinancierPayementComponent {
   loader: boolean;
   data: any;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService,private titleService: Title) {
     this.loader = true;
+    this.titleService.setTitle("Payement");
   }
   ngOnInit() {
     this.auth.getFactureTF(true).subscribe((val) => {
       this.data = val;
       this.loader = false;
-      console.log(val);
     });
   }
   objectKeys = Object.keys;
   public validate(id: any) {
-    console.log(id);
     this.loader = true;
     this.auth.validateFacture(id).subscribe((val) => {
       this.loader = false;

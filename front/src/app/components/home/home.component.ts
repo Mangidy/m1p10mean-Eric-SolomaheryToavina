@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -7,23 +8,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(private router:Router){}
+  constructor(private router:Router,private titleService: Title){ this.titleService.setTitle("Acceuil");}
 
 
 
 takeHome():void{
-  if(Number(localStorage.getItem('privilage'))==1){
-    this.router.navigate(['client']);
-  }
-  else if(Number(localStorage.getItem('privilage'))==2){
-    this.router.navigate(['atelier']);
-  }
-  else if(Number(localStorage.getItem('privilage'))==3){
-    this.router.navigate(['financier']);
-  }
-  else if(Number(localStorage.getItem('privilage'))==4){
-    this.router.navigate(['admin']);
-  }
+
+    this.router.navigate(['/home']);
+
 }
 }
 
