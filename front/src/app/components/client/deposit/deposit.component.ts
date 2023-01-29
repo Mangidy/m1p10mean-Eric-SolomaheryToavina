@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./deposit.component.css'],
 })
 export class DepositComponent {
+  loader: boolean;
   depositForm = new FormGroup({
     numero: new FormControl('', [Validators.required]),
     marque: new FormControl('', [Validators.required]),
@@ -27,9 +28,12 @@ export class DepositComponent {
   get annee() {
     return this.depositForm.get('annee');
   }
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService) {
+    this.loader = false;
+  }
   onSubmit(): void {
     if (this.depositForm.valid) {
+      this.loader = true;
       console.log(this.depositForm.value.numero);
       console.log(
         this.auth
@@ -40,18 +44,21 @@ export class DepositComponent {
             annee: this.depositForm.value.annee,
           })
           .subscribe((val) => {
+            this.loader = false;
             if ((val.message = 'NEW CAR ADDED')) {
               this.depositForm.reset();
-              
-     
-                Swal.fire('Sucess','Votre voiture a ete deposer','success');
-              } else {
-                Swal.fire('erreur',val.detailled,'error');
-              }
+              Swal.fire(
+                'Sucess',
+                'Votre voiture a été deposée | Vous pouvez le voir dans votre liste de voiture',
+                'success'
+              );
+            } else {
+              Swal.fire('erreur', val.detailled, 'error');
+            }
           })
       );
     } else {
-      Swal.fire('erreur','Detaille manquante','error');
+      Swal.fire('erreur', 'Détaille manquante', 'error');
     }
   }
 }

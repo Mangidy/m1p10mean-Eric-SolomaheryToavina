@@ -8,10 +8,14 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class CarRecoveryComponent {
   data: any;
-  constructor(private auth: AuthService) {}
+  loader: boolean;
+  constructor(private auth: AuthService) {
+    this.loader = true;
+  }
   ngOnInit() {
     this.auth.factureClient().subscribe((val) => {
       this.data = val;
+      this.loader = false;
       console.log('----------------------');
       console.log(val);
     });
