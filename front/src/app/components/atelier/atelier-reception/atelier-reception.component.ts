@@ -27,10 +27,7 @@ export class AtelierReceptionComponent {
     this.auth.addCarReception(numero).subscribe((val) => {
       this.loader = false;
       if (val.message == 'CAR RECEPTIONNED') {
-<<<<<<< Updated upstream
-=======
         console.log(val);
->>>>>>> Stashed changes
         Swal.fire('Success', 'Voiture bien recu', 'success');
         this.auth.reload('atelier/reception');
       } else {
