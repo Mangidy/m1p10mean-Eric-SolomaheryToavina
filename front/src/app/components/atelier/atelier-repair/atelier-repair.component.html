@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <div class="limiter">
   <div class="container-login100">
     <div class="wrap-back container wrap-back p-3">
@@ -30,6 +31,18 @@
             >
               <ng-container *ngFor="let news of data; let i = index">
                 <option value="{{ news._id }}">{{ news.numero }}</option>
+=======
+<div class="row w-100">
+  <div class="col-md-10 mx-auto">
+      <form class="bg-white p-3 m-3" [formGroup]="repairForm"
+      (ngSubmit)="onSubmit()">
+          <div class="form-row align-items-center">
+            <div class="col-auto my-1">
+              
+              <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" formControlName="numero">
+                  <ng-container *ngFor="let news of data; let i = index">
+                <option value={{news._id}} >{{news.numero}}</option>
+>>>>>>> Stashed changes
               </ng-container>
             </select>
           </div>
