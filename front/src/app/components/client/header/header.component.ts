@@ -16,7 +16,8 @@ export class HeaderComponent {
     search:new FormControl('')
   });
   goSearch(){
-    this.router.navigate(['/client/search/'+this.searchForm.value.search])
+    this.router.navigate(['/client/search/'+this.searchForm.value.search]);
+    this.auth.reload('/client/search/'+this.searchForm.value.search);
   }
   constructor(private auth:AuthService,private router:Router){}
   logout(){
