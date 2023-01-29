@@ -26,7 +26,7 @@ export class AtelierReceptionComponent {
     this.loader = true;
     this.auth.addCarReception(numero).subscribe((val) => {
       this.loader = false;
-      if (val.message == 'CAR REPARATION ADDED') {
+      if (val.message == 'CAR RECEPTIONNED') {
         Swal.fire('Success', 'Voiture bien recu', 'success');
         this.auth.reload('atelier/reception');
       } else {
