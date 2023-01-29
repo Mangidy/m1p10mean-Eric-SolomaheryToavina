@@ -5,33 +5,27 @@
         class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
       >
         Liste de réparation
-        <i class="fa fa-file mr-3"></i>
+        <i class="fa fa-cog mr-3"></i>
       </h3>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">ID</th>
-            <th scope="col">Numéro de la voiture</th>
-            <th scope="col">Réparation</th>
-            <th scope="col">Motif</th>
+            <th scope="col">Voiture</th>
+            <th scope="col">Marque</th>
+            <th scope="col">Modèle</th>
+            <th scope="col">Liste</th>
           </tr>
         </thead>
         <tbody>
           <ng-container *ngFor="let news of data; let i = index">
-            <tr
-              *ngIf="news && objectKeys(news).length > 1 && news.sortie == true"
-            >
+            <tr *ngIf="news && objectKeys(news).length > 1">
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ news.voiture.numero }}</td>
-              <td>{{ news.facture.Total }}</td>
+              <td>{{ news.voiture.marque }}</td>
+              <td>{{ news.voiture.modele }}</td>
               <td>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  (click)="recover(news.id)"
-                >
-                  Confirmez le payement
-                </button>
+                {{ news.reparation | json }}
               </td>
             </tr>
           </ng-container>

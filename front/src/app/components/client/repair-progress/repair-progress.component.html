@@ -4,7 +4,7 @@
       <h3
         class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
       >
-        Liste de voiture déposée
+        Liste de voiture
         <i class="fa fa-server mr-3"></i>
       </h3>
       <table class="table mt-2 mb-2 p-3">
@@ -16,13 +16,12 @@
             <th scope="col">Modèle</th>
             <th scope="col">Status de reception</th>
             <th scope="col">Date du dépot</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
           <ng-container *ngFor="let news of data; let i = index">
-            <tr
-            *ngIf="news && objectKeys(news).length <10 "
-          >
+            <tr *ngIf="news">
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ news.numero }}</td>
               <td>{{ news.marque }}</td>
@@ -31,14 +30,22 @@
                 {{ news.receptionne === false ? "EN ATTENTE" : "RECEPTIONNE" }}
               </td>
               <td>{{ news.dateDepot | date : "medium" }}</td>
-              <td *ngIf=" news.receptionne === false  ">  
-                <button class="btn btn-sm btn-danger" (click)="cancel(news._id)">Annuler</button>
+              <td *ngIf="news.receptionne === false">
+                <button
+                  class="btn btn-sm btn-danger"
+                  (click)="cancel(news._id)"
+                >
+                  Annuler
+                </button>
+              </td>
+              <td *ngIf="news.receptionne === true">
+                <button class="btn btn-sm btn-danger" disabled>Annuler</button>
               </td>
             </tr>
-            
           </ng-container>
           <tr>
             <th></th>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

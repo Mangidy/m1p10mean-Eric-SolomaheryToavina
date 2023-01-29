@@ -49,17 +49,6 @@
                       ><i class="fa fa-server padd_right" aria-hidden="true"></i
                       >Liste</a
                     >
-                  </div>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" data-toggle="dropdown"
-                    ><i
-                      class="fa fa-american-sign-language-interpreting mr-1"
-                      aria-hidden="true"
-                    ></i>
-                    Services</a
-                  >
-                  <div class="dropdown-menu">
                     <a
                       class="nav-link mt-1 mb-1 dropdown-item pt-2 pb-2"
                       routerLink="./recovery"
@@ -83,23 +72,23 @@
                     >
                   </div>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="./notification"
+                    ><i class="fa fa-bell mr-1" aria-hidden="true"></i>
+                    Notification</a
+                  >
+                </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-user mr-1"></i> Mon compte
+                    <i class="fa fa-user-circle mr-1"></i> Mon compte
                   </a>
                   <div class="dropdown-menu">
                     <a
                       class="nav-link mt-1 mb-1 dropdown-item pt-2 pb-2"
-                      routerLink="./notification"
-                      ><i class="fa fa-bell padd_right" aria-hidden="true"></i
-                      >Notification</a
+                      routerLink="./description"
+                      ><i class="fa fa-user padd_right" aria-hidden="true"></i
+                      >Profil</a
                     >
-                    <a
-                    class="nav-link mt-1 mb-1 dropdown-item pt-2 pb-2"
-                    routerLink="./description"
-                    ><i class="fa fa-user padd_right" aria-hidden="true"></i
-                    >Description</a
-                  >
                     <a
                       class="nav-link mt-1 mb-1 dropdown-item pt-2 pb-2"
                       (click)="logout()"
@@ -112,11 +101,17 @@
                   </div>
                 </li>
               </ul>
-              <form class="ml-5 form-inline" action="#" [formGroup]="searchForm" (ngSubmit)="goSearch()">
+              <form
+                class="ml-5 form-inline"
+                action="#"
+                [formGroup]="searchForm"
+                (ngSubmit)="goSearch()"
+              >
                 <input
                   class="form-control mr-sm-2"
                   type="text"
-                  placeholder="Rechercher" formControlName="search"
+                  placeholder="Rechercher une voiture"
+                  formControlName="search"
                 />
                 <button class="btn btn-success" type="submit">
                   <i class="fa fa-search"></i>

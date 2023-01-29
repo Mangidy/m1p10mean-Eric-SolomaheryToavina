@@ -107,9 +107,7 @@ const TriageDataFacture = (data) => {
                 dateDepot: resultat.dateDepot,
             }
         } else {
-            return {
-                message: "DATA EMPTY"
-            }
+            return {}
         }
     })
     return Newdata
