@@ -45,7 +45,8 @@ export class DepositComponent {
           })
           .subscribe((val) => {
             this.loader = false;
-            if ((val.message = 'NEW CAR ADDED')) {
+            if ((val.message = 'NEW CAR ADDED'&&val.detailled!='CAR ALREADY ADDED')) {
+              console.log(val);
               this.depositForm.reset();
               Swal.fire(
                 'Sucess',
@@ -53,7 +54,7 @@ export class DepositComponent {
                 'success'
               );
             } else {
-              Swal.fire('erreur', val.detailled, 'error');
+              Swal.fire('erreur', 'Voiture deja ajouter', 'error');
             }
           })
       );
