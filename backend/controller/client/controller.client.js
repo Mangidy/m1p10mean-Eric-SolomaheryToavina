@@ -537,11 +537,11 @@ async function carSearchControlle(clientConnex, req, res) {
                             }
                         })
                 } else {
-                    res.send({ message: "DATA NOT FOUND", cleSearch: req.body.cleSearch })
+                    res.send([{ message: "DATA NOT FOUND", cleSearch: req.body.cleSearch }])
                 }
             }
         } else {
-            res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
+            res.send([{ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" }])
         }
     } else {
         res.send([{ message: "USER NOT CONNECTED" }])

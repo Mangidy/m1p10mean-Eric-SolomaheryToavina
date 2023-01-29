@@ -65,8 +65,8 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" routerLink="./notification"
-                    ><i class="fa fa-history mr-1" aria-hidden="true"></i>
-                    Historique</a
+                    ><i class="fa fa-bell mr-1" aria-hidden="true"></i>
+                    Notification</a
                   >
                 </li>
                 <li class="nav-item dropdown">
@@ -102,9 +102,9 @@
                   class="form-control mr-sm-2"
                   type="text"
                   placeholder="Rechercher une voiture"
-                  formControlName="search"
+                  formControlName="search" [(ngModel)]="searcher"
                 />
-                <button class="btn btn-success" type="submit">
+                <button class="btn btn-success" type="submit" [disabled]="!searcher">
                   <i class="fa fa-search"></i>
                 </button>
               </form>
