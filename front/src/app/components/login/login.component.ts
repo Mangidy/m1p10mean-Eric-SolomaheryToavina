@@ -44,6 +44,7 @@ export class LoginComponent {
         .subscribe((val) => {
           this.loader = false;
           if (val.message == 'LOGIN SUCCESSFULLY') {
+            Swal.fire('Validé', 'Vous ête connecté(e)', 'success');
             this.router.navigate(['/client/home']);
           } else {
             Swal.fire('Erreur', 'Email ou mot de passe incorrect', 'error');
