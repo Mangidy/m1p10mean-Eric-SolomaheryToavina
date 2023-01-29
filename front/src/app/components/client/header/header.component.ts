@@ -15,6 +15,7 @@ export class HeaderComponent {
   searchForm = new FormGroup({
     search:new FormControl('')
   });
+  searcher:any;
   goSearch(){
     this.router.navigate(['/client/search/'+this.searchForm.value.search]);
     this.auth.reload('/client/search/'+this.searchForm.value.search);
