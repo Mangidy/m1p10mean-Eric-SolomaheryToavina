@@ -194,12 +194,14 @@ async function ChiffreAffaireControllerMensuel(clientConnex, res) {
                 var today = datt.getDate() + "-" + (datt.getMonth() + 1) + "-" + datt.getFullYear()
                 resAffiche.map(resMap => {
                     valBd = new Date(resMap.dateDepot)
-                    if ((valBd.getMonth() + 1) === (datt.getMonth() + 1)) {
-                        somme += resMap.facture.Total
-                        return {
-                            Total: resMap.facture.Total,
-                            today: today,
-                            bdDate: valBd.getDate() + "-" + (valBd.getMonth() + 1) + "-" + valBd.getFullYear()
+                    if (resMap.facture.Total !== undefined) {
+                        if ((valBd.getMonth() + 1) === (datt.getMonth() + 1)) {
+                            somme += parseInt(resMap.facture.Total)
+                            return {
+                                Total: resMap.facture.Total,
+                                today: today,
+                                bdDate: valBd.getDate() + "-" + (valBd.getMonth() + 1) + "-" + valBd.getFullYear()
+                            }
                         }
                     }
                 })
@@ -231,12 +233,14 @@ async function ChiffreAffaireControllerJounalier(clientConnex, res) {
                 var today = datt.getDate() + "-" + (datt.getMonth() + 1) + "-" + datt.getFullYear()
                 resAffiche.map(resMap => {
                     valBd = new Date(resMap.dateDepot)
-                    if (valBd.getDate() === datt.getDate() && (valBd.getMonth() + 1) === (datt.getMonth() + 1)) {
-                        somme += resMap.facture.Total
-                        return {
-                            Total: resMap.facture.Total,
-                            today: today,
-                            bdDate: valBd.getDate() + "-" + (valBd.getMonth() + 1) + "-" + valBd.getFullYear()
+                    if (resMap.facture.Total !== undefined) {
+                        if (valBd.getDate() === datt.getDate() && (valBd.getMonth() + 1) === (datt.getMonth() + 1)) {
+                            somme += parseInt(resMap.facture.Total)
+                            return {
+                                Total: resMap.facture.Total,
+                                today: today,
+                                bdDate: valBd.getDate() + "-" + (valBd.getMonth() + 1) + "-" + valBd.getFullYear()
+                            }
                         }
                     }
                 })
@@ -295,7 +299,7 @@ async function BeneficeController(clientConnex, req, res) {
             res.send({
                 benefice: "SALAIRE",
                 mois: new Date().getMonth() + 1,
-                Priw: "Ariary",
+                Prix: "Ariary",
                 Valeur: parseInt(req.body.salaire) * 0.30,
             })
         } catch (error) {
@@ -308,7 +312,7 @@ async function BeneficeController(clientConnex, req, res) {
             res.send({
                 benefice: "LOYER",
                 mois: new Date().getMonth() + 1,
-                Priw: "Ariary",
+                Prix: "Ariary",
                 Valeur: parseInt(req.body.loyer) * 0.30,
             })
         } catch (error) {
@@ -321,7 +325,7 @@ async function BeneficeController(clientConnex, req, res) {
             res.send({
                 benefice: "ACHAT DE PIECE",
                 mois: new Date().getMonth() + 1,
-                Priw: "Ariary",
+                Prix: "Ariary",
                 Valeur: parseInt(req.body.achatPiece) * 0.20,
             })
         } catch (error) {

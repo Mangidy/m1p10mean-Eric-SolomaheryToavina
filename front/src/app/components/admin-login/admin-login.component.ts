@@ -35,8 +35,8 @@ export class AdminLoginComponent {
           console.log(val.message);
           this.loader = false;
           if (val.message == 'LOGIN SUCCESSFULLY') {
+            Swal.fire('Validé', 'Vous ête connecté(e)', 'success');
             this.auth.getAdmin().subscribe((val) => {
-              Swal.fire('Validé', 'Vous ête connecté(e)', 'success');
               this.auth.setTokenAdmin(
                 'abcdefghijklmnopqrstuvwxyz',
                 val.admin.roleAdmin.toString().toLowerCase()
