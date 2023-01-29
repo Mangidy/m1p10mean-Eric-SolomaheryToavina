@@ -5,39 +5,49 @@
         class="d-flex justify-content-between align-content-center align-items-center responsive-hidee"
       >
         Sortie des voitures
+        <i class="fa fa-arrow-circle-up mr-3"></i>
       </h3>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">ID</th>
-            <th scope="col">Car number</th>
-            <th scope="col">Deposit date</th>
-            <th scope="col">Deposeur</th>
-            <th scope="col">Sortir</th>
+            <th scope="col">Numero voiture</th>
+            <th scope="col">Marque</th>
+            <th scope="col">Modele</th>
+            <th scope="col">Année</th>
+            <th scope="col">Date de depot</th>
+            <th scope="col">Client</th>
+            <th scope="col">Validation</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
           <ng-container *ngFor="let news of data; let i = index">
-            <tr
-              *ngIf="
-                news &&
-                objectKeys(news).length > 1 &&
-                news.validationClient == true &&
-                news.sortie == false &&
-                news.paiement == true
-              "
-            >
+            <tr>
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ news.numero }}</td>
+              <td>{{ news.marque }}</td>
+              <td>{{ news.modele }}</td>
+              <td>{{ news.annee }}</td>
               <td>{{ news.dateDepot | date : "medium" }}</td>
               <td>{{ news.client.nom }}</td>
+              <td>{{ news.paiement ? "PRET" : "EN ATTENTE" }}</td>
               <td>
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  class="btn btn-success btn-block btn-sm"
                   (click)="dispose(news._id)"
+                  *ngIf="news.paiement"
                 >
-                  Sortir
+                  VALIDER SORTIE
+                </button>
+                <button
+                  type="button"
+                  disabled
+                  class="btn btn-success btn-block btn-sm"
+                  *ngIf="!news.paiement"
+                >
+                  EN ATTENTE
                 </button>
               </td>
             </tr>
@@ -45,6 +55,15 @@
           <tr></tr>
         </tbody>
       </table>
+
+      <div
+        *ngIf="loader"
+        class="mb-3 d-flex justify-content-center text-center w-100"
+      >
+        <div class="spinner-border" role="status">
+          <span class="sr-only loader-mical" id="loading"></span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
