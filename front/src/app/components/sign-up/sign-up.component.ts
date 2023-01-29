@@ -110,7 +110,7 @@ export class SignUpComponent {
             this.loader = false;
             if (val.message == 'SUBSCRIBE SUCCESSFULLY') {
               Swal.fire(
-                'Sucess',
+                'Validé',
                 'Vous ête inscrit(e), connectez-vous maintenant',
                 'success'
               );
