@@ -6,41 +6,37 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-notfound',
   templateUrl: './notfound.component.html',
-  styleUrls: ['./notfound.component.css']
+  styleUrls: ['./notfound.component.css'],
 })
 export class NotfoundComponent {
-
-constructor(private router:Router,private auth:AuthService,private titleService: Title){ this.titleService.setTitle("Page Introuvable");}
-takeHome(){
-if(localStorage.getItem('tokenClient')!=null)
-  {
-    this.takeHomeClient();
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Mical | Page Introuvable');
   }
- else if(localStorage.getItem('tokenatelier')!=null)
-  {
-    this.takeHomeAdmin();
+  takeHome() {
+    if (localStorage.getItem('tokenClient') != null) {
+      this.takeHomeClient();
+    } else if (localStorage.getItem('tokenatelier') != null) {
+      this.takeHomeAdmin();
+    } else if (localStorage.getItem('tokenfinancier') != null) {
+      this.takeHomeAdmin();
+    } else {
+      this.router.navigate(['login']);
+    }
   }
-  else if(localStorage.getItem('tokenfinancier')!=null)
-  {
-    this.takeHomeAdmin();
+  takeHomeClient(): void {
+    if (this.auth.getClient().subscribe((val) => val != 'USER NOT CONNECTED')) {
+      this.router.navigate(['client/home']);
+    }
   }
-  else{
-    this.router.navigate(['login']);
+  takeHomeAdmin(): void {
+    this.auth
+      .getAdmin()
+      .subscribe((val) =>
+        this.router.navigate([val.admin.roleAdmin.toString().toLowerCase()])
+      );
   }
 }
-takeHomeClient():void{
-  if(this.auth.getClient().subscribe(val=>val!='USER NOT CONNECTED')){
-    this.router.navigate(['client/home']);
-  }
-}
-takeHomeAdmin():void{
-  this.auth.getAdmin().subscribe( val => 
-       
-    this.router.navigate([val.admin.roleAdmin.toString().toLowerCase() ]))
-  }
- 
- 
-}
-
-
-

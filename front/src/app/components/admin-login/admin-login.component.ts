@@ -17,8 +17,12 @@ export class AdminLoginComponent {
     password: new FormControl(''),
   });
 
-  constructor(private auth: AuthService, private router: Router,private titleService: Title) {
-    this.titleService.setTitle("Connexion administrateur");
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Mical Admin | Connexion administrateur');
     this.loader = false;
   }
   onSubmit(): void {

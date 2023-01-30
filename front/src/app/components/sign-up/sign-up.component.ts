@@ -82,10 +82,11 @@ export class SignUpComponent {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private fb: FormBuilder
-    ,private titleService: Title) {
+    private fb: FormBuilder,
+    private titleService: Title
+  ) {
     this.loader = false;
-    this.titleService.setTitle("Inscription");
+    this.titleService.setTitle('Mical | Inscription');
   }
   onSubmit(): void {
     if (this.signupForm.valid) {

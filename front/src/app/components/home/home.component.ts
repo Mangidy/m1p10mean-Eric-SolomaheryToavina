@@ -5,17 +5,14 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  constructor(private router:Router,private titleService: Title){ this.titleService.setTitle("Acceuil");}
+  constructor(private router: Router, private titleService: Title) {
+    this.titleService.setTitle('Mical | Accueil');
+  }
 
-
-
-takeHome():void{
-
+  takeHome(): void {
     this.router.navigate(['/home']);
-
+  }
 }
-}
-

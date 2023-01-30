@@ -12,7 +12,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class LoginComponent {
   loader: boolean;
-  data:any;
+  data: any;
   get email() {
     return this.loginForm.get('email');
   }
@@ -27,9 +27,13 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  constructor(private auth: AuthService, private router: Router,private titleService: Title) {
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private titleService: Title
+  ) {
     this.loader = false;
-    this.titleService.setTitle("Connexion");
+    this.titleService.setTitle('Mical | Connexion');
   }
 
   onSubmit(): void {
@@ -43,10 +47,10 @@ export class LoginComponent {
         })
         .subscribe((val) => {
           this.loader = false;
-          this.data=val;
+          this.data = val;
           if (val.message == 'LOGIN SUCCESSFULLY') {
             Swal.fire('Validé', 'Vous ête connecté(e)', 'success');
-           this.auth.setTokenClient(val.session);
+            this.auth.setTokenClient(val.session);
             this.router.navigate(['/client/home']);
           } else {
             Swal.fire('Erreur', 'Email ou mot de passe incorrect', 'error');

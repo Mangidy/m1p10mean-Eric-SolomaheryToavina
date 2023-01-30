@@ -427,10 +427,8 @@ ul.btn li:last-child {
 
 .text-bg p {
   text-align: justify;
-  line-height: 28px;
   font-weight: 500;
   padding-bottom: 20px;
-  display: block;
   color: #fff;
 }
 
