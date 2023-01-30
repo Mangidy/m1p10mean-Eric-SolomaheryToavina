@@ -25,8 +25,11 @@
               <td>{{ news.voiture.numero }}</td>
               <td>{{ news.voiture.marque }}</td>
               <td>{{ news.voiture.modele }}</td>
-              <td *ngFor='let key of objectKeys(news.reparation)'>
-                {{key}} : {{ news.reparation[key]}} 
+              <td>
+                <div *ngFor="let key of objectKeys(news.reparation)">
+                  <label> {{ key }} : {{ news.reparation[key] }}</label
+                  ><br />
+                </div>
               </td>
               <th>
                 <a
