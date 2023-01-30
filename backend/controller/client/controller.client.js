@@ -4,24 +4,24 @@ const outil = require('../../modele/outil')
 
 
 async function HomeClient(clientConnex, req, res) {
-    if (req.session.clientId) {
-        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+    if (this.session) {
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
             .then(resultat => {
-                res.send([{ message: "USER CONNECTED", user: resultat }])
+                res.send([{ message: "USER CONNECTED", user: resultat, session: this.session }])
             })
             .catch(err => {
                 res.send([{ message: "REQUEST ERROR" }])
             })
     } else {
-        res.send([{ message: "USER NOT CONNECTED" }])
+        res.send([{ message: "USER NOT CONNECTED", session: this.session }])
     }
 }
 
 async function NotificationClient(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         var continueVar = false
         var resUserN = {}
-        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
             .then(resUser => {
                 if (resUser) {
                     delete resUser._id
@@ -58,10 +58,10 @@ async function NotificationClient(clientConnex, req, res) {
 }
 
 async function GetCarClient(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         var continueVar = false
         var resClientN = {}
-        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
             .then(resClient => {
                 if (resClient) {
                     delete resClient._id
@@ -95,10 +95,10 @@ async function GetCarClient(clientConnex, req, res) {
 }
 
 async function GetCarOne(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         var continueVar = false
         var resClientN = {}
-        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
             .then(resClient => {
                 if (resClient) {
                     delete resClient._id
@@ -138,10 +138,10 @@ async function GetCarOne(clientConnex, req, res) {
 
 
 async function GetFactureClient(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         var continueVar = false
         var resClientN = {}
-        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
             .then(resClient => {
                 if (resClient) {
                     delete resClient._id
@@ -174,12 +174,12 @@ async function GetFactureClient(clientConnex, req, res) {
 }
 
 async function GetFactureIdClient(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         var continueVar = false
         var resClientN = {}
         if (req.params.id !== undefined && typeof req.params.id === "string") {
             try {
-                await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+                await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
                     .then(resClient => {
                         if (resClient) {
                             delete resClient._id
@@ -222,14 +222,14 @@ async function GetFactureIdClient(clientConnex, req, res) {
 }
 
 async function GetCarClientReception(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         try {
             var continueVar = false
             var resClientN = {}
             if (req.params.valeur === undefined && req.params.valeur) {
                 res.send({ message: "REQUEST ERROR", detailled: "INVALID INFORMATION" })
             } else {
-                await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+                await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
                     .then(resClient => {
                         if (resClient) {
                             delete resClient._id
@@ -267,7 +267,7 @@ async function GetCarClientReception(clientConnex, req, res) {
 }
 
 async function ValidateCar(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         var continueVar = false
         var continueVar1 = false
         var continueVar2 = false
@@ -276,7 +276,7 @@ async function ValidateCar(clientConnex, req, res) {
         var options = {}
         var dataActivite = {}
         var resVoitureR = {}
-        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+        await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
             .then(resClient => {
                 if (resClient) {
                     if (req.params.idVoiture !== undefined) {
@@ -358,13 +358,13 @@ async function ValidateCar(clientConnex, req, res) {
 }
 
 async function carCancelControlle(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         if (req.body.carId !== undefined) {
             var continueVar = false
             var continueVar1 = false
             var resClientN = {}
             var resCar = {}
-            await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+            await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
                 .then(resClient => {
                     resClientN = resClient
                     if (resClient) {
@@ -408,13 +408,13 @@ async function carCancelControlle(clientConnex, req, res) {
     }
 }
 async function AddCarClient(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         if (req.body.numero !== undefined && req.body.marque !== undefined && req.body.modele !== undefined && req.body.annee !== undefined) {
             var continueVar = false
             var continueVar1 = false
             var continueVar2 = false
             var resClientN = {}
-            await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(req.session.clientId) })
+            await clientConnex.db("Garage").collection('Client').findOne({ _id: new ObjectID(this.session) })
                 .then(resClient => {
                     resClientN = resClient
                     if (resClient) {
@@ -498,7 +498,7 @@ async function AddCarClient(clientConnex, req, res) {
 }
 
 async function carSearchControlle(clientConnex, req, res) {
-    if (req.session.clientId) {
+    if (this.session) {
         if (req.body.cleSearch) {
             var continueVar = false
             var valRecherche = {}
@@ -519,7 +519,7 @@ async function carSearchControlle(clientConnex, req, res) {
                 })
             if (continueVar) {
                 if (valRecherche) {
-                    await clientConnex.db("Garage").collection("Client").findOne({ _id: new ObjectID(req.session.clientId) })
+                    await clientConnex.db("Garage").collection("Client").findOne({ _id: new ObjectID(this.session) })
                         .then(resClient => {
                             if (resClient) {
                                 if (resClient.nom === valRecherche.client.nom) {
@@ -549,27 +549,34 @@ async function carSearchControlle(clientConnex, req, res) {
 }
 
 async function LoginClient(clientConnex, res, req) {
-    await clientConnex.db("Garage").collection('Client').findOne({ email: req.body.email })
-        .then(resultat => {
-            if (resultat) {
-                if (req.body.email !== undefined) {
-                    let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
-                    if (resultat.email === req.body.email && resultat.password === hashPassword) {
+    if (!req.session.clientId) {
+        await clientConnex.db("Garage").collection('Client').findOne({ email: req.body.email })
+            .then(resultat => {
+                if (resultat) {
+                    if (req.body.email !== undefined) {
                         req.session.clientId = resultat._id
-                        res.send({ message: "LOGIN SUCCESSFULLY" })
+                        let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
+                        if (resultat.email === req.body.email && resultat.password === hashPassword) {
+                            req.session.clientId = resultat._id
+                            this.session = resultat._id
+                            res.send({ message: "LOGIN SUCCESSFULLY", session: req.session.clientId })
+                        } else {
+                            res.send({ message: "LOGIN FAILED", detailled: "EMAIL OR PASSWORD INVALID" })
+                        }
                     } else {
-                        res.send({ message: "LOGIN FAILED", detailled: "EMAIL OR PASSWORD INVALID" })
+                        res.send({ message: "LOGIN FAILED", detailled: "EMAIL INVALID" })
                     }
                 } else {
-                    res.send({ message: "LOGIN FAILED", detailled: "EMAIL INVALID" })
+                    res.send({ message: "LOGIN FAILED", detailled: "INFORMATION NOT FOUND" })
                 }
-            } else {
-                res.send({ message: "LOGIN FAILED", detailled: "INFORMATION NOT FOUND" })
-            }
-        })
-        .catch(err => {
-            res.send({ message: "REQUEST ERROR" })
-        })
+            })
+            .catch(err => {
+                res.send({ message: "REQUEST ERROR" })
+            })
+    } else {
+        res.send([{ message: "USER CONNECTED" }])
+    }
+
 }
 
 async function SubScribeClient(clientConnex, res, req) {
