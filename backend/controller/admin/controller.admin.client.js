@@ -3,8 +3,9 @@ const crypto = require('crypto')
 const outil = require('../../modele/outil')
 const { facture } = require("../../route/routeAdmin")
 
+var session;
 async function HomeAdmin(clientConnex, req, res) {
-    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(this.session) })
         .then(resultat => {
             if (resultat) {
                 res.send({ message: "ADMIN CONNECTED", admin: resultat })
@@ -377,7 +378,7 @@ async function ValidFacture(clientConnex, res, req) {
     var continueVar1 = false
     var continueVar2 = false
     var resAdminR = {}
-    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(this.session) })
         .then(resAdmin => {
             resAdminR = resAdmin
             if (resAdmin.roleAdmin === "FINANCIER") {
@@ -479,7 +480,7 @@ async function CarClientOut(clientConnex, res, req) {
         var continueVar1 = false
         var continueVar2 = false
         var resAdminR = {}
-        await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+        await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(this.session) })
             .then(resAdmin => {
                 resAdminR = resAdmin
                 if (resAdmin.roleAdmin === "ATELIER") {
@@ -576,7 +577,7 @@ async function CarClientOut(clientConnex, res, req) {
 
 async function ListCarClientOut(clientConnex, res, req) {
     var continueVar = false
-    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(this.session) })
         .then(resAdmin => {
             continueVar = true
         })
@@ -641,7 +642,7 @@ async function receptionneCarFacture(clientConnex, res, req) {
                 var updateDoc = {}
                 var options = {}
                 var ValeurFact = {}
-                await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+                await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(this.session) })
                     .then(resAdmin => {
                         resAdminR = resAdmin
                         if (resAdmin) {
@@ -743,7 +744,7 @@ async function AddCarReparation(clientConnex, req, res) {
     var continueVar1 = false
     var continueVar2 = false
     var resAdminR = {}
-    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(this.session) })
         .then(resAdmin => {
             if (req.params.numero !== undefined) {
                 if (resAdmin.roleAdmin === "ATELIER") {
@@ -825,7 +826,7 @@ async function AddCarReception(clientConnex, req, res) {
     var continueVar1 = false
     var continueVar2 = false
     var resAdminR = {}
-    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(req.session.usernameAdmin) })
+    await clientConnex.db("Garage").collection('Admin').findOne({ _id: new ObjectID(this.session) })
         .then(resAdmin => {
             if (req.params.numero !== undefined) {
                 if (resAdmin.roleAdmin === "ATELIER") {
@@ -901,6 +902,7 @@ async function LoginAdmin(clientConnex, res, req) {
                 let hashPassword = crypto.createHash('md5').update(req.body.password).digest("hex")
                 if (resultat.usernameAdmin === req.body.username && resultat.passwordAdmin === hashPassword) {
                     req.session.usernameAdmin = resultat._id
+                    this.session = resultat._id
                     res.send({ message: "LOGIN SUCCESSFULLY" })
                 } else {
                     res.send({ message: "LOGIN FAILED", detailled: "LOGIN OR PASSWORD INVALID" })

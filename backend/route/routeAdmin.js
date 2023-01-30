@@ -6,223 +6,187 @@ function sendDb(client) {
 }
 
 async function home(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.HomeAdmin(clientCo, req, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.HomeAdmin(clientCo, req, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function facture(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.getAllFacture(clientCo, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.getAllFacture(clientCo, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 async function ChiffreAffaireJournalier(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.ChiffreAffaireControllerJounalier(clientCo, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.ChiffreAffaireControllerJounalier(clientCo, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 async function ChiffreAffaireMensuel(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.ChiffreAffaireControllerMensuel(clientCo, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.ChiffreAffaireControllerMensuel(clientCo, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function factureTF(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.getAllFactureTr(clientCo, res, req)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.getAllFactureTr(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function factureValidate(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.ValidFacture(clientCo, res, req)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.ValidFacture(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function carOut(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.CarClientOut(clientCo, res, req)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.CarClientOut(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function carOutList(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.ListCarClientOut(clientCo, res, req)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.ListCarClientOut(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function client(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.getAllClient(clientCo, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.getAllClient(clientCo, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function clientOne(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.getOneClient(clientCo, res, req)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.getOneClient(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function carSearchAdmin(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.carSearchControlleAdmin(clientCo, req, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.carSearchControlleAdmin(clientCo, req, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 async function clientSearchAdmin(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.clientSearchControlleAdmin(clientCo, req, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.clientSearchControlleAdmin(clientCo, req, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function carList(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.getAllCar(clientCo, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.getAllCar(clientCo, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 async function tempsReparation(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.tempsReparationController(clientCo, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.tempsReparationController(clientCo, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 async function Benefice(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.BeneficeController(clientCo, req, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.BeneficeController(clientCo, req, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function notificationAdmin(req, res) {
@@ -236,91 +200,79 @@ async function notificationAdmin(req, res) {
     }
 }
 async function carReceptionList(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.getAllCarReception(clientCo, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.getAllCarReception(clientCo, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 async function carReceptionListAll(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.getAllCarReceptionNotriage(clientCo, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.getAllCarReceptionNotriage(clientCo, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function carOne(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.getOneCar(clientCo, res, req)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.getOneCar(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function carreparation(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.AddCarReparation(clientCo, req, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.AddCarReparation(clientCo, req, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 async function carReception(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.AddCarReception(clientCo, req, res)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.AddCarReception(clientCo, req, res)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function carReceptionneFacture(req, res) {
-    if (req.session.usernameAdmin) {
-        try {
-            await clientCo.connect();
-            await controllerAdminClient.receptionneCarFacture(clientCo, res, req)
-        } catch (e) {
-            console.log(e);
-        } finally {
-            await clientCo.close();
-        }
-    } else {
-        res.send({ message: "ADMIN NOT CONNECTED" })
+
+    try {
+        await clientCo.connect();
+        await controllerAdminClient.receptionneCarFacture(clientCo, res, req)
+    } catch (e) {
+        console.log(e);
+    } finally {
+        await clientCo.close();
     }
+
 }
 
 async function login(req, res) {
